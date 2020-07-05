@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>java基础</title>
+      <link href="/2020/07/05/java%E5%9F%BA%E7%A1%80/"/>
+      <url>/2020/07/05/java%E5%9F%BA%E7%A1%80/</url>
+      
+        <content type="html"><![CDATA[<ol><li><p>面向对象和面向过程的区别</p><ul><li>面向过程：面向过程性能比面向对象高。</li><li>面向对象：面向对象易维护、易复用、易扩展。但类调用时需要实例化，开销较大，比较消耗内存资源。</li></ul></li><li><p>java语言的特点？</p><ul><li>简单易学；</li><li>面向对象（封装、继承、多态）；</li><li>平台无关性（java虚拟机可以实现跨平台）；</li><li>可靠性；</li><li>安全性；</li><li>支持多行程</li><li>支持网络编程并且很方便</li><li>编译与解释并存</li></ul></li><li><p>JVM、JDK、JRE？</p><ol><li><p>JVM</p><ul><li><p>java虚拟机（JVM）是运行在Java字节码的虚拟机。JVM有针对不同系统的特定实现，目的是使用相同的字节码，他们都会给出相同的结果。</p><blockquote><p>在Java中，JVM可以理解的代码就叫做字节码（即扩展名为.classs的文件），它不面向任何特定的处理器，只面向虚拟机。</p><p>Java通过字节码的方式，在一定程度上解决了传统解释型语言执行效率低的问题，同时又保留了解释型语言可移植的特点。</p></blockquote></li><li><p>Java程序从源代码到运行一般有以下3步：</p></li></ul></li></ol></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> java </tag>
+            
+            <tag> 基础 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>日语单词-1</title>
       <link href="/2020/07/05/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-1/"/>
       <url>/2020/07/05/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-1/</url>
