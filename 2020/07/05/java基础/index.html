@@ -716,6 +716,108 @@
 </li>
 </ul>
 </li>
+<li><p>线程、程序、进程？</p>
+<ul>
+<li><p>线程与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享同一块空间和一组系统资源，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小得多，也正因为如此，线程也被称为轻量级进程。</p>
+</li>
+<li><p>程序是含有指令和数据的文件，被存储在磁盘或其他的数据存储设备中，也就是说程序是静态的代码。</p>
+</li>
+<li><p>进程是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序即是一个进程从创建，运行到消亡的过程。</p>
+</li>
+<li><p>线程和进程的最大不同在于基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程有可能会相互影响。从另一个角度来说，进程属于操作系统的范畴，主要是同一段时间内，可以同时执行一个以上的程序，而线程则是在同一程序内几乎执行一个以上的程序段。</p>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="21">
+<li><p>线程有哪些状态？</p>
+<ul>
+<li>NEW ：初始状态，线程被构建，但是还没有调用start（）方法；</li>
+<li>RUNNABLE：运行状态，Java线程将操作系统中的就绪和运行两种状态笼统地称作“运行中”；</li>
+<li>BLOCKED：阻塞状态，表示线程阻塞于锁；</li>
+<li>WAITING：等待状态，表示线程进入等待状态，进入状态表示当前线程需要等待其它线程做出一些特定动作（通知或中断）；</li>
+<li>TIME_WAITING：超时等待状态，该状态不同于WAITING，它是可以在指定的时间内自行返回的；</li>
+<li>TERMINATED：终止状态，表示当前线程已经执行完毕</li>
+</ul>
+</li>
+<li></li>
+<li><p>final关键字</p>
+<p>final关键字主要用于三个地方：变量、方法、类。</p>
+<ul>
+<li>对于一个final变量，如果是基本的数据类型的变量，则其数值一旦初始化后便不可更改；如果是引用类型的变量，则其初始化后便不可在指向另外一个对象。</li>
+<li>当用final修饰一个类时，表明这个类不能被继承。且final类中的成员方法都会隐式地指定为final方法。</li>
+<li>使用final方法原因有两个：<ul>
+<li>把方法锁定，以防止任何继承类修改它的含义；</li>
+<li>效率，类中所有的private方法都隐式地指定为final。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Java中的异常处理</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/%E5%BC%82%E5%B8%B8.png" alt=""></p>
+<p>在Java中，所有的异常都有一个共同的祖先 java.lan g包中的Throwable类。Throwable：有两个重要的子类：</p>
+<ul>
+<li><p>Exception（异常）</p>
+<ul>
+<li><strong>是程序本身可以处理的异常</strong>。</li>
+</ul>
+</li>
+<li><p>Error（错误）</p>
+<ul>
+<li>Error是<strong>程序无法处理的错误，</strong>表示运行应用程序汇总较严重问题。这类异常发生，JVM一般会选择线程终止。</li>
+</ul>
+<p>note：<strong>异常和错误的区别：异常可以被程序本身处理，而错误则无法处理。</strong></p>
+</li>
+</ul>
+</li>
+</ol>
+<ol start="25">
+<li><p>Throwable类常用方法</p>
+<ul>
+<li>public string getMessage():返回异常发生时的简要描述</li>
+<li>public string  toString():返回异常发生时的详细信息</li>
+<li>public string  getLocalizedMessage():返回异常发生时的本地化信息</li>
+<li>public void printStackTrace():在控制台上打印Throwable对象封装的异常信息</li>
+</ul>
+</li>
+<li><p>异常处理总结</p>
+<ul>
+<li><p>try块：用于捕获异常。其后面可以接0个、多个catch块；如果没有catch块，则必须跟一个finally块；</p>
+</li>
+<li><p>catch块： 用于处理try捕获的异常；</p>
+</li>
+<li><p>finally块： 无论是否捕获或处理异常，finally块的内容都会被执行。当try或catch块中遇到return语句时，finally语句块将在方法返回之前被执行。</p>
+</li>
+<li><p>在以下4中特殊情况下，finally块不会被执行：</p>
+<ul>
+<li>在finally语句块第一行发生了异常。</li>
+<li>在前面的代码中用了System.exit(int)已退出程序。若该语句在异常语句之后，finally会执行。</li>
+<li>程序所在的线程死亡。</li>
+<li>关闭CPU。</li>
+</ul>
+<p>注意：当try语句和finally语句中都有return语句时，在方法返回之前，finally语句的内容将被执行，并且finally语句的返回值将覆盖原始的返回值，如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> value)</span></span>&#123;</span><br><span class="line">    <span class="keyword">try</span>&#123;</span><br><span class="line">        <span class="keyword">return</span> value * value;</span><br><span class="line">    &#125; <span class="keyword">finally</span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (value==<span class="number">2</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果f(2)，返回值将为0，因为finally语句的返回值覆盖了try语句块的返回值。</p>
+</li>
+</ul>
+</li>
+<li><p>获取用键盘输入常用的两种方法</p>
+<ul>
+<li><p>通过Scanner方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Scanner input = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">String s = input.nextLine();</span><br><span class="line">input.close();</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>通过BufferedReader</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BufferedReader input = <span class="keyword">new</span> BufferedReader(<span class="keyword">new</span> InputStreamReader(System.in));</span><br><span class="line">String s = input.readLine();</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ol>
+<ol start="28">
+<li></li>
 </ol>
 
             </div>
