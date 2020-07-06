@@ -740,7 +740,8 @@
 <li>TERMINATED：终止状态，表示当前线程已经执行完毕</li>
 </ul>
 </li>
-<li></li>
+</ol>
+<ol start="23">
 <li><p>final关键字</p>
 <p>final关键字主要用于三个地方：变量、方法、类。</p>
 <ul>
@@ -817,7 +818,46 @@
 </li>
 </ol>
 <ol start="28">
-<li></li>
+<li><p>Java中的IO流</p>
+<ul>
+<li><p>Java中IO流分为几种？</p>
+<ul>
+<li>按照流的流向分，分为输入流和输出流；</li>
+<li>按照操作单元分，分为字节流和字符流；</li>
+<li>按照流的角色分，分为子点流和处理流。</li>
+</ul>
+</li>
+<li><p>Java IO共有40多个类，皆是从以下4个抽象类中派生出来的：</p>
+<ul>
+<li>Input/Reader：所有的输入流的基类，前者是字节输入流，后者是字符输入流；</li>
+<li>OutputStream/Writer: 所有输出流的基类，前者是字节输出流，后者是字符输出流；</li>
+</ul>
+</li>
+<li><p>按操作方式分类结构图：</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/IO_classify.png" alt=""></p>
+<p>按照操作对象分类结构图：</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/IO_classify_2.png" alt=""></p>
+</li>
+<li><p>字节流与字符流</p>
+<p>字符流是由Java虚拟机将字节转换得到的，问题就出在这个过程非常耗时，并且，如果我们不知道编码类型就很容易出现乱码问题。所以，I/O流就干脆提供一个直接操作字符的接口，方便我们平时对字符进行流操作。如果音频文件、图片等媒体文件用字节流比较好，如果涉及到字符的话使用字符流比较好。</p>
+</li>
+<li><p>BIO，NIO，AIO有什么区别？</p>
+<ul>
+<li>BIO（Blocking I/O)：同步阻塞I/O模式，数据的读取写入必须阻塞在一个线程内等待其完成。但，当面对十万甚至百万级连接的时候，传统的BIO模型无能为力。</li>
+<li>NIO（Non-blocking/New I/O）：NIO是一种同步非阻塞的I/O模型。对于高负载、低并发的（网络）应用，应使用NIO的非阻塞模式来开发。</li>
+<li>AIO（Asynchronous I/O）： AIO也就是NIO 2。它是异步非阻塞的I/O模型。其是基于事件和回调机制实现的，也就是应用操作之后会直接返回，不会阻塞在那里，当后台处理完成，操作系统会通知相应的线程进行后续的操作。当前 AIO的应用并不广泛。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>深拷贝vs浅拷贝</p>
+<ul>
+<li><p>浅拷贝：对基本数据类型进行值传递，对引用数据类型进行引用传递般的拷贝，此为浅拷贝。</p>
+</li>
+<li><p>深拷贝：对基本数据类型间值传递，对引用数据类型，创建一个新的对象，并复制其内容，此为深拷贝。</p>
+</li>
+</ul>
+</li>
 </ol>
 
             </div>
@@ -1660,125 +1700,7 @@ code[class*="language-"], pre[class*="language-"] { white-space: pre !important;
 
 
 
-    <footer class="page-footer bg-color">
     
-        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
-<style>
-    .aplayer .aplayer-lrc p {
-        
-        display: none;
-        
-        font-size: 12px;
-        font-weight: 700;
-        line-height: 16px !important;
-    }
-
-    .aplayer .aplayer-lrc p.aplayer-lrc-current {
-        
-        display: none;
-        
-        font-size: 15px;
-        color: #42b983;
-    }
-
-    
-</style>
-<div class="">
-    
-    <div class="row">
-        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
-                   server=""
-                   type=""
-                   id=""
-                   fixed='true'
-                   autoplay='false'
-                   theme='#42b983'
-                   loop='all'
-                   order='random'
-                   preload='auto'
-                   volume='0.7'
-                   list-folded='true'
-        >
-        </meting-js>
-    </div>
-</div>
-
-<script src="/libs/aplayer/APlayer.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
-
-    
-    <div class="container row center-align" style="margin-bottom: 0px !important;">
-        <div class="col s12 m8 l8 copy-right">
-            Copyright&nbsp;&copy;
-            <span id="year">2019</span>
-            <a href="/about" target="_blank">Haseka</a>
-            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
-            <br>
-            
-            
-            
-            
-            
-            
-            <span id="busuanzi_container_site_pv">
-                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
-                    class="white-color"></span>&nbsp;次
-            </span>
-            
-            
-            <span id="busuanzi_container_site_uv">
-                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
-                    class="white-color"></span>&nbsp;人
-            </span>
-            
-            <br>
-            
-            <br>
-            
-        </div>
-        <div class="col s12 m4 l4 social-link social-statis">
-    <a href="https://github.com/haseka96" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
-        <i class="fab fa-github"></i>
-    </a>
-
-
-
-    <a href="mailto:1210733943@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
-        <i class="fas fa-envelope-open"></i>
-    </a>
-
-
-
-
-
-    <a href="1210733943" class="tooltipped" target="_blank" data-tooltip="关注我的qq: 1210733943" data-position="top" data-delay="50">
-        <i class="fab fa-qq"></i>
-    </a>
-
-
-
-    <a href="https://twitter.com/skyve8" class="tooltipped" target="_blank" data-tooltip="关注我的Twitter: https://twitter.com/skyve8" data-position="top" data-delay="50">
-        <i class="fab fa-twitter"></i>
-    </a>
-
-
-
-
-
-
-
-
-    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
-        <i class="fas fa-rss"></i>
-    </a>
-
-</div>
-    </div>
-</footer>
-
-<div class="progress-bar"></div>
-
 
     <!-- 搜索遮罩框 -->
 <div id="searchModal" class="modal">
