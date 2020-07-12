@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java_se_1, Haseka&#39;s Blog">
+    <meta name="keywords" content="Java_se_2, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java_se_1 | Haseka&#39;s Blog</title>
+    <title>Java_se_2 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/18.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java_se_1</h1>
+                    <h1 class="description center-align post-title">Java_se_2</h1>
                 </div>
             </div>
         </div>
@@ -482,6 +482,10 @@
                                 <span class="chip bg-color">视频随笔</span>
                             </a>
                         
+                            <a href="/tags/Map/">
+                                <span class="chip bg-color">Map</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -503,7 +507,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-07-11
+                    2020-07-12
                 </div>
                 
 
@@ -520,122 +524,141 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>可变参数</p>
+<li><p><strong>java.util.Map&lt;k,v&gt;集合</strong></p>
+<p>Map集合的特点：</p>
 <ul>
-<li><p>需求：计算（0-n)整数和的方法</p>
+<li>Map集合是一个双列集合，一个元素包含两个值（一个key，一个value）；</li>
+<li>Map集合中的元素，key和value的数据类型可以相同，也可以不同；</li>
+<li>Map集合中的元素，key不允许重复，value是可以重复的</li>
+<li>ap集合中的元素，key和value是一一对应</li>
+</ul>
+<p><strong>java.util.HashMap&lt;k,v&gt;集合 implements Map&lt;k,v&gt;接口</strong></p>
+<p>HashMap集合的特点：</p>
 <ul>
-<li>已知：计算整数的和，数据类型已经确定int；</li>
-<li>但是参数的个数不确定，不知道要计算几个整数的和，就可以使用可变参数；</li>
-<li>add();就会创建一个长度为0的数组，new int[0]；</li>
-<li>add(10)；就会创建一个长度为1的数组，存储传递过来的参数 new int[]{10};</li>
-<li>add(10,20):就会创建一个长度为2的数组，存储传递过来的参数 new int[]{10,20};</li>
-<li>add(10,20,30,40,50,60,70,80,90,100):就会创建一个长度为10的数组，存储传递过来的参数 new int[]{110,20,30,40,50,60,70,80,90,100};</li>
+<li><p>HashMap集合底层是哈希表：查询速度快</p>
+<ul>
+<li><p>JDK1.8之前：数组+单向链表</p>
+</li>
+<li><p>JDK1.8之后：数组+单向链表/红黑树（链表的长度大于8）：提高了查询的速度</p>
+</li>
 </ul>
 </li>
-<li><p>代码实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//int i = add();</span></span><br><span class="line">    <span class="comment">//int i = add(10);</span></span><br><span class="line">    <span class="comment">//int i = add(10,20);</span></span><br><span class="line">    <span class="keyword">int</span> i = add(<span class="number">10</span>,<span class="number">20</span>,<span class="number">30</span>,<span class="number">40</span>,<span class="number">50</span>,<span class="number">60</span>,<span class="number">70</span>,<span class="number">80</span>,<span class="number">90</span>,<span class="number">100</span>);</span><br><span class="line">    System.out.println(i);</span><br><span class="line"></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">public</span>  <span class="keyword">static</span>  <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span>...arr)</span></span>&#123;</span><br><span class="line">    <span class="comment">//System.out.println(arr);//[I@10f87f48 底层是一个数组</span></span><br><span class="line">    <span class="comment">//System.out.println(arr.length);//0.1,2,10</span></span><br><span class="line">    <span class="keyword">int</span> sum = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i : arr)&#123;</span><br><span class="line">    sum += i;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="keyword">return</span> sum;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>hashMap集合是一个无序的集合，存储元素和取出元素的顺序有可能不一致</p>
 </li>
-<li><p>注意：</p>
+</ul>
+<p><strong>java.util.LinedHashMap&lt;k,v&gt;集合 extends HashMap&lt;k,v&gt;集合</strong></p>
+<p>LinkedHashMap的特点：</p>
 <ul>
-<li><p>一个方法的参数列表，只能有一个可变参数；</p>
+<li><p>LinkedHashMap集合底层是哈希表+链表（保证迭代的顺序）</p>
 </li>
-<li><p>如果方法的参数有多个，那么可变参数必须写在参数列表的末尾。</p>
+<li><p>LinkedHashMap集合是一个有序的集合，存储元素和取出元素的顺序是一致的</p>
 </li>
-<li><p>可变参数的终极写法：</p>
+</ul>
 </li>
-<li><pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">method</span><span class="params">(Object...obj)</span></span>{
+</ol>
+<ol start="2">
+<li><p>Map接口中的常用方法：</p>
+<ul>
+<li><p>public V put(K key,V value):把指定的键与指定的值添加到Map集合中。</p>
+<ul>
+<li><pre><code class="java"><span class="comment">/*</span>
+<span class="comment">    public V put(K key,V value):把指定的键与指定的值添加到Map集合中。</span>
+<span class="comment">        返回值：v</span>
+<span class="comment">            存储键值对的时候，key不重复，返回值v是null</span>
+<span class="comment">            存储键值对的时候，key重复，会使用新的value替换map中重复的value，返回被替换的value值</span>
+<span class="comment"> */</span>
+<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">show01</span><span class="params">()</span></span>{
+    <span class="comment">//创建Map结合对象，多态</span>
+    Map&lt;String,String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();
+
+    String v1 = map.put(<span class="string">"霍建华"</span>,<span class="string">"林心如"</span>);
+    System.out.println(<span class="string">"v1:"</span>+v1);<span class="comment">//v1:null</span>
+
+    String v2 = map.put(<span class="string">"霍建华"</span>,<span class="string">"林心如2"</span>);
+    System.out.println(<span class="string">"v2:"</span>+v2);<span class="comment">//v2:；林心如</span>
+
+    System.out.println(map);<span class="comment">//{霍建华=林心如2}</span>
+
+    map.put(<span class="string">"郭靖"</span>,<span class="string">"黄蓉"</span>);
+    map.put(<span class="string">"杨过"</span>,<span class="string">"小龙女"</span>);
+    map.put(<span class="string">"梁山伯"</span>,<span class="string">"祝英台"</span>);
+    System.out.println(map);<span class="comment">//{杨过=小龙女, 霍建华=林心如2, 郭靖=黄蓉, 梁山伯=祝英台}</span>
+}
+&lt;!--￼<span class="number">0</span>--&gt;</code></pre>
+</li>
+</ul>
+</li>
+<li><p>public V get(Object key):根据指定的键，在Map集合中获取对应的值。</p>
+<ul>
+<li><pre><code class="java"><span class="comment">/*</span>
+<span class="comment">    public V get(Object key):根据指定的键，在Map集合中获取对应的值。</span>
+<span class="comment">        返回值：</span>
+<span class="comment">            key存在，返回对应的value值</span>
+<span class="comment">            key不存在，返回null</span>
+<span class="comment"> */</span>
+<span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span>  <span class="title">show03</span><span class="params">()</span></span>{
+    <span class="comment">//创建Map集合对象</span>
+    Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();
+    map.put(<span class="string">"赵丽颖"</span>,<span class="number">168</span>);
+    map.put(<span class="string">"林依晨"</span>,<span class="number">165</span>);
+    map.put(<span class="string">"林志玲"</span>,<span class="number">178</span>);
+    System.out.println(map);<span class="comment">//{林志玲=178, 赵丽颖=168, 林依晨=165}</span>
+
+    Integer v1 = map.get(<span class="string">"林依晨"</span>);
+    System.out.println(<span class="string">"v1:"</span>+v1);<span class="comment">//v1:165</span>
+
+    Integer v2 = map.get(<span class="string">"红莲"</span>);
+    System.out.println(<span class="string">"v2:"</span>+v2);<span class="comment">//v2:null</span>
 }
 &lt;!--￼<span class="number">1</span>--&gt;</code></pre>
 </li>
 </ul>
 </li>
-<li><p>关于sort代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    ArrayList&lt;Integer&gt; list01 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    list01.add(<span class="number">1</span>);</span><br><span class="line">    list01.add(<span class="number">3</span>);</span><br><span class="line">    list01.add(<span class="number">2</span>);</span><br><span class="line">    System.out.println(list01);<span class="comment">//[1,3,2]</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//public static &lt;T&gt; void sort(List&lt;T&gt; list):将集合中元素按照默认规则排序。</span></span><br><span class="line">    Collections.sort(list01);<span class="comment">//m默认升序</span></span><br><span class="line">    System.out.println(list01);<span class="comment">//[1,2,3]</span></span><br><span class="line"></span><br><span class="line">    ArrayList&lt;String&gt; list02 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    Collections.addAll(list02,<span class="string">"a"</span>,<span class="string">"c"</span>,<span class="string">"b"</span>);</span><br><span class="line">    System.out.println(list02);<span class="comment">//[a,c,b]</span></span><br><span class="line"></span><br><span class="line">    Collections.sort(list02);</span><br><span class="line">    System.out.println(list02);<span class="comment">//[a,b,c]</span></span><br><span class="line"></span><br><span class="line">    ArrayList&lt;Person&gt; list03 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    Collections.addAll(list03,<span class="keyword">new</span> Person(<span class="string">"张三"</span>,<span class="number">18</span>),<span class="keyword">new</span> Person(<span class="string">"王五"</span>,<span class="number">20</span>),<span class="keyword">new</span> Person(<span class="string">"李四"</span>,<span class="number">15</span>));</span><br><span class="line">    System.out.println(list03);<span class="comment">//[Person&#123;name='张三', age=18&#125;, Person&#123;name='王五', age=20&#125;, Person&#123;name='李四', age=15&#125;]</span></span><br><span class="line"></span><br><span class="line">    Collections.sort(list03);</span><br><span class="line">    System.out.println(list03);<span class="comment">//[Person&#123;name='李四', age=15&#125;, Person&#123;name='张三', age=18&#125;, Person&#123;name='王五', age=20&#125;]</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>Person类：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.haseka.demo05.Collections.demo05;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> <span class="keyword">implements</span> <span class="title">Comparable</span>&lt;<span class="title">Person</span>&gt;</span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Person&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//重写排序的规则</span></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compareTo</span><span class="params">(Person o)</span> </span>&#123;</span><br><span class="line">        <span class="comment">//return 0;//认为元素都是相同的</span></span><br><span class="line">        <span class="comment">//自定义比较的规则，比较两个人的年龄(this,参数Person)</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">this</span>.getAge() - o.getAge();<span class="comment">//年龄升序排序</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>注意：</p>
+<li><p>public Set<k> keyset():获取Map集合中所有的键，存储到Set集合中。</p>
 <ul>
-<li>sort(List<T> list)使用前提；</li>
-<li>被排序的集合里存储的元素，必须实现Comparable，重写接口中的方法compareTo定义排序的规则。</li>
+<li><p><img src="http://qck7twe2i.bkt.clouddn.com/java/keyset.png" alt=""></p>
+</li>
+<li><p>Map集合的第一种遍历方式：通过键找值的方式</p>
+<p>  Map集合中的方法：public Set<k> keyset():获取Map集合中所有的键，存储到Set集合中。</p>
+<p>  实现步骤：</p>
+<ul>
+<li>使用Map集合中的方法keySet()，把Map集合所有的键取出来，存储到一个set集合中；</li>
+<li>遍历Set集合，获取map集合汇总的每一个key；</li>
+<li>通过Map集合中的方法get(key)，通过key找到value</li>
 </ul>
-</li>
-<li><p>Comparable接口的排序规则：</p>
-<ul>
-<li>自己(this)-参数：升序；</li>
-<li>参数 - 自己(this)：降序。</li>
-</ul>
-</li>
-<li><p>public static <T> void sort(List<T> list,Comparator&lt;? super T&gt;):将集合元素按照指定规则排序。</p>
-<ul>
-<li><p>Comparator和Comparable区别：Comparable：自己（this）和别比较，自己需要实现Comparable接口，重写比较的规则compareTo方法；Comparator：相当于一个第三方的裁判，比较两个。</p>
-</li>
-<li><p>Comparator的排序规则：</p>
-<ul>
-<li>o1 - o2:升序</li>
-<li>o2 - o1：降序</li>
-</ul>
-</li>
-<li><p>代码实现：</p>
-<ul>
-<li><p>Student类</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.haseka.demo05.Collections.demo05;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Student</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Student</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Student&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-<li><pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>{
-    ArrayList&lt;Integer&gt; list01 = <span class="keyword">new</span> ArrayList&lt;&gt;();
-    list01.add(<span class="number">1</span>);
-    list01.add(<span class="number">3</span>);
-    list01.add(<span class="number">2</span>);
-    System.out.println(list01);<span class="comment">//[1,3,2]</span>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建Map集合对象</span></span><br><span class="line">    Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"赵丽颖"</span>,<span class="number">168</span>);</span><br><span class="line">    map.put(<span class="string">"林依晨"</span>,<span class="number">165</span>);</span><br><span class="line">    map.put(<span class="string">"林志玲"</span>,<span class="number">178</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1.使用Map集合中的方法keySet（），把Map集合所有的key取出来，存储到一个Set集合中</span></span><br><span class="line">    Set&lt;String&gt; set = map.keySet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2.遍历Set集合，获取map集合汇总的每一个key；</span></span><br><span class="line">    <span class="comment">//使用迭代器遍历Set集合</span></span><br><span class="line">     Iterator&lt;String&gt; it = set.iterator();</span><br><span class="line">     <span class="keyword">while</span> (it.hasNext())&#123;</span><br><span class="line">         String key = it.next();</span><br><span class="line">         <span class="comment">//3.通过Map集合中的方法get(key)，通过key找到value</span></span><br><span class="line">         Integer value = map.get(key);</span><br><span class="line">         System.out.println(key+<span class="string">"="</span>+value);<span class="comment">//林志玲=178 赵丽颖=168  林依晨=165</span></span><br><span class="line">     &#125;</span><br><span class="line">     System.out.println(<span class="string">"============================================"</span>);</span><br><span class="line"></span><br><span class="line">     <span class="comment">//使用增强for遍历Set集合</span></span><br><span class="line">    <span class="keyword">for</span>(String key : set)&#123;</span><br><span class="line">        Integer value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">"="</span>+value);<span class="comment">//林志玲=178 赵丽颖=168  林依晨=165</span></span><br><span class="line">        </span><br><span class="line">       </span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-    Collections.sort(list01, <span class="keyword">new</span> Comparator&lt;Integer&gt;() {
-        <span class="meta">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Integer o1, Integer o2)</span> </span>{
-            <span class="comment">//return o1 - o2;//升序</span>
-            <span class="keyword">return</span> o2 - o1;<span class="comment">//降序</span>
-        }
-    });
 
-    System.out.println(list01);<span class="comment">//[1, 2, 3]，[3, 2, 1]</span>
 
-    ArrayList&lt;Student&gt; list02 = <span class="keyword">new</span> ArrayList&lt;&gt;();
-    list02.add(<span class="keyword">new</span> Student(<span class="string">"pglprome"</span>,<span class="number">26</span>));
-    list02.add(<span class="keyword">new</span> Student(<span class="string">"haseka"</span>,<span class="number">25</span>));
-    list02.add(<span class="keyword">new</span> Student(<span class="string">"skyve"</span>,<span class="number">18</span>));
-    list02.add(<span class="keyword">new</span> Student(<span class="string">"skyve"</span>,<span class="number">25</span>));
-    System.out.println(list02);<span class="comment">//[Student{name='pglprome', age=26}, Student{name='haseka', age=25}, Student{name='skyve', age=18}],[Student{name='pglprome', age=26}, Student{name='haseka', age=25}, Student{name='skyve', age=18}, Student{name='skyve', age=25}]</span>
-
-    <span class="comment">/*Collections.sort(list02, new Comparator&lt;Student&gt;() {</span>
-<span class="comment">        @Override</span>
-<span class="comment">        public int compare(Student o1, Student o2) {</span>
-<span class="comment">            //按照年龄升序排序</span>
-<span class="comment">            return o1.getAge() - o2.getAge();</span>
-<span class="comment">        }</span>
-<span class="comment">    });*/</span>
-
-    Collections.sort(list02, <span class="keyword">new</span> Comparator&lt;Student&gt;() {
-        <span class="meta">@Override</span>
-        <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Student o1, Student o2)</span> </span>{
-            <span class="comment">//按照年龄升序排序</span>
-            <span class="keyword">int</span> result =  o1.getAge() - o2.getAge();
-            <span class="comment">//如果两个人年龄相同，使用姓名的第一个字比较</span>
-            <span class="keyword">if</span>(result==<span class="number">0</span>){
-                result = o1.getName().charAt(<span class="number">0</span>) - o2.getName().charAt(<span class="number">0</span>);
-            }
-            <span class="keyword">return</span> result;
-        }
-    });
-    System.out.println(list02);<span class="comment">//[Student{name='skyve', age=18}, Student{name='haseka', age=25}, Student{name='pglprome', age=26}],[Student{name='skyve', age=18}, Student{name='haseka', age=25}, Student{name='skyve', age=25}, Student{name='pglprome', age=26}]</span>
-}</code></pre>
-</li>
-</ul>
 </li>
 </ul>
 </li>
 </ul>
 </li>
 </ol>
+<ul>
+<li><p>public Set&lt;Map.Entry&gt;&lt;K,V&gt;&gt; entryset():获取Map集合中所有的键值对对象的集合(Set集合)。</p>
+<ul>
+<li><p><img src="http://qck7twe2i.bkt.clouddn.com/java/entryset.png" alt=""></p>
+</li>
+<li><p>Map集合遍历的第二种方法：使用Entry对象遍历</p>
+<ul>
+<li>Map集合中的方法：public Set&lt;Map.Entry&gt;&lt;K,V&gt;&gt; entryset():获取Map集合中所有的键值对对象的集合(Set集合)。</li>
+<li>实现步骤：<ul>
+<li>使用Map集合中的方法entrySet(),把Map集合中的多个Entry对象取出。存储到一个Set集合中；</li>
+<li>遍历Set集合，获取每一个Entry对象；</li>
+<li>使用Entry对象的方法getKey()和getValue()获取键与值</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建Map集合对象</span></span><br><span class="line">    Map&lt;String,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"赵丽颖"</span>,<span class="number">168</span>);</span><br><span class="line">    map.put(<span class="string">"林依晨"</span>,<span class="number">165</span>);</span><br><span class="line">    map.put(<span class="string">"林志玲"</span>,<span class="number">178</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1.使用Map集合中的方法entrySet(),把Map集合中的多个Entry对象取出。存储到一个Set集合中</span></span><br><span class="line">    Set&lt;Map.Entry&lt;String,Integer&gt;&gt; set = map.entrySet();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//遍历Set集合，获取每一个Entry对象</span></span><br><span class="line">    <span class="comment">//使用迭代器遍历</span></span><br><span class="line">    Iterator&lt;Map.Entry&lt;String,Integer&gt;&gt; it = set.iterator();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (it.hasNext())&#123;</span><br><span class="line">        <span class="comment">//3.使用Entry对象的方法getKey()和getValue()获取键与值</span></span><br><span class="line">        Map.Entry&lt;String,Integer&gt;res = it.next();</span><br><span class="line">        String key = res.getKey();</span><br><span class="line">        Integer value = res.getValue();</span><br><span class="line">        System.out.println(key+<span class="string">"="</span>+value);<span class="comment">//林志玲=178 赵丽颖=168 林依晨=165</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    System.out.println(<span class="string">"==================================================="</span>);</span><br><span class="line">    <span class="comment">//使用增强for循环遍历</span></span><br><span class="line">    <span class="keyword">for</span>(Map.Entry&lt;String,Integer&gt; res : set)&#123;</span><br><span class="line">        String key = res.getKey();</span><br><span class="line">        Integer value = res.getValue();</span><br><span class="line">        System.out.println(key+<span class="string">"="</span>+value);<span class="comment">//林志玲=178 赵丽颖=168 林依晨=165</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+</li>
+</ul>
+</li>
+</ul>
 <p>3. </p>
 
             </div>
@@ -662,7 +685,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/11/Java-se-1/">http://haseka96.github.io/2020/07/11/Java-se-1/</a>
+                    <a href="http://haseka96.github.io/2020/07/12/Java-se-2/">http://haseka96.github.io/2020/07/12/Java-se-2/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -706,6 +729,10 @@
                             
                                 <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
                                     <span class="chip bg-color">视频随笔</span>
+                                </a>
+                            
+                                <a href="/tags/Map/">
+                                    <span class="chip bg-color">Map</span>
                                 </a>
                             
                         </div>
@@ -897,7 +924,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-11T19-53-37',
+        id: '2020-07-12T08-45-23',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -922,7 +949,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Sat Jul 11 2020 19:53:37 GMT+0800',
+    id: 'Sun Jul 12 2020 08:45:23 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1235,9 +1262,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/12/Java-se-2/">
                     <div class="card-image">
@@ -1255,9 +1283,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1270,6 +1298,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1296,31 +1325,31 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/09/hege-25/">
+                <a href="/2020/07/11/Java-se-1/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="和歌-25">
+                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="Java_se_1">
                         
-                        <span class="card-title">和歌-25</span>
+                        <span class="card-title">Java_se_1</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            我愿悄悄前去与你相会
+                            b站javase视频随笔
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-09
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-11
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%92%8C%E6%AD%8C/" class="post-category">
-                                    和歌
+                            <a href="/categories/Java/" class="post-category">
+                                    Java
                                 </a>
                             
                             
@@ -1330,20 +1359,12 @@ gitment.render('gitment-content');
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%92%8C%E6%AD%8C/">
-                        <span class="chip bg-color">和歌</span>
+                    <a href="/tags/Java/">
+                        <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/%E8%8A%B1%E7%89%8C%E6%83%85%E7%BC%98/">
-                        <span class="chip bg-color">花牌情缘</span>
-                    </a>
-                    
-                    <a href="/tags/%E7%9B%B8%E6%80%9D/">
-                        <span class="chip bg-color">相思</span>
-                    </a>
-                    
-                    <a href="/tags/%E4%B8%89%E6%9D%A1%E5%8F%B3%E5%A4%A7%E8%87%A3/">
-                        <span class="chip bg-color">三条右大臣</span>
+                    <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
+                        <span class="chip bg-color">视频随笔</span>
                     </a>
                     
                 </div>
