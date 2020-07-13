@@ -566,7 +566,28 @@
 </li>
 </ul>
 </li>
-<li></li>
+<li><p>Hashtable</p>
+<ul>
+<li><p>java.util.Hashtable&lt;K,V&gt;集合 implements Map&lt;K,V&gt;接口</p>
+</li>
+<li><p>Hashtable：底层也是一个哈希表，是一个线程安全的集合，是单线程集合，速度慢</p>
+</li>
+<li><p>HashMap：底层是一个哈希表，是一个线程不安全的集合，是多线程的集合，速度快</p>
+</li>
+<li><p>Hashtable集合，不能存储null值，null键</p>
+</li>
+<li><p>Hashtable和Vector集合一样，在jdk1.2版本之后被更先进的集合（HashMap，ArrayList）取代了</p>
+</li>
+<li><p>Hashtable的资料Properties依然活跃在历史舞台</p>
+</li>
+<li><p>Properties集合是一个唯一和IO流相结合的集合</p>
+</li>
+<li><p>代码解释：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="string">"a"</span>);</span><br><span class="line">    map.put(<span class="string">"b"</span>, <span class="keyword">null</span>);</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    System.out.println(map);<span class="comment">//&#123;null=null, b=null&#125;</span></span><br><span class="line"></span><br><span class="line">    HashMap&lt;String, String&gt; table = <span class="keyword">new</span> Hashtable&lt;&gt;();</span><br><span class="line">    <span class="comment">//table.put(null,"a");//NullPointerException</span></span><br><span class="line">    <span class="comment">//table.put("b",null);//NullPointerException</span></span><br><span class="line">    table.put(<span class="keyword">null</span>,<span class="keyword">null</span>);<span class="comment">//NullPointerException</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+</li>
 </ol>
 
             </div>
