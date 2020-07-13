@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java_practice_map, Haseka&#39;s Blog">
+    <meta name="keywords" content="Java_practice_poker, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java_practice_map | Haseka&#39;s Blog</title>
+    <title>Java_practice_poker | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java_practice_map</h1>
+                    <h1 class="description center-align post-title">Java_practice_poker</h1>
                 </div>
             </div>
         </div>
@@ -486,6 +486,10 @@
                                 <span class="chip bg-color">练习</span>
                             </a>
                         
+                            <a href="/tags/%E6%89%91%E5%85%8B/">
+                                <span class="chip bg-color">扑克</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -524,38 +528,33 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>需求</p>
+<li><p>流程</p>
 <ul>
-<li>计算一个字符串中每个字符出现次数</li>
-</ul>
+<li><p>准备牌</p>
 </li>
-<li><p>分析</p>
-<ul>
-<li>使用Scanner获取用户输入的字符串</li>
-<li>创建Map集合，key是字符串中的字符，value是字符的个数</li>
-<li>遍历字符串，获取每一个字符</li>
-<li>使用获取到的字符，去Map集合判读key是否存在<ul>
-<li>key存在：<ul>
-<li>通过字符（key），获取到value（字符个数）</li>
-<li>value++</li>
-<li>put（key，value）把新的value存储到Map集合中</li>
-</ul>
+<li><p>洗牌</p>
 </li>
-<li>key不存在：<ul>
-<li>put（key，1）</li>
-</ul>
+<li><p>发牌</p>
+</li>
+<li><p>排序</p>
+</li>
+<li><p>看牌</p>
 </li>
 </ul>
 </li>
-<li>遍历Map集合，输出结果</li>
-</ul>
-</li>
-<li><p>分析图</p>
-<p><img src="http://qck7twe2i.bkt.clouddn.com/java/map_practice.png" alt=""></p>
+<li><p>解析</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/poker.png" alt=""></p>
 </li>
 <li><p>代码实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.使用Scanner获取用户输入的字符串</span></span><br><span class="line">    Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    System.out.println(<span class="string">"请输入一个字符串"</span>);</span><br><span class="line">    String str = sc.next(); <span class="comment">//aaabbbbccad</span></span><br><span class="line">    <span class="comment">//2.创建Map集合，key是字符串中的字符，value是字符的个数</span></span><br><span class="line">    Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//3.遍历字符串，获取每一个字符</span></span><br><span class="line">    <span class="keyword">char</span>[] str_arr = str.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> len = str_arr.length;</span><br><span class="line">    <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">    <span class="keyword">for</span>(Character c:str_arr)&#123;</span><br><span class="line">        <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(c))&#123;</span><br><span class="line">            <span class="keyword">int</span> value = map.get(c);</span><br><span class="line">            value++;</span><br><span class="line">            map.put(c,value);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(c,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5.遍历Map集合，输出结果</span></span><br><span class="line">    Set&lt;Character&gt; set = map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Character key : set)&#123;</span><br><span class="line">        <span class="keyword">int</span> value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">":"</span>+value);<span class="comment">//a:4 b:4 c:2 d:1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    <span class="comment">//1.准备牌</span></span><br><span class="line">    <span class="comment">//创建一个Map集合，存储牌的索引和组装好的牌</span></span><br><span class="line">    HashMap&lt;Integer,String&gt; poker = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//创建一个List集合，存储牌的索引</span></span><br><span class="line">    ArrayList&lt;Integer&gt; pokerIndex = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//定义两个集合，存储花色和牌的序号</span></span><br><span class="line">    List&lt;String&gt; colors = List.of(<span class="string">"♣"</span>,<span class="string">"♥"</span>,<span class="string">"♠"</span>,<span class="string">"♦"</span>);</span><br><span class="line">    List&lt;String&gt; numbers = List.of(<span class="string">"2"</span>,<span class="string">"A"</span>,<span class="string">"K"</span>,<span class="string">"Q"</span>,<span class="string">"J"</span>,<span class="string">"10"</span>,<span class="string">"9"</span>,<span class="string">"8"</span>,<span class="string">"7"</span>,<span class="string">"6"</span>,<span class="string">"5"</span>,<span class="string">"4"</span>,<span class="string">"3"</span>);</span><br><span class="line">    <span class="comment">//把大王和小王存储到集合中</span></span><br><span class="line">    <span class="comment">//定义一个牌的索引</span></span><br><span class="line">    <span class="keyword">int</span> index = <span class="number">0</span>;</span><br><span class="line">    poker.put(index,<span class="string">"大王"</span>);</span><br><span class="line">    pokerIndex.add(index);</span><br><span class="line">    index++;</span><br><span class="line">    poker.put(index,<span class="string">"小王"</span>);</span><br><span class="line">    pokerIndex.add(index);</span><br><span class="line">    index++;</span><br><span class="line">    <span class="comment">//循环嵌套遍历两个集合，组合52张牌，存储到集合中</span></span><br><span class="line">    <span class="keyword">for</span>(String number:numbers)&#123;</span><br><span class="line">        <span class="keyword">for</span>(String color : colors)&#123;</span><br><span class="line">            poker.put(index,color+number);</span><br><span class="line">            pokerIndex.add(index);</span><br><span class="line">            index++;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println(poker);</span><br><span class="line">    System.out.println(pokerIndex);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        2.洗牌</span></span><br><span class="line"><span class="comment">        使用Collections中的方法shuffle（List）</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Collections.shuffle(pokerIndex);</span><br><span class="line">    System.out.println(pokerIndex);</span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        3.发牌</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="comment">//定义4个集合，存储玩家牌的索引，和底牌的索引</span></span><br><span class="line">    ArrayList&lt;Integer&gt; player01 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    ArrayList&lt;Integer&gt; player02 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    ArrayList&lt;Integer&gt; player03 = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    ArrayList&lt;Integer&gt; diPai = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="comment">//遍历存储牌索引的List集合，获取每一个牌的索引</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i=<span class="number">0</span>; i &lt; pokerIndex.size(); i++)&#123;</span><br><span class="line">        Integer in = pokerIndex.get(i);</span><br><span class="line">        <span class="comment">//先判断底牌</span></span><br><span class="line">        <span class="keyword">if</span>(i&gt;=<span class="number">51</span>)&#123;</span><br><span class="line">            <span class="comment">//给底牌发牌</span></span><br><span class="line">            diPai.add(in);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i%<span class="number">3</span> == <span class="number">0</span>)&#123;</span><br><span class="line">            <span class="comment">//给玩家1发牌</span></span><br><span class="line">            player01.add(in);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i%<span class="number">3</span> == <span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//给玩家2发牌</span></span><br><span class="line">            player02.add(in);</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (i%<span class="number">3</span> == <span class="number">2</span>)&#123;</span><br><span class="line">            <span class="comment">//给玩家3发牌</span></span><br><span class="line">            player03.add(in);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        4.排序</span></span><br><span class="line"><span class="comment">        使用Collections中的方法sort（list）</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    Collections.sort(player01);</span><br><span class="line">    Collections.sort(player02);</span><br><span class="line">    Collections.sort(player03);</span><br><span class="line">    Collections.sort(diPai);</span><br><span class="line"></span><br><span class="line">    <span class="comment">/*</span></span><br><span class="line"><span class="comment">        5.看牌</span></span><br><span class="line"><span class="comment">        调用看牌的方法</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    lookPoker(<span class="string">"刘德华"</span>,poker,player01);</span><br><span class="line">    lookPoker(<span class="string">"周润发"</span>,poker,player02);</span><br><span class="line">    lookPoker(<span class="string">"周星驰"</span>,poker,player03);</span><br><span class="line">    lookPoker(<span class="string">"底牌"</span>,poker,diPai);</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">        定义一个看牌的方法，提高代码的复用性</span></span><br><span class="line"><span class="comment">        参数：</span></span><br><span class="line"><span class="comment">            String name：玩家名称</span></span><br><span class="line"><span class="comment">            HashMap&lt;Integer,String&gt; poker: 存储牌的poker集合</span></span><br><span class="line"><span class="comment">            ArrayList&lt;Integer&gt; list: 存储玩家和底牌的List集合</span></span><br><span class="line"><span class="comment">        查表法：</span></span><br><span class="line"><span class="comment">            遍历玩家或者底牌集合，获取牌的索引</span></span><br><span class="line"><span class="comment">            使用牌的索引，去Map集合中，找到对应的牌</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span>  <span class="keyword">void</span> <span class="title">lookPoker</span><span class="params">(String name,HashMap&lt;Integer,String&gt; poker,ArrayList&lt;Integer&gt; list)</span></span>&#123;</span><br><span class="line">    <span class="comment">//输出玩家名称，不换行</span></span><br><span class="line">    System.out.print(name+<span class="string">": "</span>);</span><br><span class="line">    <span class="comment">//遍历玩家或者底牌集合，获取牌的索引</span></span><br><span class="line">    <span class="keyword">for</span> (Integer key : list)&#123;</span><br><span class="line">        <span class="comment">//使用牌的索引，去Map集合中，找到对应的牌</span></span><br><span class="line">        String value = poker.get(key);</span><br><span class="line">        System.out.print(value+<span class="string">" "</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    System.out.println();<span class="comment">//打印完每一个玩家的牌，换行</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
+
+
+</li>
+</ol>
+<ol start="4">
+<li><p>结果</p>
+<p>刘德华: 大王 小王 ♥2 ♠2 ♥Q ♠Q ♣J ♠J ♠10 ♦10 ♣9 ♥7 ♣6 ♣5 ♦5 ♥4 ♦3<br>周润发: ♣2 ♦2 ♣A ♠K ♥J ♦J ♣10 ♥10 ♥9 ♠9 ♣8 ♥8 ♠8 ♣7 ♠7 ♠6 ♠4<br>周星驰: ♥A ♠A ♦A ♣K ♥K ♦K ♦Q ♦8 ♦7 ♥6 ♦6 ♥5 ♠5 ♣4 ♦4 ♥3 ♠3<br>底牌: ♣Q ♦9 ♣3 </p>
 </li>
 </ol>
 
@@ -583,7 +582,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/13/Java-practice-map/">http://haseka96.github.io/2020/07/13/Java-practice-map/</a>
+                    <a href="http://haseka96.github.io/2020/07/13/Java-practice-poker/">http://haseka96.github.io/2020/07/13/Java-practice-poker/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -631,6 +630,10 @@
                             
                                 <a href="/tags/%E7%BB%83%E4%B9%A0/">
                                     <span class="chip bg-color">练习</span>
+                                </a>
+                            
+                                <a href="/tags/%E6%89%91%E5%85%8B/">
+                                    <span class="chip bg-color">扑克</span>
                                 </a>
                             
                         </div>
@@ -822,7 +825,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-13T20-13-58',
+        id: '2020-07-13T22-19-42',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -847,7 +850,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Mon Jul 13 2020 20:13:58 GMT+0800',
+    id: 'Mon Jul 13 2020 22:19:42 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1160,9 +1163,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/13/Java-practice-poker/">
                     <div class="card-image">
@@ -1180,9 +1184,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1195,6 +1199,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1225,19 +1230,19 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/13/Java-se-3/">
+                <a href="/2020/07/13/Java-practice-map/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="Java_se_3">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Java_practice_map">
                         
-                        <span class="card-title">Java_se_3</span>
+                        <span class="card-title">Java_practice_map</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            b站javase视频随笔
+                            Map练习
                         
                     </div>
                     <div class="publish-info">
@@ -1263,8 +1268,12 @@ gitment.render('gitment-content');
                         <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
-                        <span class="chip bg-color">视频随笔</span>
+                    <a href="/tags/Map/">
+                        <span class="chip bg-color">Map</span>
+                    </a>
+                    
+                    <a href="/tags/%E7%BB%83%E4%B9%A0/">
+                        <span class="chip bg-color">练习</span>
                     </a>
                     
                 </div>
