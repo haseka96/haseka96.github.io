@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java_se_3, Haseka&#39;s Blog">
+    <meta name="keywords" content="Java_practice_map, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java_se_3 | Haseka&#39;s Blog</title>
+    <title>Java_practice_map | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java_se_3</h1>
+                    <h1 class="description center-align post-title">Java_practice_map</h1>
                 </div>
             </div>
         </div>
@@ -478,8 +478,12 @@
                                 <span class="chip bg-color">Java</span>
                             </a>
                         
-                            <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
-                                <span class="chip bg-color">视频随笔</span>
+                            <a href="/tags/Map/">
+                                <span class="chip bg-color">Map</span>
+                            </a>
+                        
+                            <a href="/tags/%E7%BB%83%E4%B9%A0/">
+                                <span class="chip bg-color">练习</span>
                             </a>
                         
                     </div>
@@ -520,73 +524,38 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>HashMap</p>
+<li><p>需求</p>
 <ul>
-<li><p>HaspMap存储自定义类型键值：Map集合保证key是唯一的，作为key的元素，必须重写hashCode方法和 equals方法，以保证key唯一。</p>
+<li>计算一个字符串中每个字符出现次数</li>
+</ul>
 </li>
-<li><p>例子一：</p>
+<li><p>分析</p>
 <ul>
-<li><p>HashMap存储自定义类键值：</p>
+<li>使用Scanner获取用户输入的字符串</li>
+<li>创建Map集合，key是字符串中的字符，value是字符的个数</li>
+<li>遍历字符串，获取每一个字符</li>
+<li>使用获取到的字符，去Map集合判读key是否存在<ul>
+<li>key存在：<ul>
+<li>通过字符（key），获取到value（字符个数）</li>
+<li>value++</li>
+<li>put（key，value）把新的value存储到Map集合中</li>
+</ul>
 </li>
-<li><p>key:String类型——&gt;String类型重写hashCode方法和equals方法，可以保证key唯一；</p>
-</li>
-<li><p>value:Person类型——&gt;value可以重复（同名同龄的人视为同一个人）。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">show01</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建HashMap集合</span></span><br><span class="line">    HashMap&lt;String,Person&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//往集合添加元素</span></span><br><span class="line">    map.put(<span class="string">"北京"</span>,<span class="keyword">new</span> Person(<span class="string">"pglprome"</span>,<span class="number">26</span>));</span><br><span class="line">    map.put(<span class="string">"上海"</span>,<span class="keyword">new</span> Person(<span class="string">"haseka"</span>,<span class="number">24</span>));</span><br><span class="line">    map.put(<span class="string">"广州"</span>,<span class="keyword">new</span> Person(<span class="string">"skyve"</span>,<span class="number">18</span>));</span><br><span class="line">    map.put(<span class="string">"北京"</span>,<span class="keyword">new</span> Person(<span class="string">"pglprome2"</span>,<span class="number">26</span>));</span><br><span class="line"></span><br><span class="line">    System.out.println(map);</span><br><span class="line">    Set&lt;String &gt; set = map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(String key : set)&#123;</span><br><span class="line">        Person value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">"---&gt;"</span>+value);<span class="comment">//上海---&gt;Person&#123;name='haseka', age=24&#125; 广州---&gt;Person&#123;name='skyve', age=18&#125; 北京---&gt;Person&#123;name='pglprome2', age=26&#125;</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>key不存在：<ul>
+<li>put（key，1）</li>
+</ul>
 </li>
 </ul>
 </li>
-<li><p>例子二：</p>
-<ul>
-<li><p>HashMap存储自定义类键值</p>
+<li>遍历Map集合，输出结果</li>
+</ul>
 </li>
-<li><p>key:Person类型——-&gt; Person类必须重写hashCode方法和equals方法，以保证key唯一；</p>
+<li><p>分析图</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/map_practice.png" alt=""></p>
 </li>
-<li><p>value:String类型——-&gt; value可以重复。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> age;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Person</span><span class="params">(String name, <span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object o)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">this</span> == o) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="keyword">if</span> (o == <span class="keyword">null</span> || getClass() != o.getClass()) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        Person person = (Person) o;</span><br><span class="line">        <span class="keyword">return</span> age == person.age &amp;&amp;</span><br><span class="line">                name.equals(person.name);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">hashCode</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> Objects.hash(name, age);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">toString</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"Person&#123;"</span> +</span><br><span class="line">                <span class="string">"name='"</span> + name + <span class="string">'\''</span> +</span><br><span class="line">                <span class="string">", age="</span> + age +</span><br><span class="line">                <span class="string">'&#125;'</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setName</span><span class="params">(String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(<span class="keyword">int</span> age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.使用Scanner获取用户输入的字符串</span></span><br><span class="line">    Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    System.out.println(<span class="string">"请输入一个字符串"</span>);</span><br><span class="line">    String str = sc.next(); <span class="comment">//aaabbbbccad</span></span><br><span class="line">    <span class="comment">//2.创建Map集合，key是字符串中的字符，value是字符的个数</span></span><br><span class="line">    Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//3.遍历字符串，获取每一个字符</span></span><br><span class="line">    <span class="keyword">char</span>[] str_arr = str.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> len = str_arr.length;</span><br><span class="line">    <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">    <span class="keyword">for</span>(Character c:str_arr)&#123;</span><br><span class="line">        <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(c))&#123;</span><br><span class="line">            <span class="keyword">int</span> value = map.get(c);</span><br><span class="line">            value++;</span><br><span class="line">            map.put(c,value);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(c,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5.遍历Map集合，输出结果</span></span><br><span class="line">    Set&lt;Character&gt; set = map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Character key : set)&#123;</span><br><span class="line">        <span class="keyword">int</span> value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">":"</span>+value);<span class="comment">//a:4 b:4 c:2 d:1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">show02</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//创建HashMap集合</span></span><br><span class="line">    HashMap&lt;Person,String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="keyword">new</span> Person(<span class="string">"pglprome"</span>,<span class="number">26</span>),<span class="string">"北京"</span>);</span><br><span class="line">    map.put(<span class="keyword">new</span> Person(<span class="string">"haseka"</span>,<span class="number">24</span>),<span class="string">"上海"</span>);</span><br><span class="line">    map.put(<span class="keyword">new</span> Person(<span class="string">"skyve"</span>,<span class="number">18</span>),<span class="string">"广州"</span>);</span><br><span class="line">    map.put(<span class="keyword">new</span> Person(<span class="string">"pglprome"</span>,<span class="number">26</span>),<span class="string">"厄瓜多尔"</span>);</span><br><span class="line"></span><br><span class="line">    Set&lt;Person &gt; set = map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Person key : set)&#123;</span><br><span class="line">        String value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">"---&gt;"</span>+value);<span class="comment">//Person&#123;name='pglprome', age=26&#125;---&gt;厄瓜多尔 Person&#123;name='haseka', age=24&#125;---&gt;上海 Person&#123;name='skyve', age=18&#125;---&gt;广州</span></span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>总结：HashMap中，String最为key的时候应为String类已经自己重写了hashCode方法和equals方法，所以我们可以直接用；但是自己自定义的类作为关键字的时候，必须重写hashCode方法和equals方法，才能保证key的唯一性。</p>
-</li>
-</ul>
-</li>
-<li><p>LinkeHashMap</p>
-<ul>
-<li><p>java.util.LinkedHashMap&lt;K,V&gt; entends HashMap&lt;K,V&gt;</p>
-</li>
-<li><p>Map 接口的哈希表和链表实现，具有可预知的迭代顺序。</p>
-</li>
-<li><p>底层原理：</p>
-<p>​    哈希表+链表（记录元素的顺序）</p>
-</li>
-<li><p>代码实现：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    HashMap&lt;String,String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="string">"a"</span>,<span class="string">"a"</span>);</span><br><span class="line">    map.put(<span class="string">"c"</span>,<span class="string">"c"</span>);</span><br><span class="line">    map.put(<span class="string">"b"</span>,<span class="string">"b"</span>);</span><br><span class="line">    map.put(<span class="string">"a"</span>,<span class="string">"d"</span>);</span><br><span class="line">    System.out.println(map);<span class="comment">//&#123;a=d, b=b, c=c&#125; key不允许重复，无序</span></span><br><span class="line"></span><br><span class="line">    LinkedHashMap&lt;String,String&gt; linked = <span class="keyword">new</span> LinkedHashMap&lt;&gt;();</span><br><span class="line">    linked.put(<span class="string">"a"</span>,<span class="string">"a"</span>);</span><br><span class="line">    linked.put(<span class="string">"c"</span>,<span class="string">"c"</span>);</span><br><span class="line">    linked.put(<span class="string">"b"</span>,<span class="string">"b"</span>);</span><br><span class="line">    linked.put(<span class="string">"a"</span>,<span class="string">"d"</span>);</span><br><span class="line">    System.out.println(linked);<span class="comment">//&#123;a=d, c=c, b=b&#125; key不允许重复，有序</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-</li>
-<li><p>Hashtable</p>
-<ul>
-<li><p>java.util.Hashtable&lt;K,V&gt;集合 implements Map&lt;K,V&gt;接口</p>
-</li>
-<li><p>Hashtable：底层也是一个哈希表，是一个线程安全的集合，是单线程集合，速度慢</p>
-</li>
-<li><p>HashMap：底层是一个哈希表，是一个线程不安全的集合，是多线程的集合，速度快</p>
-</li>
-<li><p>Hashtable集合，不能存储null值，null键</p>
-</li>
-<li><p>Hashtable和Vector集合一样，在jdk1.2版本之后被更先进的集合（HashMap，ArrayList）取代了</p>
-</li>
-<li><p>Hashtable的资料Properties依然活跃在历史舞台</p>
-</li>
-<li><p>Properties集合是一个唯一和IO流相结合的集合</p>
-</li>
-<li><p>代码解释：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="string">"a"</span>);</span><br><span class="line">    map.put(<span class="string">"b"</span>, <span class="keyword">null</span>);</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    System.out.println(map);<span class="comment">//&#123;null=null, b=null&#125;</span></span><br><span class="line"></span><br><span class="line">    HashMap&lt;String, String&gt; table = <span class="keyword">new</span> Hashtable&lt;&gt;();</span><br><span class="line">    <span class="comment">//table.put(null,"a");//NullPointerException</span></span><br><span class="line">    <span class="comment">//table.put("b",null);//NullPointerException</span></span><br><span class="line">    table.put(<span class="keyword">null</span>,<span class="keyword">null</span>);<span class="comment">//NullPointerException</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-</li>
-</ul>
 </li>
 </ol>
 
@@ -614,7 +583,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/13/Java-se-3/">http://haseka96.github.io/2020/07/13/Java-se-3/</a>
+                    <a href="http://haseka96.github.io/2020/07/13/Java-practice-map/">http://haseka96.github.io/2020/07/13/Java-practice-map/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -656,8 +625,12 @@
                                     <span class="chip bg-color">Java</span>
                                 </a>
                             
-                                <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
-                                    <span class="chip bg-color">视频随笔</span>
+                                <a href="/tags/Map/">
+                                    <span class="chip bg-color">Map</span>
+                                </a>
+                            
+                                <a href="/tags/%E7%BB%83%E4%B9%A0/">
+                                    <span class="chip bg-color">练习</span>
                                 </a>
                             
                         </div>
@@ -849,7 +822,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-13T09-02-40',
+        id: '2020-07-13T20-13-58',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -874,7 +847,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Mon Jul 13 2020 09:02:40 GMT+0800',
+    id: 'Mon Jul 13 2020 20:13:58 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1187,9 +1160,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/13/Java-practice-map/">
                     <div class="card-image">
@@ -1207,9 +1181,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1222,6 +1196,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1248,13 +1223,13 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/12/Java-se-2/">
+                <a href="/2020/07/13/Java-se-3/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="Java_se_2">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="Java_se_3">
                         
-                        <span class="card-title">Java_se_2</span>
+                        <span class="card-title">Java_se_3</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1265,7 +1240,7 @@ gitment.render('gitment-content');
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-12
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
                             </span>
                         <span class="publish-author">
                             
@@ -1288,10 +1263,6 @@ gitment.render('gitment-content');
                     
                     <a href="/tags/%E8%A7%86%E9%A2%91%E9%9A%8F%E7%AC%94/">
                         <span class="chip bg-color">视频随笔</span>
-                    </a>
-                    
-                    <a href="/tags/Map/">
-                        <span class="chip bg-color">Map</span>
                     </a>
                     
                 </div>

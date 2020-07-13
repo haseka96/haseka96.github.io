@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>Java_practice_map</title>
+      <link href="/2020/07/13/Java-practice-map/"/>
+      <url>/2020/07/13/Java-practice-map/</url>
+      
+        <content type="html"><![CDATA[<ol><li><p>需求</p><ul><li>计算一个字符串中每个字符出现次数</li></ul></li><li><p>分析</p><ul><li>使用Scanner获取用户输入的字符串</li><li>创建Map集合，key是字符串中的字符，value是字符的个数</li><li>遍历字符串，获取每一个字符</li><li>使用获取到的字符，去Map集合判读key是否存在<ul><li>key存在：<ul><li>通过字符（key），获取到value（字符个数）</li><li>value++</li><li>put（key，value）把新的value存储到Map集合中</li></ul></li><li>key不存在：<ul><li>put（key，1）</li></ul></li></ul></li><li>遍历Map集合，输出结果</li></ul></li><li><p>分析图</p><p><img src="http://qck7twe2i.bkt.clouddn.com/java/map_practice.png" alt=""></p></li><li><p>代码实现</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.使用Scanner获取用户输入的字符串</span></span><br><span class="line">    Scanner sc = <span class="keyword">new</span> Scanner(System.in);</span><br><span class="line">    System.out.println(<span class="string">"请输入一个字符串"</span>);</span><br><span class="line">    String str = sc.next(); <span class="comment">//aaabbbbccad</span></span><br><span class="line">    <span class="comment">//2.创建Map集合，key是字符串中的字符，value是字符的个数</span></span><br><span class="line">    Map&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    <span class="comment">//3.遍历字符串，获取每一个字符</span></span><br><span class="line">    <span class="keyword">char</span>[] str_arr = str.toCharArray();</span><br><span class="line">    <span class="keyword">int</span> len = str_arr.length;</span><br><span class="line">    <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">    <span class="keyword">for</span>(Character c:str_arr)&#123;</span><br><span class="line">        <span class="comment">//4.使用获取到的字符，去Map集合判读key是否存在</span></span><br><span class="line">        <span class="keyword">if</span>(map.containsKey(c))&#123;</span><br><span class="line">            <span class="keyword">int</span> value = map.get(c);</span><br><span class="line">            value++;</span><br><span class="line">            map.put(c,value);</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            map.put(c,<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 5.遍历Map集合，输出结果</span></span><br><span class="line">    Set&lt;Character&gt; set = map.keySet();</span><br><span class="line">    <span class="keyword">for</span>(Character key : set)&#123;</span><br><span class="line">        <span class="keyword">int</span> value = map.get(key);</span><br><span class="line">        System.out.println(key+<span class="string">":"</span>+value);<span class="comment">//a:4 b:4 c:2 d:1</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> Map </tag>
+            
+            <tag> 练习 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>Java_se_3</title>
       <link href="/2020/07/13/Java-se-3/"/>
       <url>/2020/07/13/Java-se-3/</url>
