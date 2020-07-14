@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>leetcode_401</title>
+      <link href="/2020/07/14/leetcode-401/"/>
+      <url>/2020/07/14/leetcode-401/</url>
+      
+        <content type="html"><![CDATA[<ol><li><p>题目：</p><p>二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。</p><p>每个 LED 代表一个 0 或 1，最低位在右侧。</p><p><img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Binary_clock_samui_moon.jpg" alt=""></p><p>例如，上面的二进制手表读取 “3:25”。</p><p>给定一个非负整数 <em>n</em> 代表当前 LED 亮着的数量，返回所有可能的时间。</p><p>示例：</p><p>输入: n = 1<br>返回: [“1:00”, “2:00”, “4:00”, “8:00”, “0:01”, “0:02”, “0:04”, “0:08”, “0:16”, “0:32”]</p><p>提示：</p><p>输出的顺序没有要求。<br>小时不会以零开头，比如 “01:00” 是不允许的，应为 “1:00”。<br>分钟必须由两位数组成，可能会以零开头，比如 “10:2” 是无效的，应为 “10:02”。<br>超过表示范围（小时 0-11，分钟 0-59）的数据将会被舍弃，也就是说不会出现 “13:00”, “0:61” 等时间。</p></li><li><p>代码实现</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">readBinaryWatch</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">       List&lt;String&gt; times =<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">12</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">60</span>;j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(Integer.bitCount(i)+Integer.bitCount(j) == num)&#123;</span><br><span class="line">                    times.add(String.format(<span class="string">"%d:%02d"</span>,i,j));</span><br><span class="line">               &#125;</span><br><span class="line">                 </span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> times;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure><p>而bitCount()在JDK1.8下的源码：(计算int型变量中二进制形式下1的个数)</p><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bitCount</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// HD, Figure 5-2</span></span><br><span class="line">        i = i - ((i &gt;&gt;&gt; <span class="number">1</span>) &amp; <span class="number">0x55555555</span>);</span><br><span class="line">        i = (i &amp; <span class="number">0x33333333</span>) + ((i &gt;&gt;&gt; <span class="number">2</span>) &amp; <span class="number">0x33333333</span>);</span><br><span class="line">        i = (i + (i &gt;&gt;&gt; <span class="number">4</span>)) &amp; <span class="number">0x0f0f0f0f</span>;</span><br><span class="line">        i = i + (i &gt;&gt;&gt; <span class="number">8</span>);</span><br><span class="line">        i = i + (i &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">        <span class="keyword">return</span> i &amp; <span class="number">0x3f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> Java </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Java </tag>
+            
+            <tag> LeetCode </tag>
+            
+            <tag> 回溯 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>leetcode_120</title>
       <link href="/2020/07/14/leetcode-120/"/>
       <url>/2020/07/14/leetcode-120/</url>

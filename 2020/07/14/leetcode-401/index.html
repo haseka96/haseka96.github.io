@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="leetcode_120, Haseka&#39;s Blog">
+    <meta name="keywords" content="leetcode_401, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>leetcode_120 | Haseka&#39;s Blog</title>
+    <title>leetcode_401 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/13.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">leetcode_120</h1>
+                    <h1 class="description center-align post-title">leetcode_401</h1>
                 </div>
             </div>
         </div>
@@ -482,12 +482,8 @@
                                 <span class="chip bg-color">LeetCode</span>
                             </a>
                         
-                            <a href="/tags/120/">
-                                <span class="chip bg-color">120</span>
-                            </a>
-                        
-                            <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
-                                <span class="chip bg-color">动态规划</span>
+                            <a href="/tags/%E5%9B%9E%E6%BA%AF/">
+                                <span class="chip bg-color">回溯</span>
                             </a>
                         
                     </div>
@@ -528,33 +524,23 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>描述 ：</p>
-<ul>
-<li><p>给定一个三角形，找出自顶向下的最小路径和。每一步只能移动到下一行中相邻的结点上。</p>
-</li>
-<li><p>相邻的结点 在这里指的是 下标 与 上一层结点下标 相同或者等于 上一层结点下标 + 1 的两个结点。</p>
-</li>
-<li><p>例如，给定三角形：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[</span><br><span class="line">     [<span class="number">2</span>],</span><br><span class="line">    [<span class="number">3</span>,<span class="number">4</span>],</span><br><span class="line">   [<span class="number">6</span>,<span class="number">5</span>,<span class="number">7</span>],</span><br><span class="line">  [<span class="number">4</span>,<span class="number">1</span>,<span class="number">8</span>,<span class="number">3</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-
-<p>自顶向下的最小路径和为 <code>11</code>（即，<strong>2</strong> + <strong>3</strong> + <strong>5</strong> + <strong>1</strong> = 11）。</p>
-</li>
-</ul>
+<li><p>题目：</p>
+<p>二进制手表顶部有 4 个 LED 代表 小时（0-11），底部的 6 个 LED 代表 分钟（0-59）。</p>
+<p>每个 LED 代表一个 0 或 1，最低位在右侧。</p>
+<p><img src="https://upload.wikimedia.org/wikipedia/commons/8/8b/Binary_clock_samui_moon.jpg" alt=""></p>
+<p>例如，上面的二进制手表读取 “3:25”。</p>
+<p>给定一个非负整数 <em>n</em> 代表当前 LED 亮着的数量，返回所有可能的时间。</p>
+<p>示例：</p>
+<p>输入: n = 1<br>返回: [“1:00”, “2:00”, “4:00”, “8:00”, “0:01”, “0:02”, “0:04”, “0:08”, “0:16”, “0:32”]</p>
+<p>提示：</p>
+<p>输出的顺序没有要求。<br>小时不会以零开头，比如 “01:00” 是不允许的，应为 “1:00”。<br>分钟必须由两位数组成，可能会以零开头，比如 “10:2” 是无效的，应为 “10:02”。<br>超过表示范围（小时 0-11，分钟 0-59）的数据将会被舍弃，也就是说不会出现 “13:00”, “0:61” 等时间。</p>
 </li>
 <li><p>代码实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">minimumTotal</span><span class="params">(List&lt;List&lt;Integer&gt;&gt; triangle)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> len = triangle.size();</span><br><span class="line">        <span class="keyword">int</span> [][] f = <span class="keyword">new</span> <span class="keyword">int</span>[len][len]; </span><br><span class="line">        f[<span class="number">0</span>][<span class="number">0</span>] = triangle.get(<span class="number">0</span>).get(<span class="number">0</span>);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++)&#123;</span><br><span class="line">            </span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;=i;j++)&#123;</span><br><span class="line">                <span class="keyword">if</span>(j==<span class="number">0</span>)&#123;</span><br><span class="line">                    f[i][j] = f[i-<span class="number">1</span>][j]+triangle.get(i).get(j);</span><br><span class="line">                &#125;<span class="keyword">else</span> <span class="keyword">if</span>(i==j)&#123;</span><br><span class="line">                    f[i][j] = f[i-<span class="number">1</span>][j-<span class="number">1</span>] + triangle.get(i).get(j);</span><br><span class="line">                &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                    <span class="keyword">if</span>(f[i-<span class="number">1</span>][j] &lt; f[i-<span class="number">1</span>][j-<span class="number">1</span>])&#123;</span><br><span class="line">                        f[i][j] = f[i-<span class="number">1</span>][j] + triangle.get(i).get(j);</span><br><span class="line">                    &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                        f[i][j] = f[i-<span class="number">1</span>][j-<span class="number">1</span>]  + triangle.get(i).get(j);</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> min = f[len-<span class="number">1</span>][<span class="number">0</span>];</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;len;i++)&#123;</span><br><span class="line">            <span class="keyword">if</span>(f[len-<span class="number">1</span>][i] &lt; min)&#123;</span><br><span class="line">                min = f[len-<span class="number">1</span>][i];</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> min;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> List&lt;String&gt; <span class="title">readBinaryWatch</span><span class="params">(<span class="keyword">int</span> num)</span> </span>&#123;</span><br><span class="line">   </span><br><span class="line">       List&lt;String&gt; times =<span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;<span class="number">12</span>;i++)&#123;</span><br><span class="line">           <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">0</span>;j&lt;<span class="number">60</span>;j++)&#123;</span><br><span class="line">               <span class="keyword">if</span>(Integer.bitCount(i)+Integer.bitCount(j) == num)&#123;</span><br><span class="line">                    times.add(String.format(<span class="string">"%d:%02d"</span>,i,j));</span><br><span class="line">               &#125;</span><br><span class="line">                 </span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">return</span> times;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
 
-<p>方法一：动态规划<br>思路与算法</p>
-<p>我们用 f[i][j]f[i][j] 表示从三角形顶部走到位置 (i, j)(i,j) 的最小路径和。这里的位置 (i, j)(i,j) 指的是三角形中第 ii 行第 jj 列（均从 00 开始编号）的位置。</p>
-<p>由于每一步只能移动到下一行「相邻的节点」上，因此要想走到位置 (i, j)(i,j)，上一步就只能在位置 (i - 1, j - 1)(i−1,j−1) 或者位置 (i - 1, j)(i−1,j)。我们在这两个位置中选择一个路径和较小的来进行转移，状态转移方程为：</p>
-<p>f[i][j] = \min(f[i-1][j-1], f[i-1][j]) + c[i][j]<br>f[i][j]=min(f[i−1][j−1],f[i−1][j])+c[i][j]</p>
-<p>其中 c[i][j]c[i][j] 表示位置 (i, j)(i,j) 对应的元素值。</p>
-<p>注意第 ii 行有 i+1i+1 个元素，它们对应的 jj 的范围为 [0, i][0,i]。当 j=0j=0 或 j=ij=i 时，上述状态转移方程中有一些项是没有意义的。例如当 j=0j=0 时，f[i-1][j-1]f[i−1][j−1] 没有意义，因此状态转移方程为：</p>
-<p>f[i][0] = f[i-1][0] + c[i][0]<br>f[i][0]=f[i−1][0]+c[i][0]</p>
-<p>即当我们在第 ii 行的最左侧时，我们只能从第 i-1i−1 行的最左侧移动过来。当 j=ij=i 时，f[i-1][j]f[i−1][j] 没有意义，因此状态转移方程为：</p>
-<p>f[i][i] = f[i-1][i-1] + c[i][i]<br>f[i][i]=f[i−1][i−1]+c[i][i]</p>
-<p>即当我们在第 ii 行的最右侧时，我们只能从第 i-1i−1 行的最右侧移动过来。</p>
-<p>最终的答案即为 f[n-1][0]f[n−1][0] 到 f[n-1][n-1]f[n−1][n−1] 中的最大值，其中 nn 是三角形的行数。</p>
+<p>而bitCount()在JDK1.8下的源码：(计算int型变量中二进制形式下1的个数)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">bitCount</span><span class="params">(<span class="keyword">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="comment">// HD, Figure 5-2</span></span><br><span class="line">        i = i - ((i &gt;&gt;&gt; <span class="number">1</span>) &amp; <span class="number">0x55555555</span>);</span><br><span class="line">        i = (i &amp; <span class="number">0x33333333</span>) + ((i &gt;&gt;&gt; <span class="number">2</span>) &amp; <span class="number">0x33333333</span>);</span><br><span class="line">        i = (i + (i &gt;&gt;&gt; <span class="number">4</span>)) &amp; <span class="number">0x0f0f0f0f</span>;</span><br><span class="line">        i = i + (i &gt;&gt;&gt; <span class="number">8</span>);</span><br><span class="line">        i = i + (i &gt;&gt;&gt; <span class="number">16</span>);</span><br><span class="line">        <span class="keyword">return</span> i &amp; <span class="number">0x3f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
 </li>
 </ol>
 
@@ -582,7 +568,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/14/leetcode-120/">http://haseka96.github.io/2020/07/14/leetcode-120/</a>
+                    <a href="http://haseka96.github.io/2020/07/14/leetcode-401/">http://haseka96.github.io/2020/07/14/leetcode-401/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -628,12 +614,8 @@
                                     <span class="chip bg-color">LeetCode</span>
                                 </a>
                             
-                                <a href="/tags/120/">
-                                    <span class="chip bg-color">120</span>
-                                </a>
-                            
-                                <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
-                                    <span class="chip bg-color">动态规划</span>
+                                <a href="/tags/%E5%9B%9E%E6%BA%AF/">
+                                    <span class="chip bg-color">回溯</span>
                                 </a>
                             
                         </div>
@@ -825,7 +807,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-14T11-10-27',
+        id: '2020-07-14T15-28-50',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -850,7 +832,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Tue Jul 14 2020 11:10:27 GMT+0800',
+    id: 'Tue Jul 14 2020 15:28:50 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1163,9 +1145,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/14/leetcode-401/">
                     <div class="card-image">
@@ -1183,9 +1166,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-14
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-14
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1198,6 +1181,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1224,24 +1208,24 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/13/Java-practice-poker/">
+                <a href="/2020/07/14/leetcode-120/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="Java_practice_poker">
+                        <img src="/medias/featureimages/13.jpg" class="responsive-img" alt="leetcode_120">
                         
-                        <span class="card-title">Java_practice_poker</span>
+                        <span class="card-title">leetcode_120</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            扑克练习
+                            三角形最小路径和
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-13
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-14
                             </span>
                         <span class="publish-author">
                             
@@ -1262,16 +1246,16 @@ gitment.render('gitment-content');
                         <span class="chip bg-color">Java</span>
                     </a>
                     
-                    <a href="/tags/Map/">
-                        <span class="chip bg-color">Map</span>
+                    <a href="/tags/LeetCode/">
+                        <span class="chip bg-color">LeetCode</span>
                     </a>
                     
-                    <a href="/tags/%E7%BB%83%E4%B9%A0/">
-                        <span class="chip bg-color">练习</span>
+                    <a href="/tags/120/">
+                        <span class="chip bg-color">120</span>
                     </a>
                     
-                    <a href="/tags/%E6%89%91%E5%85%8B/">
-                        <span class="chip bg-color">扑克</span>
+                    <a href="/tags/%E5%8A%A8%E6%80%81%E8%A7%84%E5%88%92/">
+                        <span class="chip bg-color">动态规划</span>
                     </a>
                     
                 </div>
