@@ -583,13 +583,28 @@
 <li><p>Properties集合是一个唯一和IO流相结合的集合</p>
 </li>
 <li><p>代码解释：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">    HashMap&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="string">"a"</span>);</span><br><span class="line">    map.put(<span class="string">"b"</span>, <span class="keyword">null</span>);</span><br><span class="line">    map.put(<span class="keyword">null</span>, <span class="keyword">null</span>);</span><br><span class="line">    System.out.println(map);<span class="comment">//&#123;null=null, b=null&#125;</span></span><br><span class="line"></span><br><span class="line">    HashMap&lt;String, String&gt; table = <span class="keyword">new</span> Hashtable&lt;&gt;();</span><br><span class="line">    <span class="comment">//table.put(null,"a");//NullPointerException</span></span><br><span class="line">    <span class="comment">//table.put("b",null);//NullPointerException</span></span><br><span class="line">    table.put(<span class="keyword">null</span>,<span class="keyword">null</span>);<span class="comment">//NullPointerException</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>{
+  HashMap&lt;String, String&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();
+  map.put(<span class="keyword">null</span>, <span class="string">"a"</span>);
+  map.put(<span class="string">"b"</span>, <span class="keyword">null</span>);
+  map.put(<span class="keyword">null</span>, <span class="keyword">null</span>);
+  System.out.println(map);<span class="comment">//{null=null, b=null}</span>
 
+  HashMap&lt;String, String&gt; table = <span class="keyword">new</span> Hashtable&lt;&gt;();
+  <span class="comment">//table.put(null,"a");//NullPointerException</span>
+  <span class="comment">//table.put("b",null);//NullPointerException</span>
+  table.put(<span class="keyword">null</span>,<span class="keyword">null</span>);<span class="comment">//NullPointerException</span>
+
+</code></pre>
+</li>
+</ul>
 </li>
 </ul>
 </li>
 </ol>
-
+<pre><code>}
+```</code></pre>
             </div>
             <hr/>
 
