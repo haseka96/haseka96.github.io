@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="travel_jap, Haseka&#39;s Blog">
+    <meta name="keywords" content="LeetCode_39, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>travel_jap | Haseka&#39;s Blog</title>
+    <title>LeetCode_39 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">travel_jap</h1>
+                    <h1 class="description center-align post-title">LeetCode_39</h1>
                 </div>
             </div>
         </div>
@@ -474,27 +474,22 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Japanese/">
-                                <span class="chip bg-color">Japanese</span>
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
                             </a>
                         
-                            <a href="/tags/travel/">
-                                <span class="chip bg-color">travel</span>
+                            <a href="/tags/LeetCode/">
+                                <span class="chip bg-color">LeetCode</span>
+                            </a>
+                        
+                            <a href="/tags/%E5%9B%9E%E6%BA%AF/">
+                                <span class="chip bg-color">回溯</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/Japanese/" class="post-category">
-                                Japanese
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -503,7 +498,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-07-15
+                    2020-07-16
                 </div>
                 
 
@@ -520,49 +515,44 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>一起吃饭吧</p>
+<li><p>题目描述</p>
+<p>给定一个<strong>无重复元素</strong>的数组 <code>candidates</code> 和一个目标数 <code>target</code> ，找出 <code>candidates</code> 中所有可以使数字和为 <code>target</code> 的组合。<code>candidates</code> 中的数字可以无限制重复被选取。</p>
+<p><strong>说明：</strong></p>
 <ul>
-<li>一緒に食事しませんか。</li>
-<li>食事に行きませんか。</li>
-<li>一緒に食事でもどうですか。</li>
+<li><p>所有数字（包括 <code>target</code>）都是正整数。</p>
+</li>
+<li><p>解集不能包含重复的组合。 </p>
+<p><strong>示例 1：</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">输入：candidates = [<span class="number">2</span>,<span class="number">3</span>,<span class="number">6</span>,<span class="number">7</span>], target = <span class="number">7</span>,</span><br><span class="line">所求解集为：</span><br><span class="line">[</span><br><span class="line">  [<span class="number">7</span>],</span><br><span class="line">  [<span class="number">2</span>,<span class="number">2</span>,<span class="number">3</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
 </li>
-<li><p>我去下洗手间</p>
+<li><p>思路</p>
+<p>根据示例 1：输入: candidates = [2,3,6,7]，target = 7。</p>
+<p>候选数组里有 2 ，如果找到了 7 - 2 = 5 的所有组合，再在之前加上 2 ，就是 7 的所有组合；<br>同理考虑 3，如果找到了 7 - 3 = 4 的所有组合，再在之前加上 3 ，就是 7 的所有组合，依次这样找下去；<br>上面的思路就可以画成下面的树形图。</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/leetcode_39.png" alt=""></p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/leetcode_39_1.png" alt=""></p>
 <ul>
-<li>ちょっとトイレに行ってきます。</li>
+<li>去重复<ul>
+<li>在搜索的时候，需要设置搜索起点的下标 <code>begin</code> ，由于一个数可以使用多次，下一层的结点从这个搜索起点开始搜索；</li>
+<li>在搜索起点 <code>begin</code> 之前的数因为以前的分支搜索过了，所以一定会产生重复。</li>
 </ul>
 </li>
-<li><p>可以刷卡吗</p>
-<ul>
-<li>カードでもいいですか。</li>
+<li>剪枝提速<ul>
+<li>如果一个数位搜索起点都不能搜索到结果，那么比它还大的数肯定搜索不到结果，基于这个想法，我们可以对输入数组进行排序，以减少搜索的分支；</li>
+<li>排序是为了提高搜索速度，非必要；</li>
+<li>搜索问题一般复杂度较高，能剪枝就尽量需要剪枝。把候选数组排个序，遇到一个较大的数，如果以这个数为起点都搜索不到结果，后面的数就更搜索不到结果了。</li>
 </ul>
 </li>
-<li><p>请您再说一遍</p>
-<ul>
-<li>もう一度言ってください。</li>
-<li>もう少し大きい声でお願いします。</li>
 </ul>
 </li>
-<li><p>您辛苦了</p>
-<ul>
-<li>お疲れ様です。</li>
-</ul>
-</li>
-<li><p>乘坐公交车</p>
-<ul>
-<li><p>３番のバス停はどこですか。（3号公共汽车站在哪里？）</p>
-</li>
-<li><p>ここから新宿駅にいくバスはありますか。（这里有到新宿站的公交汽车吗？）</p>
-</li>
-<li><p>このバスは新宿駅に行きますか。</p>
-</li>
-<li><p>渋谷に行くバスは、どこで乗ったらいいですか。（在哪里乘坐前往涩谷的公交车呢？）</p>
-</li>
-<li><p>早稲田大学にいきたいんですが、どこで降りたらいいですか。（我想去早稻田大学，应该在哪里下车呢？）</p>
-</li>
-<li><p>２番バスに乗って、３つ目のバス停で降りてください。（坐2路公交车，在第3站下车。）</p>
-</li>
-</ul>
+</ol>
+<ol start="3">
+<li><p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> java.util.ArrayDeque;</span><br><span class="line"><span class="keyword">import</span> java.util.ArrayList;</span><br><span class="line"><span class="keyword">import</span> java.util.Arrays;</span><br><span class="line"><span class="keyword">import</span> java.util.Deque;</span><br><span class="line"><span class="keyword">import</span> java.util.List;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; combinationSum(<span class="keyword">int</span>[] candidates, <span class="keyword">int</span> target) &#123;</span><br><span class="line">        List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">        <span class="keyword">int</span> len = candidates.length;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 排序是为了提前终止搜索</span></span><br><span class="line">        Arrays.sort(candidates);</span><br><span class="line"></span><br><span class="line">        dfs(candidates, len, target, <span class="number">0</span>, <span class="keyword">new</span> ArrayDeque&lt;&gt;(), res);</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> candidates 数组输入</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> len        输入数组的长度，冗余变量</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> residue    剩余数值</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> begin      本轮搜索的起点下标</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> path       从根结点到任意结点的路径</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> res        结果集变量</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] candidates,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">int</span> len,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">int</span> residue,</span></span></span><br><span class="line"><span class="function"><span class="params">                     <span class="keyword">int</span> begin,</span></span></span><br><span class="line"><span class="function"><span class="params">                     Deque&lt;Integer&gt; path,</span></span></span><br><span class="line"><span class="function"><span class="params">                     List&lt;List&lt;Integer&gt;&gt; res)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (residue == <span class="number">0</span>) &#123;</span><br><span class="line">            <span class="comment">// 由于 path 全局只使用一份，到叶子结点的时候需要做一个拷贝</span></span><br><span class="line">            res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(path));</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = begin; i &lt; len; i++) &#123;</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 在数组有序的前提下，剪枝</span></span><br><span class="line">            <span class="keyword">if</span> (residue - candidates[i] &lt; <span class="number">0</span>) &#123;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            path.addLast(candidates[i]);</span><br><span class="line">            dfs(candidates, len, residue - candidates[i], i, path, res);</span><br><span class="line">            path.removeLast();</span><br><span class="line"></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
 </li>
 </ol>
 
@@ -590,7 +580,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/15/travel-jap/">http://haseka96.github.io/2020/07/15/travel-jap/</a>
+                    <a href="http://haseka96.github.io/2020/07/16/LeetCode-39/">http://haseka96.github.io/2020/07/16/LeetCode-39/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -628,12 +618,16 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Japanese/">
-                                    <span class="chip bg-color">Japanese</span>
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
                                 </a>
                             
-                                <a href="/tags/travel/">
-                                    <span class="chip bg-color">travel</span>
+                                <a href="/tags/LeetCode/">
+                                    <span class="chip bg-color">LeetCode</span>
+                                </a>
+                            
+                                <a href="/tags/%E5%9B%9E%E6%BA%AF/">
+                                    <span class="chip bg-color">回溯</span>
                                 </a>
                             
                         </div>
@@ -825,7 +819,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-15T10-32-45',
+        id: '2020-07-16T08-39-39',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -850,7 +844,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Wed Jul 15 2020 10:32:45 GMT+0800',
+    id: 'Thu Jul 16 2020 08:39:39 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1163,9 +1157,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/16/LeetCode-39/">
                     <div class="card-image">
@@ -1183,9 +1178,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-16
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-16
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -1194,6 +1189,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1220,31 +1216,31 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/14/leetcode-401/">
+                <a href="/2020/07/15/travel-jap/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="leetcode_401">
+                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="travel_jap">
                         
-                        <span class="card-title">leetcode_401</span>
+                        <span class="card-title">travel_jap</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            二进制手表
+                            旅游日语
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-14
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-15
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Java/" class="post-category">
-                                    Java
+                            <a href="/categories/Japanese/" class="post-category">
+                                    Japanese
                                 </a>
                             
                             
@@ -1254,16 +1250,12 @@ gitment.render('gitment-content');
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
+                    <a href="/tags/Japanese/">
+                        <span class="chip bg-color">Japanese</span>
                     </a>
                     
-                    <a href="/tags/LeetCode/">
-                        <span class="chip bg-color">LeetCode</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%9B%9E%E6%BA%AF/">
-                        <span class="chip bg-color">回溯</span>
+                    <a href="/tags/travel/">
+                        <span class="chip bg-color">travel</span>
                     </a>
                     
                 </div>
