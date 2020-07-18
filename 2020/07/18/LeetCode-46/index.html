@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Java基础_2, Haseka&#39;s Blog">
+    <meta name="keywords" content="LeetCode_46, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Java基础_2 | Haseka&#39;s Blog</title>
+    <title>LeetCode_46 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Java基础_2</h1>
+                    <h1 class="description center-align post-title">LeetCode_46</h1>
                 </div>
             </div>
         </div>
@@ -478,8 +478,8 @@
                                 <span class="chip bg-color">java</span>
                             </a>
                         
-                            <a href="/tags/se%E5%9F%BA%E7%A1%80/">
-                                <span class="chip bg-color">se基础</span>
+                            <a href="/tags/LeetCode/">
+                                <span class="chip bg-color">LeetCode</span>
                             </a>
                         
                     </div>
@@ -503,7 +503,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-07-16
+                    2020-07-18
                 </div>
                 
 
@@ -520,97 +520,33 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>String和StringBuffer、StringBuilder的区别是什么？String为什么是不可变的？</p>
-<ul>
-<li><p><strong>可变性</strong></p>
-<p>String类中使用final类关键字修饰字符数组来保存字符串，<code>private final char value[]</code>,所以String对象是不可变的。而StringBuilder与StringBuffer都继承自AbstractStringBuilder类，在AbstractStringBuilder类中也是使用字符数组保存字符串<code>char [] value</code>但是没有用final关键字修饰，所以这两种对象都是可变的。</p>
-<p>StringBuilder与StringBuffer的构造方法都是调用父类构造方法也就是AbstractStringBuilder实现的。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">abstract</span> <span class="class"><span class="keyword">class</span> <span class="title">AbstractStringBuilder</span> <span class="keyword">implements</span> <span class="title">Appendable</span>, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="keyword">char</span>[] value;</span><br><span class="line">    <span class="keyword">int</span> count;</span><br><span class="line">    AbstractStringBuilder() &#123;</span><br><span class="line">    &#125;</span><br><span class="line">    AbstractStringBuilder(<span class="keyword">int</span> capacity) &#123;</span><br><span class="line">        value = <span class="keyword">new</span> <span class="keyword">char</span>[capacity];</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<li><p>题目</p>
+<p>给定一个 <strong>没有重复</strong> 数字的序列，返回其所有可能的全排列。</p>
+<p><strong>示例:</strong></p>
+<p>输入: [1,2,3]<br>输出:<br>[<br>  [1,2,3],<br>  [1,3,2],<br>  [2,1,3],<br>  [2,3,1],<br>  [3,1,2],<br>  [3,2,1]<br>]</p>
 </li>
-<li><p><strong>线程安全性</strong></p>
-<p>String中的对象是不可变的，也就可以理解为常量，线程安全。AbstractStringBuilder是StringBuilder和StringBuf的公共父类，定义了一些字符串的基本操作，如expandCapacity、append、insert、indexOf等公共方法。StringBuffer对方法加了同步锁或者对调用的方法加了同步锁，所以线程安全的。StringBuilder并没有对方法进行加同步锁，所以是非线程安全的。</p>
+<li><p>分析</p>
+<p>“回溯”指的是“状态重置”，可以理解为“回到过去”、“恢复现场”，是在编码的过程中，是为了节约空间而使用的一种技巧。而回溯其实是“深度优先遍历”特有的一种现象。之所以是“深度优先遍历”，是因为我们要解决的问题通常是在一棵树上完成的，在这棵树上搜索需要的答案，一般使用深度优先遍历。</p>
+<p>“全排列”就是一个非常经典的“回溯”算法的应用。我们知道，<code>N</code> 个数字的全排列一共有 N!N!N! 这么多个。</p>
+<p><img src="http://qck7twe2i.bkt.clouddn.com/java/LeetCode_46.png" alt=""></p>
+<p>说明：</p>
+<p>1、每一个结点表示了“全排列”问题求解的不同阶段，这些阶段通过变量的“不同的值”体现；<br>2、这些变量的不同的值，也称之为“状态”；<br>3、使用深度优先遍历有“回头”的过程，在“回头”以后，状态变量需要设置成为和先前一样；<br>4、因此在回到上一层结点的过程中，需要撤销上一次选择，这个操作也称之为“状态重置”；<br>5、深度优先遍历，可以直接借助系统栈空间，为我们保存所需要的状态变量，在编码中只需要注意遍历到相应的结点的时候，状态变量的值是正确的，具体的做法是：往下走一层的时候，path 变量在尾部追加，而往回走的时候，需要撤销上一次的选择，也是在尾部操作，因此 path 变量是一个栈。<br>6、深度优先遍历通过“回溯”操作，实现了全局使用一份状态变量的效果。</p>
+<p>下面我们解释如何编码：</p>
+<p>1、首先这棵树除了根结点和叶子结点以外，每一个结点做的事情其实是一样的，即在已经选了一些数的前提，我们需要在剩下还没有选择的数中按照顺序依次选择一个数，这显然是一个递归结构；</p>
+<p>2、递归的终止条件是，数已经选够了，因此我们需要一个变量来表示当前递归到第几层，我们把这个变量叫做 depth；</p>
+<p>3、这些结点实际上表示了搜索（查找）全排列问题的不同阶段，为了区分这些不同阶段，我们就需要一些变量来记录为了得到一个全排列，程序进行到哪一步了，在这里我们需要两个变量：</p>
+<p>（1）已经选了哪些数，到叶子结点时候，这些已经选择的数就构成了一个全排列；<br>（2）一个布尔数组 used，初始化的时候都为 false 表示这些数还没有被选择，当我们选定一个数的时候，就将这个数组的相应位置设置为 true ，这样在考虑下一个位置的时候，就能够以 O(1)O(1)O(1) 的时间复杂度判断这个数是否被选择过，这是一种“以空间换时间”的思想。</p>
+<p>我们把这两个变量称之为“状态变量”，它们表示了我们在求解一个问题的时候所处的阶段。</p>
+<p>4、在非叶子结点处，产生不同的分支，这一操作的语义是：在还未选择的数中依次选择一个元素作为下一个位置的元素，这显然得通过一个循环实现。</p>
+<p>5、另外，因为是执行深度优先遍历，从较深层的结点返回到较浅层结点的时候，需要做“状态重置”，即“回到过去”、“恢复现场”，我们举一个例子。</p>
+<p>从 [1, 2, 3] 到 [1, 3, 2] ，深度优先遍历是这样做的，从 [1, 2, 3] 回到 [1, 2] 的时候，需要撤销刚刚已经选择的数 3，因为在这一层只有一个数 3 我们已经尝试过了，因此程序回到上一层，需要撤销对 2 的选择，好让后面的程序知道，选择 3 了以后还能够选择 2。</p>
+<p>这种在遍历的过程中，从深层结点回到浅层结点的过程中所做的操作就叫“回溯”。</p>
 </li>
-<li><p><strong>性能</strong></p>
-<p>每次对String类型进行改变的时候，都会生成一个新的String对象，然后将指针指向新的String对象。StringBuffer每次都会对StringBuf对象本身进行操作，而不是生成新的对象并改变对象引用。相同情况下使用StringBuilder相比使用StringBuffer仅能获得10%-15%左右的性能提升，但却要冒多线程不安全的风险。</p>
-</li>
-<li><p><strong>对于三者的总结</strong></p>
-<ul>
-<li>操作少量的数据：适用String</li>
-<li>单线程操作字符缓冲区下操作大量数据：适用StringBuilder</li>
-<li>多线程操作字符串缓冲区下操作大量数据：适用StringBuffer</li>
-</ul>
-</li>
-<li><p><strong>String为什么不可变</strong>？</p>
-<p>简单来说，String类利用final修饰的char类型数组存储字符，源码如下：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">  <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br></pre></td></tr></table></figure>
-</li>
-<li><p><strong>String真的是不可变的嘛</strong></p>
-<ul>
-<li><p><strong>String不可变但不代表引用不可以变</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">String str = <span class="string">"Hello"</span>;</span><br><span class="line">str = str + <span class="string">" World"</span>;</span><br><span class="line">System.out.println(<span class="string">"str="</span> + str);</span><br></pre></td></tr></table></figure>
+</ol>
+<ol start="3">
+<li><p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; permute(<span class="keyword">int</span>[] nums)&#123;</span><br><span class="line">    <span class="keyword">int</span> len = nums.length;</span><br><span class="line">    List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    ArrayDeque&lt;Integer&gt; path = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">    </span><br><span class="line">    Arrays.sort(nums);</span><br><span class="line">    <span class="keyword">boolean</span>[] used = <span class="keyword">new</span> used[len];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">        used[i] = <span class="keyword">false</span>;</span><br><span class="line">    dfs(nums,len,<span class="number">0</span>,used,path,res);</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> res;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> len,<span class="keyword">int</span> depth,<span class="keyword">int</span>[] used,Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)</span></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(depth == nums)&#123;</span><br><span class="line">		res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(path));</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>; i&lt;len; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(!used[i])&#123;</span><br><span class="line">            path.addLast(nums[i]);</span><br><span class="line">            used[i] = <span class="keyword">true</span>;</span><br><span class="line">        </span><br><span class="line">            dfs(nums,len,depth+<span class="number">1</span>,used,path,res);</span><br><span class="line">            used[i] = <span class="keyword">false</span>;</span><br><span class="line">            path.removeLast();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
-<p>结果：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">str=Hello World</span><br></pre></td></tr></table></figure>
-
-<p>解析：</p>
-<p>实际上，原来String的内容没有变，只是str由原来指向“hello”的内存地址转为指向“Hello World”的内存地址而已，也就是说多开辟了一块内存区域给“Hello World”字符串。</p>
-</li>
-<li><p><strong>通过反射是可以修改所谓的“不可变”对象</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建字符串"Hello World"， 并赋给引用s</span></span><br><span class="line">String s = <span class="string">"Hello World"</span>;</span><br><span class="line">       </span><br><span class="line">System.out.println(<span class="string">"s = "</span> + s); <span class="comment">// Hello World</span></span><br><span class="line">       </span><br><span class="line"><span class="comment">// 获取String类中的value字段</span></span><br><span class="line">Field valueFieldOfString = String.class.getDeclaredField("value");</span><br><span class="line">       </span><br><span class="line"><span class="comment">// 改变value属性的访问权限</span></span><br><span class="line">valueFieldOfString.setAccessible(<span class="keyword">true</span>);</span><br><span class="line">       </span><br><span class="line"><span class="comment">// 获取s对象上的value属性的值</span></span><br><span class="line"><span class="keyword">char</span>[] value = (<span class="keyword">char</span>[]) valueFieldOfString.get(s);</span><br><span class="line">       </span><br><span class="line"><span class="comment">// 改变value所引用的数组中的第5个字符</span></span><br><span class="line">value[<span class="number">5</span>] = <span class="string">'_'</span>;</span><br><span class="line">       </span><br><span class="line">System.out.println(<span class="string">"s = "</span> + s); <span class="comment">// Hello_World</span></span><br></pre></td></tr></table></figure>
-
-<p>结果：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">s = Hello World</span><br><span class="line">s = Hello_World</span><br></pre></td></tr></table></figure>
-
-<p>解析：</p>
-<p>用反射可以访问私有成员，然后反射出String对象中的value属性，进而改变通过获得的value引用改变数组的结构。但是一般我们不会这么做，这里只是简单提一下有这个东西。</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p><strong>反射机制及其应用场景</strong></p>
-<ul>
-<li><p><strong>反射机制介绍</strong></p>
-<p>Java反射机制是在运行状态中，对于任意一个类，都能够知道这个类的所有属性和方法；</p>
-<p>对于任意一个对象，都能够调用它的任意一个方法和属性；</p>
-<p>这种动态化获取的信息及动态调用对象的方法的功能称为Java语言的反射机制。</p>
-</li>
-<li><p><strong>静态编译和动态编译</strong></p>
-<ul>
-<li>静态编译：在编译时确定类型，绑定对象；</li>
-<li>动态编译：运行时确定类型，绑定对象。</li>
-</ul>
-</li>
-<li><p><strong>放射机制的优缺点</strong></p>
-<ul>
-<li>优点：运行期类型的判断，动态加载类，提高代码灵活度。</li>
-<li>缺点：性能瓶颈：反射相当于一系列解释操作，通知JVM要做的事情，性能比直接的java代码要慢得多。</li>
-</ul>
-</li>
-<li><p><strong>反射的应用场景</strong></p>
-<p>例如模块化的开发，通过反射区调用对应的字节码；</p>
-<p>动态代理设计模式也采用了反射机制；</p>
-<p>还有我们日常使用的Spring/Hibernate等框架也大量使用了反射机制。</p>
-<p>举例：① 我们在使用 JDBC 连接数据库时使用 <code>Class.forName()</code>通过反射加载数据库的驱动程序；②Spring 框架也用到很多反射机制，最经典的就是 xml 的配置模式。Spring 通过 XML 配置模式装载 Bean 的过程：1) 将程序内所有 XML 或 Properties 配置文件加载入内存中; 2)Java 类里面解析 xml 或 properties 里面的内容，得到对应实体类的字节码字符串以及相关的属性信息; 3)使用反射机制，根据这个字符串获得某个类的 Class 实例; 4)动态配置实例的属性</p>
-</li>
-</ul>
-</li>
-<li><p><strong>接口和抽象类的区别？</strong></p>
-<ul>
-<li>接口的方法默认是public，所有方法在接口中不能有实现，抽象类可以有非抽象类的方法；</li>
-<li>接口中的实例变量默认是final类型的，而抽象类胡总不一定；</li>
-<li>一个类可以实现多个接口，但最多只能实现一个抽象类；</li>
-<li>一个类实现接口的话要实现接口的所有方法，而抽象类不一定；</li>
-<li>接口不能用new实例化，但可以声明，但是必须引用一个实现该接口的对象，从设计层面来说，抽象是对类的抽象，是一种模块设计，接口是行为的抽象，是一种行为规范。</li>
-</ul>
-</li>
-<li><p><strong>sleep()方法和 wait()方法的区别和共同点？</strong></p>
-<ul>
-<li>两者最主要的区别：sleep方法没有释放锁，而wait方法释放了锁。</li>
-<li>两者都可以暂停线程的执行。</li>
-<li>Wait通常被用于线程间交互/通信，sleep通常被用于暂停执行。</li>
-<li>wait方法被调用后，线程不会自动苏醒，需要别的线程调用同一个对象上的notify()或者notifyAll()方法。sleep方法执行完成后，线程会自动苏醒。或者可以使用wait(long timeout)超时后线程会自动苏醒。</li>
-</ul>
 </li>
 </ol>
 
@@ -638,7 +574,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/16/Java%E5%9F%BA%E7%A1%80-2/">http://haseka96.github.io/2020/07/16/Java%E5%9F%BA%E7%A1%80-2/</a>
+                    <a href="http://haseka96.github.io/2020/07/18/LeetCode-46/">http://haseka96.github.io/2020/07/18/LeetCode-46/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -680,8 +616,8 @@
                                     <span class="chip bg-color">java</span>
                                 </a>
                             
-                                <a href="/tags/se%E5%9F%BA%E7%A1%80/">
-                                    <span class="chip bg-color">se基础</span>
+                                <a href="/tags/LeetCode/">
+                                    <span class="chip bg-color">LeetCode</span>
                                 </a>
                             
                         </div>
@@ -873,7 +809,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-16T13-54-00',
+        id: '2020-07-18T06-53-41',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -898,7 +834,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Thu Jul 16 2020 13:54:00 GMT+0800',
+    id: 'Sat Jul 18 2020 06:53:41 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1211,9 +1147,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/18/LeetCode-46/">
                     <div class="card-image">
@@ -1231,9 +1168,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-18
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-18
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1246,6 +1183,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1268,19 +1206,19 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/16/LeetCode-39/">
+                <a href="/2020/07/16/Java%E5%9F%BA%E7%A1%80-2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="LeetCode_39">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Java基础_2">
                         
-                        <span class="card-title">LeetCode_39</span>
+                        <span class="card-title">Java基础_2</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            组合总数
+                            java基础
                         
                     </div>
                     <div class="publish-info">
@@ -1289,8 +1227,12 @@ gitment.render('gitment-content');
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            Haseka
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/java/" class="post-category">
+                                    java
+                                </a>
+                            
                             
                         </span>
                     </div>
@@ -1298,16 +1240,12 @@ gitment.render('gitment-content');
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Java/">
-                        <span class="chip bg-color">Java</span>
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
-                    <a href="/tags/LeetCode/">
-                        <span class="chip bg-color">LeetCode</span>
-                    </a>
-                    
-                    <a href="/tags/%E5%9B%9E%E6%BA%AF/">
-                        <span class="chip bg-color">回溯</span>
+                    <a href="/tags/se%E5%9F%BA%E7%A1%80/">
+                        <span class="chip bg-color">se基础</span>
                     </a>
                     
                 </div>
