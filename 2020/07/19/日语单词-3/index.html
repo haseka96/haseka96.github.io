@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="LeetCode_47, Haseka&#39;s Blog">
+    <meta name="keywords" content="日语单词_3, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>LeetCode_47 | Haseka&#39;s Blog</title>
+    <title>日语单词_3 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/11.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/12.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">LeetCode_47</h1>
+                    <h1 class="description center-align post-title">日语单词_3</h1>
                 </div>
             </div>
         </div>
@@ -474,12 +474,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java/">
-                                <span class="chip bg-color">java</span>
+                            <a href="/tags/Japanese/">
+                                <span class="chip bg-color">Japanese</span>
                             </a>
                         
-                            <a href="/tags/LeetCode/">
-                                <span class="chip bg-color">LeetCode</span>
+                            <a href="/tags/word/">
+                                <span class="chip bg-color">word</span>
                             </a>
                         
                     </div>
@@ -490,8 +490,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/java/" class="post-category">
-                                java
+                            <a href="/categories/Japanese/" class="post-category">
+                                Japanese
                             </a>
                         
                     </div>
@@ -503,7 +503,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-07-18
+                    2020-07-19
                 </div>
                 
 
@@ -520,22 +520,44 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <ol>
-<li><p>题目</p>
-<p>给定一个可包含重复数字的序列，返回所有不重复的全排列。</p>
-<p><strong>示例:</strong></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">输入: [<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>]</span><br><span class="line">输出:</span><br><span class="line">[</span><br><span class="line">  [<span class="number">1</span>,<span class="number">1</span>,<span class="number">2</span>],</span><br><span class="line">  [<span class="number">1</span>,<span class="number">2</span>,<span class="number">1</span>],</span><br><span class="line">  [<span class="number">2</span>,<span class="number">1</span>,<span class="number">1</span>]</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
+<li><p><strong>うまい</strong>　<strong>なadj.</strong> （味道）好吃的；（技术、技能等）高明的，巧妙的</p>
+<p><strong>e.g.</strong> </p>
+<p>​    中華料理はうまいです。（中国菜好吃。）</p>
 </li>
-<li><p>分析</p>
-<p><img src="http://qck7twe2i.bkt.clouddn.com/java/leetcode_47.png" alt=""></p>
-<p>产生重复结点的地方，正是图中标注了“剪刀”，且被绿色框框住的地方。</p>
-<p>大家也可以把第 2 个 1 加上 ‘ ，即 [1, 1’, 2] 去想象这个搜索的过程。只要遇到起点一样，就有可能产生重复。这里还有一个很细节的地方：</p>
-<p>1、在图中 ② 处，搜索的数也和上一次一样，但是上一次的 1 还在使用中；<br>2、在图中 ① 处，搜索的数也和上一次一样，但是上一次的 1 刚刚被撤销，正是因为刚被撤销，下面的搜索中还会使用到，因此会产生重复，剪掉的就应该是这样的分支。</p>
-<p>代码实现方面，在第 46 题的基础上，要加上这样一段代码：</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (i &gt; <span class="number">0</span> &amp;&amp; nums[i] == nums[i - <span class="number">1</span>] &amp;&amp; !used[i - <span class="number">1</span>]) &#123;</span><br><span class="line">    <span class="keyword">continue</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><p><strong>きちんと</strong> <strong>adv.</strong> 好好地；正经地</p>
+<p><strong>e.g.</strong> </p>
+<p>​    朝ごはん毎日きちんと食べていますか。（每天都有好好吃早饭吗？）</p>
 </li>
-<li><p>代码实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> List&lt;List&lt;Integer&gt;&gt; permuteUnique(<span class="keyword">int</span>[] nums) &#123;</span><br><span class="line">   </span><br><span class="line">       List&lt;List&lt;Integer&gt;&gt; res = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">       ArrayDeque&lt;Integer&gt; path = <span class="keyword">new</span> ArrayDeque&lt;&gt;();</span><br><span class="line">       <span class="keyword">int</span> len = nums.length;</span><br><span class="line">   </span><br><span class="line">       Arrays.sort(nums);</span><br><span class="line">       <span class="keyword">boolean</span>[] used = <span class="keyword">new</span> <span class="keyword">boolean</span>[len];</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)</span><br><span class="line">           used[i] = <span class="keyword">false</span>;</span><br><span class="line">       dfs(nums,len,<span class="number">0</span>,used,path,res);</span><br><span class="line">   </span><br><span class="line">       <span class="keyword">return</span> res;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">dfs</span><span class="params">(<span class="keyword">int</span>[] nums,<span class="keyword">int</span> len,<span class="keyword">int</span> depth,<span class="keyword">boolean</span>[] used,Deque&lt;Integer&gt; path,List&lt;List&lt;Integer&gt;&gt; res)</span></span>&#123;</span><br><span class="line">       </span><br><span class="line">       <span class="keyword">if</span>(depth == len)&#123;</span><br><span class="line">           res.add(<span class="keyword">new</span> ArrayList&lt;&gt;(path));</span><br><span class="line">           <span class="keyword">return</span>;</span><br><span class="line">       &#125;</span><br><span class="line">       <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">0</span>;i&lt;len;i++)&#123;</span><br><span class="line">           <span class="keyword">if</span>(!used[i])&#123;</span><br><span class="line">               <span class="keyword">if</span>(i&gt;<span class="number">0</span> &amp;&amp; nums[i] == nums[i-<span class="number">1</span>] &amp;&amp; !used[i-<span class="number">1</span>])</span><br><span class="line">                   <span class="keyword">continue</span>;</span><br><span class="line">               </span><br><span class="line">               path.addLast(nums[i]);</span><br><span class="line">               used[i] = <span class="keyword">true</span>;</span><br><span class="line">               dfs(nums,len,depth+<span class="number">1</span>,used,path,res);</span><br><span class="line">               used[i] = <span class="keyword">false</span>;</span><br><span class="line">               path.removeLast();</span><br><span class="line">               </span><br><span class="line">           &#125;</span><br><span class="line">       &#125;</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-
+<li><p><strong>出発時刻(しゅっぱつじこく)</strong>：*<em>n. *</em>出发时间</p>
+<p><strong>e.g.</strong> </p>
+<p>​    出発時刻はいつですか。（出发时间是什么时候？）</p>
+</li>
+<li><p><strong>詳（くわ）しい：なadj.</strong>  详细</p>
+<p><strong>e.g.</strong> </p>
+<pre><code>詳しいお話を饲（か）いたいのですか。（想询问一下详细信息。）</code></pre></li>
+<li><p><strong>高速（こうそく）バス　：　ｎ.</strong>     高速公共汽车</p>
+<p><strong>e.g.</strong> </p>
+<p>​    高速バスに乗って、郊外（こうがい）に行きます。（坐高速巴士去郊外。）</p>
+</li>
+<li><p><strong>旅行（りょこう）予定（よてい）　：　ｎ.</strong>      旅行计划</p>
+<p><strong>e.g.</strong> </p>
+<p>​    今月（こんげつ）中に旅行予定がありますか。（这个月有旅行计划吗？）</p>
+</li>
+<li><p><strong>自由（じゆう）　：　adj.</strong>     随便，自由</p>
+<p><strong>e.g.</strong> </p>
+<p>​    誰でも自由に利用（りよう）することができるんてでしょうか。（谁都可以随随便便用吗？）</p>
+</li>
+<li><p><strong>ただし　：　conj.</strong>     不过，只是</p>
+<p><strong>e.g.</strong> </p>
+<p>​    ただし、有料ですか。（只是，是付费的。）</p>
+</li>
+<li><p><strong>列車（れっしゃ）　：　ｎ.</strong>    火车</p>
+<p><strong>e.g.</strong> </p>
+<p>​    広州（広州）へは列車で行きますか。（是坐火车去广州吗？）</p>
+</li>
+<li><p><strong>丁寧（ていねい）　：　なadj.</strong>     精心，细心，恭敬</p>
+<p><strong>e.g.</strong> </p>
+<p>​    丁寧に言う暇（ひま）がありません。（没空说恭敬的话。）</p>
 </li>
 </ol>
 
@@ -563,7 +585,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/18/LeetCode-47/">http://haseka96.github.io/2020/07/18/LeetCode-47/</a>
+                    <a href="http://haseka96.github.io/2020/07/19/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-3/">http://haseka96.github.io/2020/07/19/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-3/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -601,12 +623,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/java/">
-                                    <span class="chip bg-color">java</span>
+                                <a href="/tags/Japanese/">
+                                    <span class="chip bg-color">Japanese</span>
                                 </a>
                             
-                                <a href="/tags/LeetCode/">
-                                    <span class="chip bg-color">LeetCode</span>
+                                <a href="/tags/word/">
+                                    <span class="chip bg-color">word</span>
                                 </a>
                             
                         </div>
@@ -798,7 +820,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-18T20-21-28',
+        id: '2020-07-19T09-06-31',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -823,7 +845,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Sat Jul 18 2020 20:21:28 GMT+0800',
+    id: 'Sun Jul 19 2020 09:06:31 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1136,9 +1158,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/07/19/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-3/">
                     <div class="card-image">
@@ -1156,9 +1179,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-07-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1171,6 +1194,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1193,13 +1217,13 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/18/LeetCode-46/">
+                <a href="/2020/07/18/LeetCode-47/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="LeetCode_46">
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="LeetCode_47">
                         
-                        <span class="card-title">LeetCode_46</span>
+                        <span class="card-title">LeetCode_47</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
