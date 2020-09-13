@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="LeetCode_1221, Haseka&#39;s Blog">
+    <meta name="keywords" content="java_base_1, Haseka&#39;s Blog">
     <meta name="description" content="像风一样的男子">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>LeetCode_1221 | Haseka&#39;s Blog</title>
+    <title>java_base_1 | Haseka&#39;s Blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -352,12 +352,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">LeetCode_1221</h1>
+                    <h1 class="description center-align post-title">java_base_1</h1>
                 </div>
             </div>
         </div>
@@ -474,20 +474,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/java/">
-                                <span class="chip bg-color">java</span>
+                            <a href="/tags/Java/">
+                                <span class="chip bg-color">Java</span>
                             </a>
                         
-                            <a href="/tags/leetcode/">
-                                <span class="chip bg-color">leetcode</span>
-                            </a>
-                        
-                            <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/">
-                                <span class="chip bg-color">贪心算法</span>
-                            </a>
-                        
-                            <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                <span class="chip bg-color">字符串</span>
+                            <a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+                                <span class="chip bg-color">基础知识</span>
                             </a>
                         
                     </div>
@@ -498,8 +490,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/java/" class="post-category">
-                                java
+                            <a href="/categories/Java/" class="post-category">
+                                Java
                             </a>
                         
                     </div>
@@ -511,7 +503,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>Publish Date:&nbsp;&nbsp;
-                    2020-07-21
+                    2020-09-13
                 </div>
                 
 
@@ -527,41 +519,55 @@
         <hr class="clearfix">
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <ol>
-<li><p>题目</p>
-<p>在一个「平衡字符串」中，’L’ 和 ‘R’ 字符的数量是相同的。</p>
-<p>给出一个平衡字符串 s，请你将它分割成尽可能多的平衡字符串。</p>
-<p>返回可以通过分割得到的平衡字符串的最大数量。</p>
-</li>
-</ol>
-<ol start="2">
-<li><p>示例</p>
-<p>输入：s = “RLRRLLRLRL”<br>输出：4<br>解释：s 可以分割为 “RL”, “RRLL”, “RL”, “RL”, 每个子字符串中都包含相同数量的 ‘L’ 和 ‘R’。</p>
-</li>
-</ol>
-<ol start="3">
-<li><p>分析</p>
-<p>利用贪心算法实现</p>
+                <h1 id="一、基本功"><a href="#一、基本功" class="headerlink" title="一、基本功"></a>一、基本功</h1><h2 id="1-很多程序设计语言（特别是，C-和-Pascal-提供了两种参数传递的方式：值调用和引用调用。有些程序员（甚至本书的作者）认为-Java-程序设计语言对对象采用的是引用调用，实际上，这种理解是不对的。由于这种误解具有一定的普遍性，所以下面给出一个反例来详细地阐述一下这个问题。"><a href="#1-很多程序设计语言（特别是，C-和-Pascal-提供了两种参数传递的方式：值调用和引用调用。有些程序员（甚至本书的作者）认为-Java-程序设计语言对对象采用的是引用调用，实际上，这种理解是不对的。由于这种误解具有一定的普遍性，所以下面给出一个反例来详细地阐述一下这个问题。" class="headerlink" title="1.很多程序设计语言（特别是，C++和 Pascal)提供了两种参数传递的方式：值调用和引用调用。有些程序员（甚至本书的作者）认为  Java  程序设计语言对对象采用的是引用调用，实际上，这种理解是不对的。由于这种误解具有一定的普遍性，所以下面给出一个反例来详细地阐述一下这个问题。"></a>1.<strong>很多程序设计语言（特别是，C++和 Pascal)提供了两种参数传递的方式：值调用和引用调用。有些程序员（甚至本书的作者）认为  Java  程序设计语言对对象采用的是引用调用，实际上，这种理解是不对的。由于这种误解具有一定的普遍性，所以下面给出一个反例来详细地阐述一下这个问题。</strong></h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">		<span class="comment">// TODO Auto-generated method stub</span></span><br><span class="line">		Student s1 = <span class="keyword">new</span> Student(<span class="string">"小张"</span>);</span><br><span class="line">		Student s2 = <span class="keyword">new</span> Student(<span class="string">"小李"</span>);</span><br><span class="line">		Test.swap(s1, s2);</span><br><span class="line">		System.out.println(<span class="string">"s1:"</span> + s1.getName());</span><br><span class="line">		System.out.println(<span class="string">"s2:"</span> + s2.getName());</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(Student x, Student y)</span> </span>&#123;</span><br><span class="line">		Student temp = x;</span><br><span class="line">		x = y;</span><br><span class="line">		y = temp;</span><br><span class="line">		System.out.println(<span class="string">"x:"</span> + x.getName());</span><br><span class="line">		System.out.println(<span class="string">"y:"</span> + y.getName());</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>result:</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">x:小李</span><br><span class="line">y:小张</span><br><span class="line">s1:小张</span><br><span class="line">s2:小李</span><br></pre></td></tr></table></figure>
+
+<p>通过上面两张图可以很清晰的看出： <strong>方法并没有改变存储在变量 s1 和 s2 中的对象引用。swap 方法的参数 x 和 y 被初始化为两个对象引用的拷贝，这个方法交换的是这两个拷贝</strong></p>
+<p>Java 程序设计语言对对象采用的不是引用调用，实际上，对象引用是按 值传递的。</p>
+<p>下面再总结一下 Java 中方法参数的使用情况：</p>
 <ul>
-<li>利用一个变量flag来记录；</li>
-<li>逐个访问字符串s，如果为‘L’，flag++；如果为’R‘，flag–；</li>
-<li>如果flag为0，则满足一次条件；</li>
-<li>统计所有的满足字符子串个数并返回。</li>
+<li>一个方法不能修改一个基本数据类型的参数（即数值型或布尔型）。</li>
+<li>一个方法可以改变一个对象参数的状态。</li>
+<li>一个方法不能让对象参数引用一个新的对象。</li>
 </ul>
-</li>
-<li><p>代码实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">balancedStringSplit</span><span class="params">(String s)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> len = s.length();</span><br><span class="line">        <span class="keyword">int</span> flag = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> res = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">char</span>[] s_char = s.toCharArray();</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">char</span> c : s_char)&#123;</span><br><span class="line">            <span class="keyword">if</span>(c == <span class="string">'L'</span>)</span><br><span class="line">                flag++;</span><br><span class="line">            <span class="keyword">if</span>(c == <span class="string">'R'</span>)</span><br><span class="line">                flag--;</span><br><span class="line">            <span class="keyword">if</span>(flag == <span class="number">0</span>)</span><br><span class="line">                res++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-
-
-
-</li>
+<h1 id="二、java面向对象"><a href="#二、java面向对象" class="headerlink" title="二、java面向对象"></a>二、java面向对象</h1><h2 id="2-1-成员变量与局部变量的区别有哪些？"><a href="#2-1-成员变量与局部变量的区别有哪些？" class="headerlink" title="2.1 成员变量与局部变量的区别有哪些？"></a>2.1 成员变量与局部变量的区别有哪些？</h2><ol>
+<li>从语法形式上看:成员变量是属于类的，而局部变量是在代码块或方法中定义的变量或是方法的参数；成员变量可以被  public,private,static 等修饰符所修饰，而局部变量不能被访问控制修饰符及 static  所修饰；但是，成员变量和局部变量都能被 final 所修饰。</li>
+<li>从变量在内存中的存储方式来看:如果成员变量是使用<code>static</code>修饰的，那么这个成员变量是属于类的，如果没有使用<code>static</code>修饰，这个成员变量是属于实例的。而对象存在于堆内存，局部变量则存在于栈内存。</li>
+<li>从变量在内存中的生存时间上看:成员变量是对象的一部分，它随着对象的创建而存在，而局部变量随着方法的调用而自动消失。</li>
+<li>成员变量如果没有被赋初值:则会自动以类型的默认值而赋值（一种情况例外:被 final 修饰的成员变量也必须显式地赋值），而局部变量则不会自动赋值。</li>
 </ol>
-<ol start="5">
-<li><p>附上错误反思</p>
-<p>String变量是不可变变量，不可以重复赋值。</p>
-<p>String s = “abcdaa”;</p>
-<p>s = s.replace(“aa”,”+”); //或者s.replace(“aa”,”+”);</p>
-<p>上面的情况下，s的值仍为”abcdaa”。</p>
+<h2 id="2-2创建一个对象用什么运算符-对象实体与对象引用有何不同"><a href="#2-2创建一个对象用什么运算符-对象实体与对象引用有何不同" class="headerlink" title="2.2创建一个对象用什么运算符?对象实体与对象引用有何不同?"></a>2.2创建一个对象用什么运算符?对象实体与对象引用有何不同?</h2><p>new 运算符，new 创建对象实例（对象实例在堆内存中），对象引用指向对象实例（对象引用存放在栈内存中）。一个对象引用可以指向 0 个或 1 个对象（一根绳子可以不系气球，也可以系一个气球）;一个对象可以有 n 个引用指向它（可以用 n 条绳子系住一个气球）。</p>
+<h2 id="2-3-面向对象三大特征"><a href="#2-3-面向对象三大特征" class="headerlink" title="2.3. 面向对象三大特征"></a>2.3. 面向对象三大特征</h2><h3 id="2-3-1-封装"><a href="#2-3-1-封装" class="headerlink" title="2.3.1 封装"></a>2.3.1 封装</h3><p>封装是指把一个对象的状态信息（也就是属性）隐藏在对象内部，不允许外部对象直接访问对象的内部信息。但是可以提供一些可以被外界访问的方法来操作属性。就好像我们看不到挂在墙上的空调的内部的零件信息（也就是属性），但是可以通过遥控器（方法）来控制空调。如果属性不想被外界访问，我们大可不必提供方法给外界访问。但是如果一个类没有提供给外界访问的方法，那么这个类也没有什么意义了。就好像如果没有空调遥控器，那么我们就无法操控空凋制冷，空调本身就没有意义了（当然现在还有很多其他方法 ，这里只是为了举例子）。</p>
+<h3 id="2-3-2-继承"><a href="#2-3-2-继承" class="headerlink" title="2.3.2 继承"></a>2.3.2 继承</h3><p>不同类型的对象，相互之间经常有一定数量的共同点。例如，小明同学、小红同学、小李同学，都共享学生的特性（班级、学号等）。同时，每一个对象还定义了额外的特性使得他们与众不同。例如小明的数学比较好，小红的性格惹人喜爱；小李的力气比较大。继承是使用已存在的类的定义作为基础建立新类的技术，新类的定义可以增加新的数据或新的功能，也可以用父类的功能，但不能选择性地继承父类。通过使用继承，可以快速地创建新的类，可以提高代码的重用，程序的可维护性，节省大量创建新类的时间 ，提高我们的开发效率。</p>
+<p><strong>关于继承如下 3 点请记住：</strong></p>
+<ol>
+<li>子类拥有父类对象所有的属性和方法（包括私有属性和私有方法），但是父类中的私有属性和方法子类是无法访问，<strong>只是拥有</strong>。</li>
+<li>子类可以拥有自己属性和方法，即子类可以对父类进行扩展。</li>
+<li>子类可以用自己的方式实现父类的方法。（以后介绍）。</li>
+</ol>
+<h3 id="2-3-3-多态"><a href="#2-3-3-多态" class="headerlink" title="2.3.3 多态"></a>2.3.3 多态</h3><p>多态，顾名思义，表示一个对象具有多种的状态。具体表现为父类的引用指向子类的实例。</p>
+<ol>
+<li></li>
+</ol>
+<p><strong>多态的特点:</strong></p>
+<ul>
+<li>对象类型和引用类型之间具有继承（类）/实现（接口）的关系；</li>
+<li>对象类型不可变，引用类型可变；</li>
+<li>方法具有多态性，属性不具有多态性；</li>
+<li>引用类型变量发出的方法调用的到底是哪个类中的方法，必须在程序运行期间才能确定；</li>
+<li>多态不能调用“只在子类存在但在父类不存在”的方法；</li>
+<li>如果子类重写了父类的方法，真正执行的是子类覆盖的方法，如果子类没有覆盖父类的方法，执行的是父类的方法。</li>
+</ul>
+<h2 id="2-4-修饰符"><a href="#2-4-修饰符" class="headerlink" title="2.4. 修饰符"></a>2.4. 修饰符</h2><p><strong>main函数访问非静态方法或类</strong></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="class"><span class="keyword">class</span> <span class="title">TreeNode</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val;</span><br><span class="line">        TreeNode left;</span><br><span class="line">        TreeNode right;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">TreeNode</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.val = x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">Node</span></span>&#123;</span><br><span class="line">        <span class="keyword">int</span> val;</span><br><span class="line">        Node next;</span><br><span class="line">        <span class="function"><span class="keyword">public</span> <span class="title">Node</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">            <span class="keyword">this</span>.val = x;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> temp;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Test</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(<span class="keyword">int</span> a,<span class="keyword">int</span> b)</span></span>&#123;</span><br><span class="line">        <span class="keyword">return</span> a+b;</span><br><span class="line">    &#125;</span><br><span class="line"><span class="comment">//    public static int add(int a,int b)&#123;</span></span><br><span class="line"><span class="comment">//        return a+b;</span></span><br><span class="line"><span class="comment">//    &#125;</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> a = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> b =<span class="number">2</span>;</span><br><span class="line">        Test test = <span class="keyword">new</span> Test();</span><br><span class="line">        test.add(a,b);</span><br><span class="line">        Test.TreeNode node= test.<span class="keyword">new</span> TreeNode(<span class="number">2</span>);</span><br><span class="line">        System.out.println(node.val);</span><br><span class="line">        Node node1 = <span class="keyword">new</span> Node(<span class="number">2</span>);</span><br><span class="line">        <span class="comment">//add(a,b);</span></span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="2-4-1-在一个静态方法内调用一个非静态成员为什么是非法的"><a href="#2-4-1-在一个静态方法内调用一个非静态成员为什么是非法的" class="headerlink" title="2.4.1. 在一个静态方法内调用一个非静态成员为什么是非法的?"></a>2.4.1. 在一个静态方法内调用一个非静态成员为什么是非法的?</h3><p>由于静态方法可以不通过对象进行调用，因此在静态方法里，不能调用其他非静态变量，也不可以访问非静态变量成员。</p>
+<h3 id="2-4-2-静态方法和实例方法有何不同"><a href="#2-4-2-静态方法和实例方法有何不同" class="headerlink" title="2.4.2 静态方法和实例方法有何不同"></a>2.4.2 静态方法和实例方法有何不同</h3><ol>
+<li><p>在外部调用静态方法时，可以使用”类名.方法名”的方式，也可以使用”对象名.方法名”的方式。而实例方法只有后面这种方式。也就是说，调用静态方法可以无需创建对象。</p>
+</li>
+<li><p>静态方法在访问本类的成员时，只允许访问静态成员（即静态成员变量和静态方法），而不允许访问实例成员变量和实例方法；实例方法则无此限制。</p>
 </li>
 </ol>
 
@@ -589,7 +595,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="http://haseka96.github.io/2020/07/21/LeetCode-1221/">http://haseka96.github.io/2020/07/21/LeetCode-1221/</a>
+                    <a href="http://haseka96.github.io/2020/09/13/java-base-1/">http://haseka96.github.io/2020/09/13/java-base-1/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -627,20 +633,12 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/java/">
-                                    <span class="chip bg-color">java</span>
+                                <a href="/tags/Java/">
+                                    <span class="chip bg-color">Java</span>
                                 </a>
                             
-                                <a href="/tags/leetcode/">
-                                    <span class="chip bg-color">leetcode</span>
-                                </a>
-                            
-                                <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/">
-                                    <span class="chip bg-color">贪心算法</span>
-                                </a>
-                            
-                                <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                    <span class="chip bg-color">字符串</span>
+                                <a href="/tags/%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
+                                    <span class="chip bg-color">基础知识</span>
                                 </a>
                             
                         </div>
@@ -832,7 +830,7 @@
         repo: 'haseka96.github.io',
         owner: 'haseka96',
         admin: ["haseka96"],
-        id: '2020-07-21T15-29-36',
+        id: '2020-09-13T20-24-01',
         distractionFreeMode: false  // Facebook-like distraction free mode
     });
 
@@ -857,7 +855,7 @@
 
 <script>
 var gitment = new Gitment({
-    id: 'Tue Jul 21 2020 15:29:36 GMT+0800',
+    id: 'Sun Sep 13 2020 20:24:01 GMT+0800',
     owner: 'haseka96',
     repo: 'haseka96.github.io',
     oauth: {
@@ -1170,9 +1168,10 @@ gitment.render('gitment-content');
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2020/09/13/java-base-1/">
                     <div class="card-image">
@@ -1190,9 +1189,9 @@ gitment.render('gitment-content');
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-09-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1205,6 +1204,7 @@ gitment.render('gitment-content');
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -1227,31 +1227,31 @@ gitment.render('gitment-content');
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/19/%E6%97%A5%E8%AF%AD%E5%8D%95%E8%AF%8D-3/">
+                <a href="/2020/07/21/LeetCode-1221/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="日语单词_3">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="LeetCode_1221">
                         
-                        <span class="card-title">日语单词_3</span>
+                        <span class="card-title">LeetCode_1221</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            每日日语单词
+                            平衡分割字符串
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-19
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-21
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/Japanese/" class="post-category">
-                                    Japanese
+                            <a href="/categories/java/" class="post-category">
+                                    java
                                 </a>
                             
                             
@@ -1261,12 +1261,20 @@ gitment.render('gitment-content');
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Japanese/">
-                        <span class="chip bg-color">Japanese</span>
+                    <a href="/tags/java/">
+                        <span class="chip bg-color">java</span>
                     </a>
                     
-                    <a href="/tags/word/">
-                        <span class="chip bg-color">word</span>
+                    <a href="/tags/leetcode/">
+                        <span class="chip bg-color">leetcode</span>
+                    </a>
+                    
+                    <a href="/tags/%E8%B4%AA%E5%BF%83%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">贪心算法</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                        <span class="chip bg-color">字符串</span>
                     </a>
                     
                 </div>
