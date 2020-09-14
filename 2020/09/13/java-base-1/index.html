@@ -570,6 +570,36 @@
 <li><p>静态方法在访问本类的成员时，只允许访问静态成员（即静态成员变量和静态方法），而不允许访问实例成员变量和实例方法；实例方法则无此限制。</p>
 </li>
 </ol>
+<h1 id="三、Java核心技术"><a href="#三、Java核心技术" class="headerlink" title="三、Java核心技术"></a>三、Java核心技术</h1><h2 id="3-1异常"><a href="#3-1异常" class="headerlink" title="3.1异常"></a>3.1异常</h2><h3 id="3-1-1java异常类层次结构图："><a href="#3-1-1java异常类层次结构图：" class="headerlink" title="3.1.1java异常类层次结构图："></a>3.1.1java异常类层次结构图：</h3><p>![avatar]<a href="https://chercher.tech/images/java-programming/exception-architechture-java.png" target="_blank" rel="noopener">https://chercher.tech/images/java-programming/exception-architechture-java.png</a></p>
+<p>在Java中，所有的异常都有一个共同的祖先java.lang包中的Throwable类。Throwable：有两个重要的子类：Exception（异常）和Error（错误），二者都是Java异常处理的重要子类，各自都包含大量子类。</p>
+<p><strong>Error（错误）:是程序无法处理的错误</strong></p>
+<p><strong>Exception（异常）:是程序本身可以处理的异常</strong>。Exception类有一个重要的子类RuntimeException。RuntimeException异常由Java虚拟机抛出。NullPointerException（要访问的变量没有引用任何对象时，抛出该异常）、ArithmeticException（算术运算异常，一个整数除以0时，抛出该异常）和ArrayIndexOutOfBoundsException（下标越界异常）。</p>
+<p><strong>注意：异常和错误的区别：异常能被程序本身处理，错误是无法处理。</strong></p>
+<h3 id="3-1-2-Throwable类常用方法"><a href="#3-1-2-Throwable类常用方法" class="headerlink" title="3.1.2. Throwable类常用方法"></a>3.1.2. Throwable类常用方法</h3><ul>
+<li><strong>public string getMessage():</strong> 返回异常发生时的简要描述</li>
+<li><strong>public string toString():</strong>  返回异常发生时的详细信息</li>
+<li><strong>public string getLocalizedMessage():</strong>  返回异常对象的本地化信息。使用Throwable的子类覆盖这个方法，可以生成本地化信息。如果子类没有覆盖该方法，则该方法返回的信息与getMessage()返回的结果相同。</li>
+<li><strong>public void printStackTrace():</strong>  在控制台上打印Throwable对象封装的异常信息。</li>
+</ul>
+<h3 id="3-1-3-try-catch-finally"><a href="#3-1-3-try-catch-finally" class="headerlink" title="3.1.3 try-catch-finally"></a>3.1.3 try-catch-finally</h3><ul>
+<li>try块：用于捕获异常。气候可接零到多个catch块，如果没有catch块，则必须跟一个finally块。</li>
+<li>catch块：用于处理try块捕获到的信息。</li>
+<li>finally块：无论是否捕获或处理异常，finally块里的语句都会被执行。当在try块或catch块中遇到return语句时，finally语句将在方法返回之前被执行。</li>
+</ul>
+<p><strong>在以下4中特殊情况下，finally块不会被执行：</strong></p>
+<ol>
+<li>在fianlly语句块第一行发生了异常。因为在其他行，finally块还是会得到执行；</li>
+<li>在前面的代码中用了System.exit(int)已退出程序。exit是带参函数，若该语句在异常语句之后，finally会执行；</li>
+<li>程序所在的线程死亡。</li>
+<li>关闭CPU。</li>
+</ol>
+<p><strong>注意：</strong> 当try语句和finally语句中都有return语句时，在方法返回之前，finally语句将被执行，并且finally语句的返回值将会覆盖原始的返回值。如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Test</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">f</span><span class="params">(<span class="keyword">int</span> value)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> value * value;</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            <span class="keyword">if</span> (value == <span class="number">2</span>) &#123;</span><br><span class="line">                <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果调用f(2),返回值为0，因为finally的返回语句覆盖了try语句块的返回值。</p>
+<h2 id="3-2多线程"><a href="#3-2多线程" class="headerlink" title="3.2多线程"></a>3.2多线程</h2><h3 id="3-2-1简述线程、程序、进程的基本概念。以及它们间的关系？"><a href="#3-2-1简述线程、程序、进程的基本概念。以及它们间的关系？" class="headerlink" title="3.2.1简述线程、程序、进程的基本概念。以及它们间的关系？"></a>3.2.1简述线程、程序、进程的基本概念。以及它们间的关系？</h3><p><strong>线程：</strong> 与进程相似，但线程是一个比进程更小的执行单位。一个进程在其执行的过程中可以产生多个线程。与进程不同的是同类的多个线程共享同一块内存空间和一组系统资源，所以系统在产生一个线程，或是在各个线程之间作切换工作时，负担要比进程小很多，也正因为如此，线程也被称为轻量级进程。</p>
+<p><strong>程序：</strong> 是含有指令和数据的文件，被存储在磁盘或其他的数据存储设备中，也就是说程序是静态的代码。</p>
+<p><strong>进程：</strong> 是程序的一次执行过程，是系统运行程序的基本单位，因此进程是动态的。系统运行一个程序是一个程序即是一个进程重创建，运行到消亡的过程。简单来说，一个进程就是一个执行中的程序，它在计算机中一个 指令接着一个指令地执行着，同时，每个进程还占有某些系统资源如CPU时间，内存空间，文件，输入输出设备的使用权等。换言之，当程序在执行时，将被os载入内存中。线程是进程划分成的更小的运行单位。线程和进程的最大的不同在于基本上各进程是独立的，而各线程则不一定，因为同一进程中的线程极有可能会相互影响。从另一角度说，进程属于os的范畴，主要是同一段时间内，可以同时执行一个以上的程序，而线程则是在同一程序内几乎同时执行一个以上的程序段。</p>
 
             </div>
             <hr/>
