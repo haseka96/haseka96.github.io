@@ -4,6 +4,35 @@
   
     
     <entry>
+      <title>ps_1</title>
+      <link href="/2021/06/05/ps-1/"/>
+      <url>/2021/06/05/ps-1/</url>
+      
+        <content type="html"><![CDATA[<center>图层与平移笔记</center><ol><li><p>alt+左击小眼睛：唯一只显示该图层</p></li><li><p>ctrl + t ：对某图层进行大小位置调整</p></li><li><p>ctrl + 依次点击多个图层右侧空白位置：选中多个图层（方便组合）</p></li><li><p>ctrl + j ：拷贝图层 </p></li><li><p>del：删除图层</p></li><li><p>Alt + del ：填充前景色</p></li><li><p>按住鼠标左击拖动图层</p></li></ol>]]></content>
+      
+      
+      <categories>
+          
+          <category> ps </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> ps </tag>
+            
+            <tag> 图层 </tag>
+            
+            <tag> 平移 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>kokono</title>
       <link href="/2020/12/29/kokono/"/>
       <url>/2020/12/29/kokono/</url>
