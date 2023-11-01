@@ -5,10 +5,10 @@
     
     <entry>
       <title>DETR_Start</title>
-      <link href="/haseka96/2023/11/01/DETR%E5%AD%A6%E4%B9%A0/"/>
-      <url>/haseka96/2023/11/01/DETR%E5%AD%A6%E4%B9%A0/</url>
+      <link href="/2023/11/01/DETR%E5%AD%A6%E4%B9%A0/"/>
+      <url>/2023/11/01/DETR%E5%AD%A6%E4%B9%A0/</url>
       
-        <content type="html"><![CDATA[<center><head>    DETR原理解读    </head> </center><h6 id="原理解读"><a href="#原理解读" class="headerlink" title="原理解读"></a>原理解读</h6><hr><p> DETR任务是Object detection，用到的工具是transformers，特点是End-to-end。而目标检测的任务是要预测一系列的Bounding Box的坐标及Label，当下大多数检测器通过定义一些proposal或者anchor，将问题构建成一个分类及回归问题来间接完成这个任务。DETR的工作则是将transfoemers运用到目标检测领域，取代了现在模型需要手工设计的工作，并且取得了不错的结果。    DETR是第一个使用端到端的方法解决检测问题，解决的方法是检测问题视为一个set prediction 问题，如下图所示：</p><p>​    <img src="https://pic1.zhimg.com/v2-772984ccd82a0e0a279ea6a09c3c34c0_r.jpg" alt=""></p><h6 id=""><a href="#" class="headerlink" title=" "></a> </h6><p>     网络的主要组成：CNN和Transformer。</p><p>DETR工作两个关键部分：</p><ul><li>用transformer的encoder-decoder架构一次性生成N个box prediction。(N是一个事先设定的、远远大于image中object个数的一个整数)</li><li>设计了bipartite matching loss，基于预测的box和ground truthboxes的二分图匹配计算loss大小，从而使得预测的box位置和类别更接近于ground truth。</li></ul><p>DETR整体结构可以分为4个部分：(如下图所示)</p><ul><li><p>backbone</p></li><li><p>encoder</p></li><li><p>decoder</p></li><li><p>FFN</p><p><img src="https://pic4.zhimg.com/80/v2-3d43474df51c545ad6bafc19b3c8ccc3_720w.webp" alt=""></p></li></ul>]]></content>
+        <content type="html"><![CDATA[<center><head>    DETR原理解读    </head> </center><h6 id="原理解读"><a href="#原理解读" class="headerlink" title="原理解读"></a>原理解读</h6><hr><p> DETR任务是Object detection，用到的工具是transformers，特点是End-to-end。而目标检测的任务是要预测一系列的Bounding Box的坐标及Label，当下大多数检测器通过定义一些proposal或者anchor，将问题构建成一个分类及回归问题来间接完成这个任务。DETR的工作则是将transfoemers运用到目标检测领域，取代了现在模型需要手工设计的工作，并且取得了不错的结果。    DETR是第一个使用端到端的方法解决检测问题，解决的方法是检测问题视为一个set prediction 问题，如下图所示：</p><p>​    <img src="https://pic1.zhimg.com/v2-772984ccd82a0e0a279ea6a09c3c34c0_r.jpg" alt=""></p><h6 id=""><a href="#" class="headerlink" title=" "></a> </h6><p>     网络的主要组成：CNN和Transformer。</p><p>DETR工作两个关键部分：</p><ul><li>用transformer的encoder-decoder架构一次性生成N个box prediction。(N是一个事先设定的、远远大于image中object个数的一个整数)</li><li>设计了bipartite matching loss，基于预测的box和ground truthboxes的二分图匹配计算loss大小，从而使得预测的box位置和类别更接近于ground truth。</li></ul><p>DETR整体结构可以分为4个部分：(如下图所示)</p><ul><li><p>backbone</p></li><li><p>encoder</p></li><li><p>decoder</p></li><li><p>FFN</p><p><img src="https://pic4.zhimg.com/80/v2-3d43474df51c545ad6bafc19b3c8ccc3_720w.webp" alt=""></p></li></ul><ol><li><strong>backbone:</strong> CNN backbone处理 </li></ol>]]></content>
       
       
       <categories>
