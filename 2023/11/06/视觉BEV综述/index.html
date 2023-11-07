@@ -1,0 +1,329 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>视觉BEV综述 | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="感知BEV综述 什么是BEV BEV的意思是鸟瞰图，也就是我们会将环视摄像机，激光雷达，甚至是毫米波雷达的数据，经过特征提取之后，统统通过视角变换，转换到鸟瞰图这种场景下，然后会在这些场景下，做一些多传感器数据融合就很方便了，之后我们就可以接各种任务头，做3D目标检测，车道线检测，语义分割，障碍物检测等等，都是可以的。 对于低成本的自动驾驶系统，以视觉为中心的BEV感知是一个长期的挑战，因为摄像头">
+<meta property="og:type" content="article">
+<meta property="og:title" content="视觉BEV综述">
+<meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/06/%E8%A7%86%E8%A7%89BEV%E7%BB%BC%E8%BF%B0/index.html">
+<meta property="og:site_name" content="在发之泽">
+<meta property="og:description" content="感知BEV综述 什么是BEV BEV的意思是鸟瞰图，也就是我们会将环视摄像机，激光雷达，甚至是毫米波雷达的数据，经过特征提取之后，统统通过视角变换，转换到鸟瞰图这种场景下，然后会在这些场景下，做一些多传感器数据融合就很方便了，之后我们就可以接各种任务头，做3D目标检测，车道线检测，语义分割，障碍物检测等等，都是可以的。 对于低成本的自动驾驶系统，以视觉为中心的BEV感知是一个长期的挑战，因为摄像头">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-11-06T09:27:51.000Z">
+<meta property="article:modified_time" content="2023-11-07T06:19:53.358Z">
+<meta property="article:author" content="haseka">
+<meta property="article:tag" content="-BEV -综述">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://github.com/haseka96.github.io/2023/11/06/%E8%A7%86%E8%A7%89BEV%E7%BB%BC%E8%BF%B0/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '视觉BEV综述',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-07 14:19:53'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">视觉BEV综述</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-06T09:27:51.000Z" title="Created 2023-11-06 17:27:51">2023-11-06</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-07T06:19:53.358Z" title="Updated 2023-11-07 14:19:53">2023-11-07</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E6%8A%80%E6%9C%AF-%E7%AC%94%E8%AE%B0-%E7%BB%BC%E8%BF%B0/">-技术 -笔记 -综述</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="视觉BEV综述"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="感知bev综述">感知BEV综述</h1>
+<h3 id="什么是bev">什么是BEV</h3>
+<p>BEV的意思是鸟瞰图，也就是我们会将环视摄像机，激光雷达，甚至是毫米波雷达的数据，经过特征提取之后，统统通过视角变换，转换到鸟瞰图这种场景下，然后会在这些场景下，做一些多传感器数据融合就很方便了，之后我们就可以接各种任务头，做3D目标检测，车道线检测，语义分割，障碍物检测等等，都是可以的。</p>
+<p>对于低成本的自动驾驶系统，以视觉为中心的BEV感知是一个长期的挑战，因为摄像头通常放置在自车上，与地面平行，面向外部。图像在与BEV正交的透视图（PV）中获取，并且两个视图之间的变换是不适定问题。最早工作[用单应矩阵以物理和数学方式将平坦地面从PV转换为BEV。多年来，这种方法一直占据主导地位，直到平地硬约束无法满足复杂真实场景的自主驾驶要求。随着计算机视觉中数据驱动方法的发展，近年来出现了许多基于深度学习的方法，通过求解PV-BEV变换来促进以视觉为中心的BEV感知。</p>
+<h3 id="bev方法">BEV方法</h3>
+<p>基于视图变换，当前BEV视觉感知工作可分为两大类：基于几何的变换和基于网络的变换。如图1所示：</p>
+<p><img
+src="https://pic1.zhimg.com/v2-1bccea29938448e33a091e958698199c_r.jpg" /></p>
+<p>前者充分利用摄像头的物理原理以可解释的方式迁移视图。除了经典的基于homograph的方法外，通过显式或隐式深度估计将2-D特征提升到3-D空间是主要的解决方案。对于图像的每个像素，都存在一条来自摄影机的光线，该光线会遇到现实世界中的目标。不直接将像素映射到BEV，另一种方法是计算每个像素的深度分布，利用该分布将2D特征提升到3D，然后通过降维从3D获得BEV表示。</p>
+<p>这些方法对深度采用不同的假设，例如精确值、射线上的均匀分布或射线上的类分布。深度监督来自于最终的显示深度值或任务监督。对于后者，其方法采用神经网络作为PV到BEV的视图投影。深度神经网络充当一个负责的映射函数，以不同的模式、维度、表示等将输入转换为输出。简单的想法是使用编码器-解码器（VE-D）或MLP将PV特征投影到BEV。上述方法在某种程度上采用了自下而上（bottom-up）的策略，以前向的凡是处理转换。另一种方法是采用自顶向下（top-down）的策略，通过交叉注意力机制直接构造BEV
+query并搜索前视图像上的相应特征。为了匹配不同的下游任务，各种方法提出稀疏、密集或混合query。</p>
+<p>3-D目标检测是3-D感知的核心任务之一。根据不同的输入数据模式，该任务可以分为：基于图像、基于激光雷达和基于多模态的3-D检测。</p>
+<p>基于图像的3D检测设置需要模型预测仅给定多个图像的目标类别和3-D边框。以前的工作通常直接从透视图特征进行预测，这个过程虽然简单，但在实践中对多视图摄像头数据进行复杂的后处理，难以利用来自多个视图和时间连续帧的立体视觉线索。因此，最近基于BEV的方法进入视野。</p>
+<p>将透视图转化为BEV的一个传统而直接的解决方案是，利用二者之间的自然集合投影关系，称之为几何方法。根据如何弥合这两个视图间的差距，以前的工作可分为两组：基于homograpgh的方法和基于深度的方法。</p>
+<h4 id="基于homograph的方法">基于homograph的方法</h4>
+<p>3-D空间中的点可以通过透视映射变换到图像空间，而将图像像素投影到3-D空间的逆问题是病态的。逆透视映射（IPM），基于逆映射点位于水平面的夫君爱约束，解决数学上不可能的映射问题。单应矩阵可以从相机的内外参物理地导出。一些方法用CNN提取PV图形的语义特征，并估计图像中的垂直消失点和地平面消失线，以确定单应矩阵。</p>
+<p>由于IPM严重依赖于平坦地面假设，这些给予IPM的方法通常无法准确检测地平面上方的目标，如建筑物、车辆和行人。</p>
+<p><strong>总结：</strong>基于homograph方法主要基于PV和BEV之间平地面的物理映射，具有良好的可解释性。IPM在下游感知任务的图像投影或特征投影中起作用。为了减少地平面以上区域的失真，充分探索语义信息，并广泛使用GAN来提高BEV特征的质量。由于从PV到BEV的实际转换是不适定的，IPM的硬假设解决来部分问题。PV整个特征图的有效BEV映射仍有待解决。</p>
+<h4 id="基于深度预测的方法">基于深度预测的方法</h4>
+<p>基于深度的PV-BEV方法自然建立在显示3D表示上。基于所使用的表示，这些方法可以分为两种类型：基于点的方法和基于体素的方法。</p>
+<ul>
+<li>基于点的视图转换</li>
+</ul>
+<p>基于点的方法直接使用深度估计将像素转换为点云，在连续3-D空间中散播。其更直接，更容易集成单目深度估计和基于激光雷达的3D检测成熟经验。</p>
+<ul>
+<li>基于体素的视图变换</li>
+</ul>
+<p>与基于激光雷达的3-D检测方法类似，纯摄像头方法也有两种常见的选择来表示变换后的3-D特征和几何。与分布在连续3-D空间中的点云相比，体素通过离散3-D空间来构造用于特征变换的均匀结构，为3-D场景理解提供来更有效的表示。</p>
+<p>具体而言，该方案通常使用深度引导直接在相应位置的3D位置散射2D特征（而不是点）。先前的工作将2D特征图与相应的预测深度分布进行外积（outer
+product）来实现这一目标。早期的工作假设分布是均匀的，即沿射线的所有特征都相同，如OFT。这项工作建立了一个内部表示，以确定图像中哪些特征与正交BEV上的位置相关。在定义的均匀间隔3-D格上，它构建3-D体素特征图，并在投影的相应图像特征图区域累积特征来填充体素。然后，沿垂直轴对体素特征求和获得正交特征图，然后深度卷积神经网络提取BEV特征用于3-D目标检测。<strong>对于图像的每个像素，网络对分配的3D点预测相同的表示，即预测沿深度的均匀表示。</strong>这类方法通常不需要深度监督，并且可以在视图转换之后以端到端方式学习网络中的深度或3D位置信息。</p>
+<p>相反，另一种范式会明确预测深度分布，并以此仔细构建3D特征，LSS代表了这种方法。其预测深度上的类分布（categorical
+distribution）和上下文向量，其外积确定透视光线每个点的特征，更好地接近真实深度分布。此外，它将来自所有摄像头的预测融合到场景的一个结合表征中，对标定误差更有鲁棒性。BEVDet遵循这一LSS范式，提出了一种从BEV进行全摄像头多视图的3D检测框架。而新版本BEVDet4D展示了基于多摄像头3D检测的时域线索。具体而言，保留前一帧的中间BEV特征，并将其与前帧生产的特征连接。</p>
+<ul>
+<li>深度监督</li>
+</ul>
+<p>当使用预测深度分布来提升2-D特征时，该分布精度非常重要。CaDDN用经典方法对激光雷达点投影的稀疏深度图进行插值，并以此监督深度分布的预测。其他不用深度标签的方法，只能从稀疏实例标注中学习此类3D位置或深度信息，仅靠网络学习，要困难得多。除了将深度监督纳入检测框架之外，DD3D和MV-FCOS3D++指出，深度估计和单目3D检测的预训练可以显著增强2D主干的表征学习。</p>
+<ul>
+<li>与基于IPM的方法相结合</li>
+</ul>
+<p>PanopticSeg利用这两个方法的优点，提出一种用于全景分割的dense
+transformer模块，其包括一个用IPM的flat
+transformer，然后误差校正，生成平面BEV特征，还有一个用3-D体格（volumetri
+lattice）建模中间3D空间的vertical transformer。</p>
+<ul>
+<li>多视图聚合做立体匹配</li>
+</ul>
+<p>除了单目深度估计外，立体匹配还可以在纯摄像头感知中预测更精确的深度信息。它依赖于适当多视图设置自然形成的基线。相比之下，在双目情况下的深度估计中具有更重要的优点。</p>
+<p>基于深度的视图变换方法通常基于显式3-D表示、量化体素或连续3-D空间的点云散射。基于体素的方法使用均匀的深度向量或明确预测的深度分布将2D特征提升到3D体素空间，并执行几乎BEV的感知。相反，基于点的方法将深度预测转化为伪激光雷达表示，然后用定义网络进行3-D检测。如下表显式了3-D检测的结果：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-1a79417fd7b3a648bc32a239516a4a9b_720w.webp" /></p>
+<p>下图是基于深度的方法时间顺序概述：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-dc857d960de7bb1eb157a672367a9c1b_720w.webp" /></p>
+<p><strong>总而言之：</strong></p>
+<p>1.早期的方法通常第一步用伪激光雷达表示，在第二步直接用3D检测器；然而，由于难以进行可推广的端到端训练，而面临着模型复杂度和性能低的问题。</p>
+<p>2.由于计算效率和灵活性，最近的方法更加关注基于体素的方法。这种表示已广泛应用于不同任务的纯摄像头方法中。</p>
+<p>3.深度监督对于这种基于深度的方法很重要，因为准确的深度分布可以为特征PV转换为BEV时提供基本线索。</p>
+<p>4.如DfM、BEVDet4D和MV-FCOS3D++所分析的，在时域建模中此类方法是一个有希望的方向。</p>
+<p>基于几何的方法明确建立在摄像头投影过程的物理原理上，将视图pV转换为BEV，这是一种可解释的解决方案。另一种选择是以<strong>数据驱动</strong>的方式对视图进行建模，有效地利用摄像头几何结构，其中神经网络充当PV和BEV之间的映射函数。为了涵盖单应性等复杂变幻，<strong>MLP</strong>和<strong>transformer</strong>是基于<strong>网络方法</strong>的两个合适选择。</p>
+<h4 id="基于mlp的视图转换">基于MLP的视图转换</h4>
+<p>多层感知器（MLP）在某种程度上可以看为一个复杂的映射函数，其将输入映射到具有不同模态、维度或表示的输出。摆脱标定摄像机设置包含的继承感应偏差，一些方法倾向于利用MLP学习摄像机标定的隐式表示，实现在两个不同视图（PV和BEV）之间转换。</p>
+<p>基于MLP的方法忽略了标定摄像机的几何先验，并利用MLP作为通用映射函数来建模从PV到BEV的转换。虽然MLP在理论上是一种通用的近似器，但由于缺乏深度信息、遮挡等原因，这使得基于MLP的方法无法利用重叠区域带来的几何潜力。</p>
+<p>总之，基于MLP的方法更多地关注单个图像的情况，而多视图融合还没有得到充分的研究。</p>
+<h4 id="基于transformer的视图转换">基于Transformer的视图转换</h4>
+<p>Transformer解决方案，无需明确利用摄像头模型。基于MLP和基于Transformer的张量映射之间有三个主要区别：</p>
+<p>1）由于加权矩阵在推理过程中是固定的，因此MLP学习的映射不依赖于数据，相反，Transformer中的交叉注意与数据相关，其中加权矩阵与输入数据相关。此数据相关属性使Transformer更有表现力。</p>
+<p>2）交叉注意是置换不变的，需要位置编码来区分输入顺序；MLP对排列自然敏感。</p>
+<p>3）基于Transformer的方法采用自顶向下的策略，通过构造query并通过注意机制搜索相应的图像特征，而不是像基于MLP的方法那样以前向方式处理视图变换。</p>
+<p>根据Transformer解码器中可学习slots（称为query）的粒度，将这些方法分为三类：基于稀疏query的方法、基于密集query的方法和基于混合query的方法。</p>
+<h5 id="基于稀疏query的方法">基于稀疏query的方法</h5>
+<p>对于基于稀疏查询的方法，查询嵌入使网络能够直接产生稀疏感知结果，而无需显式执行图像特征的密集变换。</p>
+<p>DETR3D侧重与多摄像机输入的3D检测，并用基于几何的特征采样过程代替交叉注意。它首先从可学习的稀疏查询中预测3-D参考点，然后使用标定矩阵将参考点投影到图像平面上，最后对相应的多视图多尺度图像特征进行采样，进行端到端的3-D边框预测。为了缓解DETR3D中复杂的特征采样过程，PETR将摄像机参数导出的3-D位置嵌入编码到2-D多视图特征中，这样稀疏查询可以直接与交叉注意中位置-觉察图像特征进行交互，实现更简单、更优雅的框架。下图为PETR3D与PETR比较：</p>
+<p><img
+src="https://pic3.zhimg.com/80/v2-69dfa7b7a47ab07cda1888787f838006_720w.webp" /></p>
+<p>PETRv2将3D位置嵌入扩展到时域来利用时域信息。</p>
+<h5 id="基于密集query的方法">基于密集query的方法</h5>
+<p>对于基于密集查询的方法，每个查询都预先分配3D空间或BEV空间的空间位置。查询数目有光栅化空间的空间分辨率决定，通常大于基于稀疏查询的方法。密集BEV表示可以密集查询与多个下游任务图像特征之间的交互来实现。</p>
+<h5 id="基于混合query的方法">基于混合query的方法</h5>
+<p>基于稀疏查询的方法适用于以目标为中心的任务，但无法导出显示密集BEV表示，不适用于密集感知任务，如BEV分割。因此，PETRv2中设计了一种混合查询策略，其中处理稀疏目标查询外，还提出了一种密集分割查询，每个分割查询分割特定的patch。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/06/%E8%A7%86%E8%A7%89BEV%E7%BB%BC%E8%BF%B0/">https://github.com/haseka96.github.io/2023/11/06/%E8%A7%86%E8%A7%89BEV%E7%BB%BC%E8%BF%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/BEV-%E7%BB%BC%E8%BF%B0/">-BEV -综述</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="next-post pull-full"><a href="/2023/11/02/DETR%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/" title="DETR代码解读"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">DETR代码解读</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%84%9F%E7%9F%A5bev%E7%BB%BC%E8%BF%B0"><span class="toc-number">1.</span> <span class="toc-text">感知BEV综述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFbev"><span class="toc-number">1.0.1.</span> <span class="toc-text">什么是BEV</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#bev%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.</span> <span class="toc-text">BEV方法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Ehomograph%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.1.</span> <span class="toc-text">基于homograph的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B7%B1%E5%BA%A6%E9%A2%84%E6%B5%8B%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.2.</span> <span class="toc-text">基于深度预测的方法</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Emlp%E7%9A%84%E8%A7%86%E5%9B%BE%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.0.2.3.</span> <span class="toc-text">基于MLP的视图转换</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8Etransformer%E7%9A%84%E8%A7%86%E5%9B%BE%E8%BD%AC%E6%8D%A2"><span class="toc-number">1.0.2.4.</span> <span class="toc-text">基于Transformer的视图转换</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E7%A8%80%E7%96%8Fquery%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.4.1.</span> <span class="toc-text">基于稀疏query的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E5%AF%86%E9%9B%86query%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.4.2.</span> <span class="toc-text">基于密集query的方法</span></a></li><li class="toc-item toc-level-5"><a class="toc-link" href="#%E5%9F%BA%E4%BA%8E%E6%B7%B7%E5%90%88query%E7%9A%84%E6%96%B9%E6%B3%95"><span class="toc-number">1.0.2.4.3.</span> <span class="toc-text">基于混合query的方法</span></a></li></ol></li></ol></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/06/%E8%A7%86%E8%A7%89BEV%E7%BB%BC%E8%BF%B0/" title="视觉BEV综述">视觉BEV综述</a><time datetime="2023-11-06T09:27:51.000Z" title="Created 2023-11-06 17:27:51">2023-11-06</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/02/DETR%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB/" title="DETR代码解读">DETR代码解读</a><time datetime="2023-11-02T07:07:41.000Z" title="Created 2023-11-02 15:07:41">2023-11-02</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/01/DETR%E5%AD%A6%E4%B9%A0/" title="DETR_Start">DETR_Start</a><time datetime="2023-11-01T02:48:55.000Z" title="Created 2023-11-01 10:48:55">2023-11-01</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
