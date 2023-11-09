@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>Attention</title>
+      <link href="/2023/11/09/Attention/"/>
+      <url>/2023/11/09/Attention/</url>
+      
+        <content type="html"><![CDATA[<h2 id="一注意力机制attention">一、注意力机制：Attention</h2><h3 id="什么是注意力机制">1.1什么是注意力机制？</h3><p>我们先来看一张图片</p><p><imgsrc="/home/haseka/Documents/hexo_blog/themes/butterfly/source/img/clannad.jpg" /></p><p>那么，大家的目光是更多注意在美少女古河渚身上，还是花草风景身上呢？可能对于热爱动漫的人来说他会关注logo------CLANNAD1和主人公古河渚，对于喜欢花的人来说可能更关注樱花，对于喜欢制服的人来说可能更关注jk装......</p><p>再举几个例子：</p><ul><li>看人--&gt;看脸</li><li>看文章--&gt;看标题</li><li>看段落--&gt;看开头</li></ul><p><strong>注意力机制</strong>其实是源自于人对于外部信息的处理能力。由于每一时刻接受的信息都是无比庞大且复杂万分的，远远超过了人脑的处理能力，<font color="red">因此人在处理信息的时候，会将注意力放在需要关注的信息上，对于其他无关的外部信息进行过滤</font>，这种处理方式被称为注意力机制。</p><p>通俗而言，注意力对于人而言可以理解为“关注度”，对于没有感情的机器而言就是赋予多少权重（0-1间的小数），越重要的地方或者越相关的地方就赋予越高的权重。</p><hr /><h3 id="如何运用注意力机制">1.2如何运用注意力机制？</h3><h4 id="querykey和value">1.2.1 Query、Key和Value</h4><p>首先，三者概念：</p><ul><li>查询（Query）：是指查询的范围，自主提示，即主观意识的特征向量</li><li>键（Key）：是被对比的项，非自主提示，即物体的突然出特征信息向量</li><li>值（Value）：是代表物体自身的特征向量，通常与Key成对出现</li></ul><p>注意力机制是通过Query与Key的注意力汇聚（给定一个Query，计算Query与Key的相关性，然后根据该相关性去找到最合适的Value）实现对Value的注意力权重分配，生成最终的输出结果。</p><p><imgsrc="https://img-blog.csdnimg.cn/img_convert/3724c8a2bee76f326f78f18c5d3fa4da.webp?x-oss-process=image/format,png" /></p><p>举例子而言：</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> -技术 -笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> -Attention </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>BEVFormer</title>
       <link href="/2023/11/07/BEVFormer/"/>
       <url>/2023/11/07/BEVFormer/</url>
