@@ -1,0 +1,484 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mmdetection整体构建流程 | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MMDetection 整体构建流程一、摘要众所周知，目标检测算法比较复杂，细节比较多，难以复现，而我们推出的 MMDetection 开源框架则希望解决上述问题。目前  MMdetection 已经复现了大部分主流和前沿模型，例如 Faster R-CNN 系列、Mask R-CNN 系列、YOLO  系列和比较新的 DETR 等等，模型库非常丰富，star 接近 13k，在学术研究和工业落地中">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mmdetection整体构建流程">
+<meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/index.html">
+<meta property="og:site_name" content="在发之泽">
+<meta property="og:description" content="MMDetection 整体构建流程一、摘要众所周知，目标检测算法比较复杂，细节比较多，难以复现，而我们推出的 MMDetection 开源框架则希望解决上述问题。目前  MMdetection 已经复现了大部分主流和前沿模型，例如 Faster R-CNN 系列、Mask R-CNN 系列、YOLO  系列和比较新的 DETR 等等，模型库非常丰富，star 接近 13k，在学术研究和工业落地中">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-11-15T00:34:40.000Z">
+<meta property="article:modified_time" content="2023-11-15T03:51:14.547Z">
+<meta property="article:author" content="haseka">
+<meta property="article:tag" content="MMDetection">
+<meta property="article:tag" content="BEV">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://github.com/haseka96.github.io/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'mmdetection整体构建流程',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-15 11:51:14'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">mmdetection整体构建流程</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-15T00:34:40.000Z" title="Created 2023-11-15 08:34:40">2023-11-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-15T03:51:14.547Z" title="Updated 2023-11-15 11:51:14">2023-11-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="mmdetection整体构建流程"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="MMDetection-整体构建流程"><a href="#MMDetection-整体构建流程" class="headerlink" title="MMDetection 整体构建流程"></a>MMDetection 整体构建流程</h1><h2 id="一、摘要"><a href="#一、摘要" class="headerlink" title="一、摘要"></a>一、摘要</h2><p>众所周知，目标检测算法比较复杂，细节比较多，难以复现，而我们推出的 MMDetection 开源框架则希望解决上述问题。目前  MMdetection 已经复现了大部分主流和前沿模型，例如 Faster R-CNN 系列、Mask R-CNN 系列、YOLO  系列和比较新的 DETR 等等，模型库非常丰富，star 接近 13k，在学术研究和工业落地中应用非常广泛。</p>
+<p>本文主要是从整体框架构建角度来解析，不会涉及到具体算法和代码，希望通过本文讲解：</p>
+<ul>
+<li>MMDetection 整体构建流程和思想</li>
+<li>目标检测算法核心组件划分</li>
+<li>目标检测核心组件功能</li>
+</ul>
+<h2 id="二、目标检测算法抽象流程"><a href="#二、目标检测算法抽象流程" class="headerlink" title="二、目标检测算法抽象流程"></a>二、目标检测算法抽象流程</h2><p>按照目前目标检测的发展，可以大概归纳为如下所示： </p>
+<p><img src="https://pic1.zhimg.com/80/v2-23f3f33d5ed5792e7ad55e559a6798fc_720w.webp" alt="img"></p>
+<p>注意上面仅仅写了几个典型算法而已，简单来说目标检测算法可以按照 3 个维度划分：</p>
+<ul>
+<li><strong>按照 stage 个数划分</strong>，常规是 one-stage 和 two-stage，但是实际上界限不是特别清晰，例如带 refine 阶段的算法  RepPoints，实际上可以认为是1.5 stage 算法，而 Cascade R-CNN  可以认为是多阶段算法，为了简单，上面图示没有划分如此细致</li>
+<li><strong>按照是否需要预定义 anchor 划分</strong>，常规是 anchor-based 和 anchor-free，当然也有些算法是两者混合的</li>
+<li><strong>按照是否采用了 transformer 结构划分</strong>，目前基于 transformer 结构的目标检测算法发展迅速，也引起了极大的关注，所以这里特意增加了这个类别的划分</li>
+</ul>
+<p>不管哪种划分方式，其实都可以分成若干固定模块，然后通过模块堆叠来构建整个检测算法体系。</p>
+<h2 id="三、MMDetection整体构建流程和思想"><a href="#三、MMDetection整体构建流程和思想" class="headerlink" title="三、MMDetection整体构建流程和思想"></a>三、MMDetection整体构建流程和思想</h2><p>基于目前代码实现，所有目标检测算法都按照以下流程进行划分： </p>
+<p><img src="https://pic1.zhimg.com/80/v2-7ecc8e5e19c59a3e6682c5e3cdc34918_720w.webp" alt="img"></p>
+<p>上述流程对应 MMDetection 代码构建流程，理解每个组件的作用不仅仅对阅读算法源码有帮助，而且还能够快速理解新提出算法对应的改进部分。下面对每个模块进行详细解读。</p>
+<h3 id="3-1-训练核心组件"><a href="#3-1-训练核心组件" class="headerlink" title="3.1 训练核心组件"></a>3.1 训练核心组件</h3><p>训练部分一般包括 9 个核心组件，总体流程是：</p>
+<ol>
+<li>任何一个 batch 的图片先输入到 backbone 中进行特征提取，典型的骨干网络是 ResNet</li>
+<li>输出的单尺度或者多尺度特征图输入到 neck 模块中进行特征融合或者增强，典型的 neck 是 FPN</li>
+<li>上述多尺度特征最终输入到 head 部分，一般都会包括分类和回归分支输出</li>
+<li>在整个网络构建阶段都可以引入一些即插即用增强算子来增加提取提取能力，典型的例如 SPP、DCN 等等</li>
+<li>目标检测 head 输出一般是特征图，对于分类任务存在严重的正负样本不平衡，可以通过正负样本属性分配和采样控制</li>
+<li>为了方便收敛和平衡多分支，一般都会对 gt bbox 进行编码</li>
+<li>最后一步是计算分类和回归 loss，进行训练</li>
+<li>在训练过程中也包括非常多的 trick，例如优化器选择等，参数调节也非常关键</li>
+</ol>
+<p>注意上述 9 个组件不是每个算法都需要的，下面详细分析。</p>
+<h4 id="3-1-1-Backbone"><a href="#3-1-1-Backbone" class="headerlink" title="3.1.1 Backbone"></a>3.1.1 Backbone</h4><p><img src="https://pic2.zhimg.com/80/v2-cdee2bd9f289d650ddbcbd748c4be0f9_720w.webp" alt="img"></p>
+<p>backbone 作用主要是特征提取。目前 MMDetection 中已经集成了大部分骨架网络，具体见文件：<code>mmdet/models/backbones</code>，V2.7 已经实现的骨架如下：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;RegNet&#39;, &#39;ResNet&#39;, &#39;ResNetV1d&#39;, &#39;ResNeXt&#39;, &#39;SSDVGG&#39;, &#39;HRNet&#39;, &#39;Res2Net&#39;,
+    &#39;HourglassNet&#39;, &#39;DetectoRS_ResNet&#39;, &#39;DetectoRS_ResNeXt&#39;, &#39;Darknet&#39;,
+    &#39;ResNeSt&#39;, &#39;TridentResNet&#39;
+]
+</code></pre>
+<p>最常用的是 ResNet 系列、ResNetV1d 系列和 Res2Net 系列。如果你需要对骨架进行扩展，可以继承上述网络，然后通过注册器机制注册使用。一个典型用法为：</p>
+<pre><code class="lang-python"># 骨架的预训练权重路径
+pretrained=&#39;torchvision://resnet50&#39;,
+backbone=dict(
+    type=&#39;ResNet&#39;, # 骨架类名，后面的参数都是该类的初始化参数
+    depth=50,
+    num_stages=4,
+    out_indices=(0, 1, 2, 3),
+    frozen_stages=1,
+    norm_cfg=dict(type=&#39;BN&#39;, requires_grad=True), 
+    norm_eval=True,
+    style=&#39;pytorch&#39;),
+</code></pre>
+<p>通过 MMCV 中的注册器机制，你可以通过 dict 形式的配置来实例化任何已经注册的类，非常方便和灵活。</p>
+<h4 id="3-1-2-Neck"><a href="#3-1-2-Neck" class="headerlink" title="3.1.2 Neck"></a>3.1.2 Neck</h4><p><img src="https://pic1.zhimg.com/80/v2-f0975c00a32fa03a80860f9c09234bbc_720w.webp" alt="img"></p>
+<p>neck 可以认为是 backbone 和 head 的连接层，主要负责对 backbone 的特征进行高效融合和增强，能够对输入的单尺度或者多尺度特征进行融合、增强输出等。具体见文件：<code>mmdet/models/necks</code>，V2.7 已经实现的 neck 如下：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;FPN&#39;, &#39;BFP&#39;, &#39;ChannelMapper&#39;, &#39;HRFPN&#39;, &#39;NASFPN&#39;, &#39;FPN_CARAFE&#39;, &#39;PAFPN&#39;,
+    &#39;NASFCOS_FPN&#39;, &#39;RFP&#39;, &#39;YOLOV3Neck&#39;
+]
+</code></pre>
+<p>最常用的应该是 FPN，一个典型用法是：</p>
+<pre><code class="lang-python">neck=dict(
+    type=&#39;FPN&#39;,
+    in_channels=[256, 512, 1024, 2048], # 骨架多尺度特征图输出通道
+    out_channels=256, # 增强后通道输出
+    num_outs=5), # 输出num_outs个多尺度特征图
+</code></pre>
+<h4 id="3-1-3-Head"><a href="#3-1-3-Head" class="headerlink" title="3.1.3 Head"></a>3.1.3 Head</h4><p><img src="https://pic2.zhimg.com/80/v2-fdd9a6232e62c75b143153dab8ba9bc1_720w.webp" alt="img"></p>
+<p>目标检测算法输出一般包括分类和框坐标回归两个分支，不同算法 head 模块复杂程度不一样，灵活度比较高。在网络构建方面，理解目标检测算法主要是要理解 head 模块。</p>
+<p>MMDetection 中 head 模块又划分为 two-stage 所需的 RoIHead 和 one-stage 所需的 DenseHead，也就是说所有的 one-stage 算法的 head 模块都在<code>mmdet/models/dense_heads</code>中，而 two-stage 算法还包括额外的<code>mmdet/models/roi_heads</code>。</p>
+<p>目前 V2.7 中已经实现的 dense_heads 包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;AnchorFreeHead&#39;, &#39;AnchorHead&#39;, &#39;GuidedAnchorHead&#39;, &#39;FeatureAdaption&#39;,
+    &#39;RPNHead&#39;, &#39;GARPNHead&#39;, &#39;RetinaHead&#39;, &#39;RetinaSepBNHead&#39;, &#39;GARetinaHead&#39;,
+    &#39;SSDHead&#39;, &#39;FCOSHead&#39;, &#39;RepPointsHead&#39;, &#39;FoveaHead&#39;,
+    &#39;FreeAnchorRetinaHead&#39;, &#39;ATSSHead&#39;, &#39;FSAFHead&#39;, &#39;NASFCOSHead&#39;,
+    &#39;PISARetinaHead&#39;, &#39;PISASSDHead&#39;, &#39;GFLHead&#39;, &#39;CornerHead&#39;, &#39;YOLACTHead&#39;,
+    &#39;YOLACTSegmHead&#39;, &#39;YOLACTProtonet&#39;, &#39;YOLOV3Head&#39;, &#39;PAAHead&#39;,
+    &#39;SABLRetinaHead&#39;, &#39;CentripetalHead&#39;, &#39;VFNetHead&#39;, &#39;TransformerHead&#39;
+]
+</code></pre>
+<p>几乎每个算法都包括一个独立的 head，而 roi_heads 比较杂，就不列出了。</p>
+<p>需要注意的是：<strong>two-stage 或者 mutli-stage 算法，会额外包括一个区域提取器 roi extractor，用于将不同大小的 RoI 特征图统一成相同大小</strong>。</p>
+<p>虽然 head 部分的网络构建比较简单，但是由于正负样本属性定义、正负样本采样和 bbox 编解码模块都在 head 模块中进行组合调用，故 MMDetection <strong>中最复杂的模块就是 head</strong>。在最后的整体流程部分会对该模块进行详细分析。</p>
+<h4 id="3-1-4-Enhance"><a href="#3-1-4-Enhance" class="headerlink" title="3.1.4 Enhance"></a>3.1.4 Enhance</h4><p><img src="https://pic3.zhimg.com/80/v2-65a706efe224f0b7ffc7f4fd7a65f2ca_720w.webp" alt="img"></p>
+<p>enhance 是即插即用、能够对特征进行增强的模块，其具体代码可以通过 dict 形式注册到 backbone、neck 和 head  中，非常方便(目前还不完善)。常用的 enhance 模块是 SPP、ASPP、RFB、Dropout、Dropblock、DCN  和各种注意力模块 SeNet、Non_Local、CBA 等。目前 MMDetection 中部分模块支持 enhance 的接入，例如  ResNet 骨架中的 plugins。</p>
+<h4 id="3-1-5-BBox-Assigner"><a href="#3-1-5-BBox-Assigner" class="headerlink" title="3.1.5 BBox Assigner"></a>3.1.5 BBox Assigner</h4><p>正负样本属性分配模块作用是进行正负样本定义或者正负样本分配（可能也包括忽略样本定义），正样本就是常说的前景样本（可以是任何类别），负样本就是背景样本。因为目标检测是一个同时进行分类和回归的问题，对于分类场景必然需要确定正负样本，否则无法训练。该模块至关重要，不同的正负样本分配策略会带来显著的性能差异，目前大部分目标检测算法都会对这个部分进行改进，至关重要。一些典型的分配策略如下：</p>
+<p><img src="https://pic3.zhimg.com/80/v2-12bae70e2ea2e4afb05d0d8d3f38ca56_720w.webp" alt="img"></p>
+<p>对应的代码在<code>mmdet/core/bbox/assigners</code>中，V2.7 主要包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;BaseAssigner&#39;, &#39;MaxIoUAssigner&#39;, &#39;ApproxMaxIoUAssigner&#39;, 
+    &#39;PointAssigner&#39;, &#39;ATSSAssigner&#39;, &#39;CenterRegionAssigner&#39;, &#39;GridAssigner&#39;,
+    &#39;HungarianAssigner&#39;
+]
+</code></pre>
+<h4 id="3-1-6-BBox-Sampler"><a href="#3-1-6-BBox-Sampler" class="headerlink" title="3.1.6 BBox Sampler"></a>3.1.6 BBox Sampler</h4><p>在确定每个样本的正负属性后，可能还需要进行样本平衡操作。本模块作用是对前面定义的正负样本不平衡进行采样，力争克服该问题。一般在目标检测中 gt bbox 都是非常少的，所以正负样本比是远远小于 1  的。而基于机器学习观点：在数据极度不平衡情况下进行分类会出现预测倾向于样本多的类别，出现过拟合，为了克服该问题，适当的正负样本采样策略是非常必要的，一些典型采样策略如下：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-91674a0710afadfd06a9ebd139f875fb_720w.webp" alt="img"></p>
+<p>对应的代码在<code>mmdet/core/bbox/samplers</code>中，V2.7 主要包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;BaseSampler&#39;, &#39;PseudoSampler&#39;, &#39;RandomSampler&#39;,
+    &#39;InstanceBalancedPosSampler&#39;, &#39;IoUBalancedNegSampler&#39;, &#39;CombinedSampler&#39;,
+    &#39;OHEMSampler&#39;, &#39;SamplingResult&#39;, &#39;ScoreHLRSampler&#39;
+]
+</code></pre>
+<h4 id="3-1-7-BBox-Encoder"><a href="#3-1-7-BBox-Encoder" class="headerlink" title="3.1.7 BBox Encoder"></a>3.1.7 BBox Encoder</h4><p>为了更好的收敛和平衡多个 loss，具体解决办法非常多，而 bbox 编解码策略也算其中一个，bbox 编码阶段对应的是对正样本的 gt bbox  采用某种编码变换（反操作就是 bbox 解码），最简单的编码是对 gt bbox  除以图片宽高进行归一化以平衡分类和回归分支，一些典型的编解码策略如下：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-1f8d5e5e45886423df474d168452f50b_720w.webp" alt="img"></p>
+<p>对应的代码在<code>mmdet/core/bbox/coder</code>中，V2.7 主要包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;BaseBBoxCoder&#39;, &#39;PseudoBBoxCoder&#39;, &#39;DeltaXYWHBBoxCoder&#39;,
+    &#39;LegacyDeltaXYWHBBoxCoder&#39;, &#39;TBLRBBoxCoder&#39;, &#39;YOLOBBoxCoder&#39;,
+    &#39;BucketingBBoxCoder&#39;
+]
+</code></pre>
+<h4 id="3-1-8-Loss"><a href="#3-1-8-Loss" class="headerlink" title="3.1.8 Loss"></a>3.1.8 Loss</h4><p>Loss 通常都分为分类和回归 loss，其对网络 head 输出的预测值和 bbox encoder 得到的 targets 进行梯度下降迭代训练。</p>
+<p>loss 的设计也是各大算法重点改进对象，常用的 loss 如下：</p>
+<p><img src="https://pic4.zhimg.com/80/v2-686b0b9ac6a82f9945ae454d18783227_720w.webp" alt="img"></p>
+<p>对应的代码在<code>mmdet/models/losses</code>中，V2.7 主要包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;cross_entropy&#39;, &#39;binary_cross_entropy&#39;,
+    &#39;mask_cross_entropy&#39;, &#39;CrossEntropyLoss&#39;, &#39;sigmoid_focal_loss&#39;,
+    &#39;FocalLoss&#39;, &#39;smooth_l1_loss&#39;, &#39;SmoothL1Loss&#39;, &#39;balanced_l1_loss&#39;,
+    &#39;BalancedL1Loss&#39;, &#39;mse_loss&#39;, &#39;MSELoss&#39;, &#39;iou_loss&#39;, &#39;bounded_iou_loss&#39;,
+    &#39;IoULoss&#39;, &#39;BoundedIoULoss&#39;, &#39;GIoULoss&#39;, &#39;DIoULoss&#39;, &#39;CIoULoss&#39;, &#39;GHMC&#39;,
+    &#39;GHMR&#39;, &#39;reduce_loss&#39;, &#39;weight_reduce_loss&#39;, &#39;weighted_loss&#39;, &#39;L1Loss&#39;,
+    &#39;l1_loss&#39;, &#39;isr_p&#39;, &#39;carl_loss&#39;, &#39;AssociativeEmbeddingLoss&#39;,
+    &#39;GaussianFocalLoss&#39;, &#39;QualityFocalLoss&#39;, &#39;DistributionFocalLoss&#39;,
+    &#39;VarifocalLoss&#39;
+]
+</code></pre>
+<p>可以看出 MMDetection 中已经实现了非常多的 loss，可以直接使用。</p>
+<h4 id="3-1-9-Training-tricks"><a href="#3-1-9-Training-tricks" class="headerlink" title="3.1.9 Training tricks"></a>3.1.9 Training tricks</h4><p>训练技巧非常多，常说的调参很大一部分工作都是在设置这部分超参。这部分内容比较杂乱，很难做到完全统一，目前主流的 tricks 如下所示:</p>
+<p><img src="https://pic3.zhimg.com/80/v2-569a12b6d4a20f8619a27b48d5b2fa42_720w.webp" alt="img"></p>
+<p>MMDetection 目前这部分还会继续完善，也欢迎大家一起贡献。</p>
+<h3 id="3-2-测试核心组件"><a href="#3-2-测试核心组件" class="headerlink" title="3.2 测试核心组件"></a>3.2 测试核心组件</h3><p>测试核心组件和训练非常类似，但是简单很多，除了必备的网络构建部分外( backbone、neck、head 和 enhance )，不需要正负样本定义、正负样本采样和 loss  计算三个最难的部分，但是其额外需要一个 bbox 后处理模块和测试 trick。</p>
+<h4 id="3-2-1-BBox-Decoder"><a href="#3-2-1-BBox-Decoder" class="headerlink" title="3.2.1 BBox Decoder"></a>3.2.1 BBox Decoder</h4><p>训练时候进行了编码，那么对应的测试环节需要进行解码。根据编码的不同，解码也是不同的。举个简单例子：假设训练时候对宽高是直接除以图片宽高进行归一化的，那么解码过程也仅仅需要乘以图片宽高即可。其代码和 bbox encoder 放在一起，在<code>mmdet/core/bbox/coder</code>中。</p>
+<h4 id="3-2-2-BBox-PostProcess"><a href="#3-2-2-BBox-PostProcess" class="headerlink" title="3.2.2 BBox PostProcess"></a>3.2.2 BBox PostProcess</h4><p>在得到原图尺度 bbox 后，由于可能会出现重叠 bbox 现象，故一般都需要进行后处理，最常用的后处理就是非极大值抑制以及其变种。</p>
+<p>其对应的文件在<code>mmdet/core/post_processing</code>中，V2.7 主要包括：</p>
+<pre><code class="lang-python">__all__ = [
+    &#39;multiclass_nms&#39;, &#39;merge_aug_proposals&#39;, &#39;merge_aug_bboxes&#39;,
+    &#39;merge_aug_scores&#39;, &#39;merge_aug_masks&#39;, &#39;fast_nms&#39;
+]
+</code></pre>
+<h4 id="3-2-3-Testing-tricks"><a href="#3-2-3-Testing-tricks" class="headerlink" title="3.2.3 Testing tricks"></a>3.2.3 Testing tricks</h4><p>为了提高检测性能，测试阶段也会采用 trick。这个阶段的 tricks 也非常多，难以完全统一，最典型的是多尺度测试以及各种模型集成手段，典型配置如下：</p>
+<pre><code class="lang-python">dict(
+    type=&#39;MultiScaleFlipAug&#39;,
+    img_scale=(1333, 800),
+    flip=True,
+    transforms=[
+        dict(type=&#39;Resize&#39;, keep_ratio=True),
+        dict(type=&#39;RandomFlip&#39;),
+        dict(type=&#39;Normalize&#39;, **img_norm_cfg),
+        dict(type=&#39;Pad&#39;, size_divisor=32),
+        dict(type=&#39;ImageToTensor&#39;, keys=[&#39;img&#39;]),
+        dict(type=&#39;Collect&#39;, keys=[&#39;img&#39;]),
+    ])
+</code></pre>
+<p><img src="https://pic3.zhimg.com/80/v2-16e307727f0c3e941ec72c21f214b982_720w.webp" alt="img"></p>
+<h3 id="3-3-训练测试算法流程"><a href="#3-3-训练测试算法流程" class="headerlink" title="3.3 训练测试算法流程"></a>3.3 训练测试算法流程</h3><p>在分析完每个训练流程的各个核心组件后，为了方便大家理解整个算法构建，下面分析 MMDetection 是如何组合各个组件进行训练的，这里以 one-stage 检测器为例，two-stage 也比较类似。</p>
+<pre><code class="lang-python">class SingleStageDetector(---):
+
+   def __init__(...):
+        # 构建骨架、neck和head
+        self.backbone = build_backbone(backbone)
+        if neck is not None:
+            self.neck = build_neck(neck)
+        self.bbox_head = build_head(bbox_head)
+
+  def forward_train(---): 
+        # 先运行backbone+neck进行特征提取
+        x = self.extract_feat(img)
+        # 对head进行forward train，输出loss
+        losses = self.bbox_head.forward_train(x, img_metas, gt_bboxes,
+                                              gt_labels, gt_bboxes_ignore)
+        return losses
+
+  def simple_test(---):
+        # 先运行backbone+neck进行特征提取
+        x = self.extract_feat(img)
+        # head输出预测特征图
+        outs = self.bbox_head(x)
+        # bbox解码和还原
+        bbox_list = self.bbox_head.get_bboxes(
+            *outs, img_metas, rescale=rescale)
+        # 重组结果返回
+        bbox_results = [
+            bbox2result(det_bboxes, det_labels, self.bbox_head.num_classes)
+            for det_bboxes, det_labels in bbox_list
+        ]
+        return bbox_results
+</code></pre>
+<p>以上就是整个检测器算法训练和测试最简逻辑，可以发现训练部分最核心的就是<code>bbox_head.forward_train</code>，测试部分最核心的是<code>bbox_head.get_bboxes</code>，下面单独简要分析。</p>
+<h4 id="3-3-1-bbox-head-forward-train"><a href="#3-3-1-bbox-head-forward-train" class="headerlink" title="3.3.1 bbox_head.forward_train"></a>3.3.1 bbox_head.forward_train</h4><p>forward_train 是通用函数，如下所示：</p>
+<pre><code class="lang-python">def forward_train(...):
+    # 调用每个head自身的forward方法
+    outs = self(x)
+    if gt_labels is None:
+        loss_inputs = outs + (gt_bboxes, img_metas)
+    else:
+        loss_inputs = outs + (gt_bboxes, gt_labels, img_metas)
+    # 计算每个head自身的loss方法
+    losses = self.loss(*loss_inputs, gt_bboxes_ignore=gt_bboxes_ignore)
+    # 返回
+    return losses
+</code></pre>
+<p>对于不同的 head，虽然 forward 内容不一样，但是依然可以抽象为： <code>outs = self(x)</code></p>
+<pre><code class="lang-python">def forward(self, feats):
+   # 多尺度特征图，一个一个迭代进行forward_single
+   return multi_apply(self.forward_single, feats)
+
+def forward_single(self, x):
+   # 运行各个head独特的head forward方法，得到预测图
+   ....
+   return cls_score, bbox_pred...
+</code></pre>
+<p>而对于不同的 head，其 loss 计算部分也比较复杂，可以简单抽象为：<code>losses = self.loss(...)</code></p>
+<pre><code class="lang-python">def loss(...):
+    # 1 生成anchor-base需要的anchor或者anchor-free需要的points
+    # 2 利用gt bbox对特征图或者anchor计算其正负和忽略样本属性
+    # 3 进行正负样本采样
+    # 4 对gt bbox进行bbox编码
+    # 5 loss计算，并返回
+    return dict(loss_cls=losses_cls, loss_bbox=losses_bbox,...)
+</code></pre>
+<h4 id="3-3-2-bbox-head-get-bboxes"><a href="#3-3-2-bbox-head-get-bboxes" class="headerlink" title="3.3.2 bbox_head.get_bboxes"></a>3.3.2 bbox_head.get_bboxes</h4><p>get_bboxes函数更加简单</p>
+<pre><code class="lang-python">def get_bboxes(...):
+   # 1 生成anchor-base需要的anchor或者anchor-free需要的points
+   # 2 遍历每个输出层，遍历batch内部的每张图片，对每张图片先提取指定个数的预测结果，缓解后面后处理压力；对保留的位置进行bbox解码和还原到原图尺度
+   # 3 统一nms后处理
+   return det_bboxes, det_labels...
+</code></pre>
+<h2 id="四、-总结"><a href="#四、-总结" class="headerlink" title="四、 总结"></a>四、 总结</h2><p>本文重点分析了一个目标检测器是如何通过多个核心组件堆叠而成，不涉及具体代码，大家只需要总体把握即可，其中最应该了解的是：<strong>任何一个目标检测算法都可以分成 n 个核心组件，组件和组件之间是隔离的，方便复用和设计</strong>。当面对一个新算法时候我们可以先分析其主要是改进了哪几个核心组件，然后就可以高效的掌握该算法。</p>
+<p>最后附上总图： </p>
+<p><img src="https://pic3.zhimg.com/80/v2-c4e6229a1fd42692d090108481be34a6_720w.webp" alt="img"></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/">https://github.com/haseka96.github.io/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/MMDetection/">MMDetection</a><a class="post-meta__tags" href="/tags/BEV/">BEV</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/15/mmdetection3d/" title="mmdetection3d"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">mmdetection3d</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/09/Attention:%E4%BB%8ENLP%E5%88%B0CV%E5%86%8D%E5%88%B0BEV/" title="Attention:从NLP到CV再到BEV"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Attention:从NLP到CV再到BEV</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/11/15/MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E4%BA%8C/" title="MMDetection整体构建流程二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-15</div><div class="title">MMDetection整体构建流程二</div></div></a></div><div><a href="/2023/11/16/Registry/" title="Registry"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-16</div><div class="title">Registry</div></div></a></div><div><a href="/2023/11/17/importlib/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd-custom_imports/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd-hook/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd3d_build_from_cfg/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">20</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">16</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MMDetection-%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B"><span class="toc-number">1.</span> <span class="toc-text">MMDetection 整体构建流程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E6%91%98%E8%A6%81"><span class="toc-number">1.1.</span> <span class="toc-text">一、摘要</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%AE%97%E6%B3%95%E6%8A%BD%E8%B1%A1%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">二、目标检测算法抽象流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E5%92%8C%E6%80%9D%E6%83%B3"><span class="toc-number">1.3.</span> <span class="toc-text">三、MMDetection整体构建流程和思想</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#3-1-%E8%AE%AD%E7%BB%83%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 训练核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-1-Backbone"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">3.1.1 Backbone</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-2-Neck"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">3.1.2 Neck</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-3-Head"><span class="toc-number">1.3.1.3.</span> <span class="toc-text">3.1.3 Head</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-4-Enhance"><span class="toc-number">1.3.1.4.</span> <span class="toc-text">3.1.4 Enhance</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-5-BBox-Assigner"><span class="toc-number">1.3.1.5.</span> <span class="toc-text">3.1.5 BBox Assigner</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-6-BBox-Sampler"><span class="toc-number">1.3.1.6.</span> <span class="toc-text">3.1.6 BBox Sampler</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-7-BBox-Encoder"><span class="toc-number">1.3.1.7.</span> <span class="toc-text">3.1.7 BBox Encoder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-8-Loss"><span class="toc-number">1.3.1.8.</span> <span class="toc-text">3.1.8 Loss</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-1-9-Training-tricks"><span class="toc-number">1.3.1.9.</span> <span class="toc-text">3.1.9 Training tricks</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-2-%E6%B5%8B%E8%AF%95%E6%A0%B8%E5%BF%83%E7%BB%84%E4%BB%B6"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 测试核心组件</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-1-BBox-Decoder"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">3.2.1 BBox Decoder</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-2-BBox-PostProcess"><span class="toc-number">1.3.2.2.</span> <span class="toc-text">3.2.2 BBox PostProcess</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-2-3-Testing-tricks"><span class="toc-number">1.3.2.3.</span> <span class="toc-text">3.2.3 Testing tricks</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-3-%E8%AE%AD%E7%BB%83%E6%B5%8B%E8%AF%95%E7%AE%97%E6%B3%95%E6%B5%81%E7%A8%8B"><span class="toc-number">1.3.3.</span> <span class="toc-text">3.3 训练测试算法流程</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-1-bbox-head-forward-train"><span class="toc-number">1.3.3.1.</span> <span class="toc-text">3.3.1 bbox_head.forward_train</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-3-2-bbox-head-get-bboxes"><span class="toc-number">1.3.3.2.</span> <span class="toc-text">3.3.2 bbox_head.get_bboxes</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81-%E6%80%BB%E7%BB%93"><span class="toc-number">1.4.</span> <span class="toc-text">四、 总结</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/17/mmd3d%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E3%80%81%E6%A8%A1%E5%9E%8B%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/" title="mmd3d数据提取、模型搭建过程">mmd3d数据提取、模型搭建过程</a><time datetime="2023-11-17T07:40:17.000Z" title="Created 2023-11-17 15:40:17">2023-11-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/17/importlib/" title="mmd_hook">mmd_hook</a><time datetime="2023-11-17T00:47:07.000Z" title="Created 2023-11-17 08:47:07">2023-11-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/17/mmd-custom_imports/" title="mmd_hook">mmd_hook</a><time datetime="2023-11-17T00:47:07.000Z" title="Created 2023-11-17 08:47:07">2023-11-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/17/mmd-hook/" title="mmd_hook">mmd_hook</a><time datetime="2023-11-17T00:47:07.000Z" title="Created 2023-11-17 08:47:07">2023-11-17</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/17/mmd3d_build_from_cfg/" title="mmd_hook">mmd_hook</a><time datetime="2023-11-17T00:47:07.000Z" title="Created 2023-11-17 08:47:07">2023-11-17</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
