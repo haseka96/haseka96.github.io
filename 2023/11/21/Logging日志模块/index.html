@@ -1,0 +1,732 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Logging日志模块 | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Python中Logging 日志模块 一、基础知识 Logging库是非常常用的记录日志库，通过logging模块存储各种格式的日志，主要用于输出运行日志，可以设置输出日志的等级、日志保存路径、日志文件回滚等 Logging优点：  1.你可以控制消息的级别，过滤掉那些并不重要的消息。 2.你可决定输出到什么地方，以及怎么输出。有许多的重要性别级可供选择，debug、info、warning、e">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Logging日志模块">
+<meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/21/Logging%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97/index.html">
+<meta property="og:site_name" content="在发之泽">
+<meta property="og:description" content="Python中Logging 日志模块 一、基础知识 Logging库是非常常用的记录日志库，通过logging模块存储各种格式的日志，主要用于输出运行日志，可以设置输出日志的等级、日志保存路径、日志文件回滚等 Logging优点：  1.你可以控制消息的级别，过滤掉那些并不重要的消息。 2.你可决定输出到什么地方，以及怎么输出。有许多的重要性别级可供选择，debug、info、warning、e">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-11-21T01:10:45.000Z">
+<meta property="article:modified_time" content="2023-11-21T01:24:00.392Z">
+<meta property="article:author" content="haseka">
+<meta property="article:tag" content="log">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://github.com/haseka96.github.io/2023/11/21/Logging%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Logging日志模块',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-21 09:24:00'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Logging日志模块</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-21T01:10:45.000Z" title="Created 2023-11-21 09:10:45">2023-11-21</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-21T01:24:00.392Z" title="Updated 2023-11-21 09:24:00">2023-11-21</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Logging日志模块"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="python中logging-日志模块">Python中Logging 日志模块</h1>
+<h2 id="一基础知识">一、基础知识</h2>
+<p>Logging库是非常常用的记录日志库，通过<code>logging</code>模块存储各种格式的日志，主要用于输出运行日志，可以设置输出日志的等级、日志保存路径、日志文件回滚等</p>
+<p><strong>Logging优点：</strong></p>
+<ul>
+<li>1.你可以控制消息的级别，过滤掉那些并不重要的消息。</li>
+<li>2.你可决定输出到什么地方，以及怎么输出。有许多的重要性别级可供选择，<code>debug、info、warning、error 以及 critical</code>。通过赋予
+<code>logger</code> 或者 <code>handler</code>
+不同的级别，你就可以只输出错误消息到特定的记录文件中，或者在调试时只记录调试信息。</li>
+</ul>
+<p>for example:</p>
+<pre class="python3"><code>import logging
+
+# 1、创建一个logger
+logger = logging.getLogger(&#39;mylogger&#39;)
+logger.setLevel(logging.DEBUG)
+
+# 2、创建一个handler，用于写入日志文件
+fh = logging.FileHandler(&#39;test.log&#39;)
+fh.setLevel(logging.DEBUG)
+
+# 再创建一个handler，用于输出到控制台
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# 3、定义handler的输出格式（formatter）
+formatter = logging.Formatter(&#39;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#39;)
+
+# 4、给handler添加formatter
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+
+# 5、给logger添加handler
+logger.addHandler(fh)
+logger.addHandler(ch)</code></pre>
+<p>上面代码的用到了getLogger()、setLevel()、setFormatter()、StreamHandler()。后续进阶部分，我们会重点讲解这些函数。如果想系统了解python的日志写入，又不想趴英文网站，可以继续往下看，绝对详细、好理解。</p>
+<p>根据它们用来跟踪的事件的级别或事件的严重程度命名的。以下描述了标准水平及其适用性（按严重程度的增加顺序）</p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-52dd1e56f885cfebe649febabfeb55b9_720w.jpg" /></p>
+<p>可以看到，严重程度的级别依次是DEBUG&lt;INFO&lt;WARNING&lt;ERROR&lt;CRITICAL</p>
+<h3 id="简单栗子"><strong>1.1 简单栗子</strong></h3>
+<pre class="text"><code>import logging
+logging.warning(&#39;Watch out!&#39;)  # will print a message to the console
+logging.info(&#39;I told you so&#39;)  # will not print anything</code></pre>
+<h3 id="将日志写入到一个文件中"><strong>1.2
+将日志写入到一个文件中</strong></h3>
+<pre class="text"><code>import logging
+import os
+os.chdir(&quot;./&quot;) # 日志写入地址
+logging.basicConfig(filename=&#39;example.log&#39;, level=logging.DEBUG) 
+# 注意：上面level设置的是显示的最低严重级别，小于level设置的最低严重级别将不会打印出来
+logging.debug(&#39;This message should go to the log file&#39;)
+logging.info(&#39;So should this&#39;)
+logging.warning(&#39;And this, too&#39;)
+logging.error(&#39;And non-ASCII stuff, too, like Øresund and Malmö&#39;)</code></pre>
+<p>basicConfig()函数要在debug()、info()等运行，且只要第一次运行才生效。后续的调用都是无效的。上述logging.basicConfig()写入的日志是增量的写入。如果想要覆盖之前的日志，可以设定为：</p>
+<pre class="text"><code>logging.basicConfig(filename=&#39;example.log&#39;,filemode=&#39;w&#39;,level=logging.DEBUG)</code></pre>
+<p><strong>2. 多个模块日志调用</strong></p>
+<p>logger.py</p>
+<pre class="text"><code>import logging
+import mylib
+
+def main():
+    logging.basicConfig(filename=&#39;myapp.log&#39;, level=logging.INFO)
+    logging.info(&#39;Started&#39;)
+    mylib.do_something() # 这里打印的是另一个模块的日志
+    logging.info(&#39;Finished&#39;)
+
+if __name__ == &#39;__main__&#39;:
+    main()</code></pre>
+<p>mylib.py</p>
+<pre class="text"><code>import logging
+
+def do_something():
+    logging.info(&quot;Doing things&quot;)</code></pre>
+<p>输出结果(下面打印结果中含有root，后续我们会说到怎样避免打印root)</p>
+<p>INFO:root:Started</p>
+<p>INFO:root:Doing something</p>
+<p>INFO:root:Finished</p>
+<h3 id="改变呈现message的format格式"><strong>1.3.
+改变呈现message的format(格式)</strong></h3>
+<p>：定义日志呈现中预想的日志呈现格式</p>
+<pre class="text"><code>import logging
+logging.basicConfig(format=&#39;%(levelname)s:%(message)s&#39;, level=logging.DEBUG)
+logging.debug(&#39;This message should appear on the console&#39;)
+logging.info(&#39;So should this&#39;)
+logging.warning(&#39;And this, too&#39;)</code></pre>
+<p>输出结果：</p>
+<p>DEBUG:This message should appear on the console</p>
+<p>INFO:So should this</p>
+<p>WARNING:And this, too</p>
+<p>上面日志打印的结果格式中，少了root:。
+有一系列可以用做格式化的属性，如下：</p>
+<table>
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 36%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Attribute name</th>
+<th>Format</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>args</td>
+<td>You shouldn’t need to format this yourself.</td>
+<td>The tuple of arguments merged into msg to produce message, or a dict
+whose values are used for the merge (when there is only one argument,
+and it is a dictionary).</td>
+</tr>
+<tr class="even">
+<td>asctime</td>
+<td>%(asctime)s</td>
+<td>Human-readable time when the LogRecord was created. By default this
+is of the form ‘2003-07-08 16:49:45,896’ (the numbers after the comma
+are millisecond portion of the time).</td>
+</tr>
+<tr class="odd">
+<td>created</td>
+<td>%(created)f</td>
+<td>Time when the LogRecord was created (as returned by
+time.time()).</td>
+</tr>
+<tr class="even">
+<td>exc_info</td>
+<td>You shouldn’t need to format this yourself.</td>
+<td>Exception tuple (à la sys.exc_info) or, if no exception has
+occurred, None.</td>
+</tr>
+<tr class="odd">
+<td>filename</td>
+<td>%(filename)s</td>
+<td>Filename portion of pathname.</td>
+</tr>
+<tr class="even">
+<td>funcName</td>
+<td>%(funcName)s</td>
+<td>Name of function containing the logging call.</td>
+</tr>
+<tr class="odd">
+<td>levelname</td>
+<td>%(levelname)s</td>
+<td>Text logging level for the message ('DEBUG', 'INFO', 'WARNING',
+'ERROR', 'CRITICAL').</td>
+</tr>
+<tr class="even">
+<td>levelno</td>
+<td>%(levelno)s</td>
+<td>Numeric logging level for the message (DEBUG, INFO, WARNING, ERROR,
+CRITICAL).</td>
+</tr>
+<tr class="odd">
+<td>lineno</td>
+<td>%(lineno)d</td>
+<td>Source line number where the logging call was issued (if
+available).</td>
+</tr>
+<tr class="even">
+<td>message</td>
+<td>%(message)s</td>
+<td>The logged message, computed as msg % args. This is set when
+Formatter.format() is invoked.</td>
+</tr>
+<tr class="odd">
+<td>module</td>
+<td>%(module)s</td>
+<td>Module (name portion of filename).</td>
+</tr>
+<tr class="even">
+<td>msecs</td>
+<td>%(msecs)d</td>
+<td>Millisecond portion of the time when the LogRecord was created.</td>
+</tr>
+<tr class="odd">
+<td>msg</td>
+<td>You shouldn’t need to format this yourself.</td>
+<td>The format string passed in the original logging call. Merged with
+args to produce message, or an arbitrary object (see Using arbitrary
+objects as messages).</td>
+</tr>
+<tr class="even">
+<td>name</td>
+<td>%(name)s</td>
+<td>Name of the logger used to log the call.</td>
+</tr>
+<tr class="odd">
+<td>pathname</td>
+<td>%(pathname)s</td>
+<td>Full pathname of the source file where the logging call was issued
+(if available).</td>
+</tr>
+<tr class="even">
+<td>process</td>
+<td>%(process)d</td>
+<td>Process ID (if available).</td>
+</tr>
+<tr class="odd">
+<td>processName</td>
+<td>%(processName)s</td>
+<td>Process name (if available).</td>
+</tr>
+<tr class="even">
+<td>relativeCreated</td>
+<td>%(relativeCreated)d</td>
+<td>Time in milliseconds when the LogRecord was created, relative to the
+time the logging module was loaded.</td>
+</tr>
+<tr class="odd">
+<td>stack_info</td>
+<td>You shouldn’t need to format this yourself.</td>
+<td>Stack frame information (where available) from the bottom of the
+stack in the current thread, up to and including the stack frame of the
+logging call which resulted in the creation of this record.</td>
+</tr>
+<tr class="even">
+<td>thread</td>
+<td>%(thread)d</td>
+<td>Thread ID (if available).</td>
+</tr>
+<tr class="odd">
+<td>threadName</td>
+<td>%(threadName)s</td>
+<td>Thread name (if available)</td>
+</tr>
+</tbody>
+</table>
+<p>比如，我们将上面logging.basicConfig(format='%(levelname)s:%(message)s',
+level=logging.DEBUG) <strong>修改为</strong>
+logging.basicConfig(format='%(levelname)s:%(message)s:%(module)s',
+level=logging.DEBUG)。</p>
+<p>输出的结果将会变为：</p>
+<p>DEBUG:This message should appear on the console:logger</p>
+<p>INFO:So should this:logger</p>
+<p>WARNING:And this, too:logger</p>
+<p>如果你想加入时间，可以试试加上%(asctime)s。</p>
+<pre class="text"><code>import logging
+logging.basicConfig(format=&#39;%(asctime)s %(message)s&#39;)
+logging.warning(&#39;is when this event was logged.&#39;)</code></pre>
+<p>输出：</p>
+<p>2010-12-12 11:41:42,612 is when this event was logged.</p>
+<p>如果你希望控制输出时间的格式，可以使用datefmt.</p>
+<pre class="text"><code>import logging
+logging.basicConfig(format=&#39;%(asctime)s %(message)s&#39;, datefmt=&#39;%m/%d/%Y %I:%M:%S %p&#39;)
+logging.warning(&#39;is when this event was logged.&#39;)</code></pre>
+<p>输出：</p>
+<p>12/12/2010 11:46:36 AM is when this event was logged.</p>
+<h2 id="二进阶知识"><strong>二、进阶知识</strong></h2>
+<p>logging库提供了模块化的方法和几个组件<strong>，下列列出了模块定义的基础类和函数</strong></p>
+<blockquote>
+<p>Loggers ：记录器公开应用程序代码直接使用的接口。 Handlers
+：处理程序将日志记录（由记录器创建）发送到相应的目标。 Filters
+：过滤器提供了更细粒度的工具，用于确定要输出哪些日志记录。 Formatters：
+格式化程序指定最终输出中日志记录的布局。</p>
+</blockquote>
+<pre class="text"><code>logger = logging.getLogger(__name__)</code></pre>
+<p>这意味着logger的名称和包/模块层次结构一致，从logger
+的名称记录事件是非常直观的方法。logger的根层级调用根logger.
+根logger是函数debug（）、info（）、warning（）、error（）和critical（）使用的记录器，这些函数只调用根记录器的同名方法。<strong>根logger名称会在打印时以'root'出现在输出结果中。</strong></p>
+<p>当然，可以将消息记录到不同的目的地。该软件包支持将日志消息写入文件、HTTP
+GET/POST位置、通过SMTP发送的电子邮件、通用套接字、队列或特定于操作系统的日志机制，如syslog或Windows
+NT事件日志。目的地由handler classes提供服务。如果有任何内置handler
+classes都无法满足的特殊要求，则可以创建自己的日志目标类。</p>
+<p>默认情况下，不会为任何日志消息设置目标。可以使用basicConfig（）指定目标（如控制台或文件），如上述所示。如果调用函数debug（）、info（）、warning（）、error（）和critical（），它们将检查是否未设置目标位置（如控制台或文件）；如果没有设置，他们将设置控制台的目的地（sys.stderr）和显示消息的默认格式，然后再委托root
+logger进行实际的消息输出。</p>
+<p>basicConfig()设定的默认形式为：severity:logger name:message</p>
+<h3 id="logger对象"><strong>2.1 Logger对象</strong></h3>
+<p>Logger对象有三方面的工作。</p>
+<ol type="1">
+<li>logger对象向应用程序代码公开了几种方法，以便应用程序可以在运行时记录消息。</li>
+<li>logger对象根据severity
+,即严重性（默认过滤功能）或过滤对象确定要对哪些日志消息采取行动。</li>
+<li>logger对象对象将相关日志消息传递给所有感兴趣的日志处理程序。</li>
+</ol>
+<p>在Logger对象中最常用的方方有两类：<strong>配置和消息发送。</strong></p>
+<p><strong>最常用的配置方法：</strong></p>
+<ul>
+<li>Logger.setLevel()
+指定处理的最低严重性日志消息，其中debug是最低的内置严重性级别，critical是最高的内置严重性级别。例如，如果严重性级别为INFO，Logger将只处理
+INFO, WARNING, ERROR和CRITICAL messages，并将忽略DEBUG 消息。</li>
+</ul>
+<p>举个栗子，比如我们在logging.basicConfig(format='%(levelname)s:%(message)s',
+level=logging.DEBUG)。这里的Level设置的是最低严重性级别DEBUG,那么，将打印所有的信息，包括DEBUG
+，INFO，WARNING, ERROR和CRITICAL
+；但是当上面的basicConfig，则打印当中没有DEBUG，只有INFO，WARNING,
+ERROR和CRITICAL。这是因为level设置的最低级别是INFO，而DEBUG的严重性级别最低，所有在此不用打印。</p>
+<ul>
+<li>Logger.addHandler()和 Logger.removeHandler()
+从Logger对象中添加和移出handler对象</li>
+<li>Logger.addFilter()和
+Logger.removeFilter()从Logger对象中添加和移出filter对象</li>
+</ul>
+<p>配置logger对象后，以下方法将创建日志消息：</p>
+<ul>
+<li>Logger.debug(), Logger.info(),
+Logger.warning(),Logger.error()和Logger.critical()都会创建日志记录，其中包含一条message和一个对应于各自方法名称的级别，message实际上是一个格式字符串，它可能包含%s、%d、%f等标准字符串替换语法。其余参数是与message中的替换字段相对应的对象列表。</li>
+<li>Logger.exception()创建了一个和Logger.error()相似的message。
+不同的是Logger.exception()伴随的是一堆轨迹，只能从exception
+handler中调用此方法。</li>
+<li>Logger.log()将日志级别作为显式参数。与使用上面列出的日志级别便利方法相比，记录消息要详细一些，但这是如何使用自定义方法对日志进行记录。</li>
+<li>getLogger()
+返回对具有指定名称的Logger实例的引用（如果提供了），或者如果没有指定，则返回对根实例的引用。这些名称是以句点分隔的层次结构。使用相同名称多次调用getLogger（）将返回对同一记录器对象的引用。在层级列表中较低的记录器是列表中较高记录器的子级。例如，给定一个名为foo的Logger,
+那么，foo.bar, foo.bar.baz, and foo.bam 皆是foo的后代</li>
+</ul>
+<h3 id="handle对象"><strong>2.2</strong>
+Handle<strong>对象</strong></h3>
+<p>Handler对象负责将适当的日志消息（基于日志消息的严重性）分派到处理程序的指定目标。Handler对象可以使用addHandler（）方法将零个或多个handler对象添加。应用程序可能希望将所有日志消息发送到日志文件，将所有错误或更高级别的日志消息发送到标准输出，并将所有关键消息发送到电子邮件地址。此场景需要三个单独的处理程序，每个处理程序负责将特定严重性的消息发送到特定位置。</p>
+<p>Handler方法有很多，下面主要介绍两种：StreamHandle和FileHandle</p>
+<p>回到文章最开始的代码，我们看到</p>
+<pre class="text"><code>fh=logging.FileHandler(&#39;test.log&#39;) # 将日志写入到test.log文件 
+fh.setLevel(logging.DEBUG) # 并且需要指定写入的内容严重级别</code></pre>
+<p>同理，</p>
+<pre class="text"><code>ch=logging.StreamHandler() # 将日志写入控制台
+ch.setLevel(loggong.DEBUG) # 并且需要指定写入的内容严重级别</code></pre>
+<p>除此之外，我们会发现，文中最开始的栗子exam.py中在最开始创建Logger时设置了setLevel</p>
+<pre class="text"><code>logger=logging.getLogger(&#39;mylogger&#39;) # 创建logger
+logger.setLevel(logging.DEBUG) # 写入内容的严重级别</code></pre>
+<p>那么为什么后续在定义Handler时又做了一次set
+Level操作呢？原因是：<strong>Logger中设置的级别决定它将传递给Handler的消息严重性。每个Handler设置的setLevel()决定了该处理程序将发送哪些消息</strong>（记住：日志中消息是分严重程度的，当确定严重级别是某个层级时，该层级以下的消息不被发送或者记录，该层级以上的消息才被发送或者记录）。</p>
+<ul>
+<li>setLevel()方法，就像在logger对象中一样，指定将被分派到相应目标的最低严重性。为什么有两个setLevel()方法？logger中设置的级别决定它将传递给其Handler的消息的严重性。每个Handler设置的级别决定了该处理程序将发送哪些消息。</li>
+<li>setFormatter()选择此处理程序Handler要使用的格式化程序对象.</li>
+<li>addFilter()和removeFilter()分别在处理程序上配置和取消配置筛选器对象。</li>
+</ul>
+<p>到此，我们再次回顾一下exam.py中的代码，相信看到这里大家就明白了。</p>
+<pre class="text"><code>import logging
+
+# 1、创建一个logger
+logger = logging.getLogger(&#39;mylogger&#39;)
+logger.setLevel(logging.DEBUG)
+
+# 2、创建一个handler，用于写入日志文件
+fh = logging.FileHandler(&#39;test.log&#39;)
+fh.setLevel(logging.DEBUG)
+
+# 再创建一个handler，用于输出到控制台
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# 3、定义handler的输出格式（formatter）
+formatter = logging.Formatter(&#39;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#39;)
+
+# 4、给handler添加formatter
+fh.setFormatter(formatter)
+ch.setFormatter(formatter)
+
+# 5、给logger添加handler
+logger.addHandler(fh)
+logger.addHandler(ch)</code></pre>
+<h3 id="formatters对象"><strong>2.3 Formatters对象</strong></h3>
+<p>Formatters对象配置了最终的顺序、结构和日志消息内容。</p>
+<p>logging.Formatter.<strong><strong>init</strong></strong>(<em>fmt=None</em>,
+<em>datefmt=None</em>, <em>style='%'</em>)</p>
+<p>fmt:消息格式</p>
+<p>datefmt:时间格式，默认为：%Y-%m-%d %H:%M:%S</p>
+<h3 id="configuring-logging"><strong>2.4 Configuring
+Logging</strong></h3>
+<p>程序配置日志有三种方式：</p>
+<ul>
+<li>调用上述配置方法的Python代码显式创建Loggers、handlers和formatters</li>
+<li>创建日志配置文件并使用fileConfig（）函数读取它</li>
+<li>创建配置信息字典并将其传递给dictConfig（）函数</li>
+</ul>
+<p>*<strong>我们再举个简单的例子说明第一种方式，显示的创建Loggers、handlers和formatters*</strong></p>
+<pre class="text"><code>import logging
+# 创建logger
+logger = logging.getLogger(&#39;simple_example&#39;) # logger名称
+logger.setLevel(logging.DEBUG) # 设定logger显示的严重级别
+
+# 创建一个handler，用于输出控制台，并且设定严重级别
+ch = logging.StreamHandler()
+ch.setLevel(logging.DEBUG)
+
+# 创建handler的输出格式（formatter）
+formatter = logging.Formatter(&#39;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#39;)
+
+# 将formatter添加到handler中
+ch.setFormatter(formatter)
+
+# 将handler添加到logger中
+logger.addHandler(ch)
+
+# 输出以下内容
+# &#39;application&#39; code
+logger.debug(&#39;debug message&#39;)
+logger.info(&#39;info message&#39;)
+logger.warning(&#39;warn message&#39;)
+logger.error(&#39;error message&#39;)
+logger.critical(&#39;critical message&#39;)</code></pre>
+<p><strong>$</strong> python simple_logging_module.py</p>
+<p>#输出结果如下</p>
+<p>2005-03-19 15:10:26,618 - simple_example - DEBUG - debug message</p>
+<p>2005-03-19 15:10:26,620 - simple_example - INFO - info message</p>
+<p>2005-03-19 15:10:26,695 - simple_example - WARNING - warn message</p>
+<p>2005-03-19 15:10:26,697 - simple_example - ERROR - error message</p>
+<p>2005-03-19 15:10:26,773 - simple_example - CRITICAL - critical
+message</p>
+<p>*<strong>第二种方式：引入配置文件，配置文件写在logging.conf中*</strong></p>
+<pre class="text"><code>import logging
+import logging.config
+logging.config.fileConfig(&#39;logging.conf&#39;)
+
+# create logger
+logger = logging.getLogger(&#39;simpleExample&#39;)
+
+# &#39;application&#39; code
+logger.debug(&#39;debug message&#39;)
+logger.info(&#39;info message&#39;)
+logger.warning(&#39;warn message&#39;)
+logger.error(&#39;error message&#39;)
+logger.critical(&#39;critical message&#39;)</code></pre>
+<p>配置文件的内容如下：</p>
+<pre class="text"><code>[loggers]
+keys=root,simpleExample
+
+[handlers]
+keys=consoleHandler
+
+[formatters]
+keys=simpleFormatter
+
+[logger_root]
+level=DEBUG
+handlers=consoleHandler
+
+[logger_simpleExample]
+level=DEBUG
+handlers=consoleHandler
+qualname=simpleExample
+propagate=0
+
+[handler_consoleHandler]
+class=StreamHandler
+level=DEBUG
+formatter=simpleFormatter
+args=(sys.stdout,)
+
+[formatter_simpleFormatter]
+format=%(asctime)s - %(name)s - %(levelname)s - %(message)s</code></pre>
+<p><strong>$</strong> python simple_logging_module.py</p>
+<p>#输出结果如下</p>
+<p>2005-03-19 15:10:26,618 - simple_example - DEBUG - debug message</p>
+<p>2005-03-19 15:10:26,620 - simple_example - INFO - info message</p>
+<p>2005-03-19 15:10:26,695 - simple_example - WARNING - warn message</p>
+<p>2005-03-19 15:10:26,697 - simple_example - ERROR - error message</p>
+<p>2005-03-19 15:10:26,773 - simple_example - CRITICAL - critical
+message</p>
+<p><strong>配置文件的好处是：1.配置文件和代码的分离；2.非代码人员也能轻松定义配置文件的内容</strong></p>
+<p>*<strong>第三种方式：dictConfig()*</strong></p>
+<pre class="text"><code>version: 1
+formatters:
+  simple:
+    format: &#39;%(asctime)s - %(name)s - %(levelname)s - %(message)s&#39;
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: DEBUG
+    formatter: simple
+    stream: ext://sys.stdout
+loggers:
+  simpleExample:
+    level: DEBUG
+    handlers: [console]
+    propagate: no
+root:
+  level: DEBUG
+  handlers: [console]</code></pre>
+<p><strong>这种方式是我个人感觉非常非常赞的方式，即实现了代码和配置的分离，又简单好理解。</strong></p>
+<p>最后，总结一下整个操作流（官网上down下来的）：</p>
+<figure>
+<img
+src="https://pic3.zhimg.com/80/v2-d69005a3c3ee464c7c68e7bcf5012682_720w.webp"
+alt="w" />
+<figcaption aria-hidden="true">w</figcaption>
+</figure>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/21/Logging%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97/">https://github.com/haseka96.github.io/2023/11/21/Logging%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/log/">log</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/" title="cnn_batch形成"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">cnn_batch形成</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/17/mmd3d%E6%95%B0%E6%8D%AE%E6%8F%90%E5%8F%96%E3%80%81%E6%A8%A1%E5%9E%8B%E6%90%AD%E5%BB%BA%E8%BF%87%E7%A8%8B/" title="mmd3d数据提取、模型搭建过程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">mmd3d数据提取、模型搭建过程</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python%E4%B8%ADlogging-%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97"><span class="toc-number">1.</span> <span class="toc-text">Python中Logging 日志模块</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86"><span class="toc-number">1.1.</span> <span class="toc-text">一、基础知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%AE%80%E5%8D%95%E6%A0%97%E5%AD%90"><span class="toc-number">1.1.1.</span> <span class="toc-text">1.1 简单栗子</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B0%86%E6%97%A5%E5%BF%97%E5%86%99%E5%85%A5%E5%88%B0%E4%B8%80%E4%B8%AA%E6%96%87%E4%BB%B6%E4%B8%AD"><span class="toc-number">1.1.2.</span> <span class="toc-text">1.2
+将日志写入到一个文件中</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E5%8F%98%E5%91%88%E7%8E%B0message%E7%9A%84format%E6%A0%BC%E5%BC%8F"><span class="toc-number">1.1.3.</span> <span class="toc-text">1.3.
+改变呈现message的format(格式)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E8%BF%9B%E9%98%B6%E7%9F%A5%E8%AF%86"><span class="toc-number">1.2.</span> <span class="toc-text">二、进阶知识</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#logger%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.1.</span> <span class="toc-text">2.1 Logger对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#handle%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.2
+Handle对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#formatters%E5%AF%B9%E8%B1%A1"><span class="toc-number">1.2.3.</span> <span class="toc-text">2.3 Formatters对象</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#configuring-logging"><span class="toc-number">1.2.4.</span> <span class="toc-text">2.4 Configuring
+Logging</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/MMD-PETR-train-detector%E5%AF%BC%E5%9B%BE/" title="MMD-PETR_train-detector导图">MMD-PETR_train-detector导图</a><time datetime="2023-11-27T00:37:42.000Z" title="Created 2023-11-27 08:37:42">2023-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMDataParallel/" title="MMDataParallel">MMDataParallel</a><time datetime="2023-11-24T02:32:08.000Z" title="Created 2023-11-24 10:32:08">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMD3D%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%8B%E8%AF%95%E7%BE%A4%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/" title="MMD3D模型训练测试群流程解析">MMD3D模型训练测试群流程解析</a><time datetime="2023-11-24T02:22:56.000Z" title="Created 2023-11-24 10:22:56">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/PETR%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="PETR代码详解">PETR代码详解</a><time datetime="2023-11-23T08:41:06.000Z" title="Created 2023-11-23 16:41:06">2023-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/Hook%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" title="Hook食用指南">Hook食用指南</a><time datetime="2023-11-23T08:17:27.000Z" title="Created 2023-11-23 16:17:27">2023-11-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

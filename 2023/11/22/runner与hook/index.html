@@ -1,0 +1,642 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>runner与hook | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Runner和Hook详细解析 1.Runner和Hook概述   Runner又称执行器，负责模型训练过程的调度，主要目的是让用户使用更少的代码以及灵活可配置的方式开启训练。换句话说，MMCV将整个训练过程封装起来了，并使用Runner进行管理和配置。高度封装虽然减少了代码量，但如何对内部流程进行自定义的修改（比如动态调整学习率等）？这时就需要用到Hook机制。   Hook是能够改变程序执行流">
+<meta property="og:type" content="article">
+<meta property="og:title" content="runner与hook">
+<meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/22/runner%E4%B8%8Ehook/index.html">
+<meta property="og:site_name" content="在发之泽">
+<meta property="og:description" content="Runner和Hook详细解析 1.Runner和Hook概述   Runner又称执行器，负责模型训练过程的调度，主要目的是让用户使用更少的代码以及灵活可配置的方式开启训练。换句话说，MMCV将整个训练过程封装起来了，并使用Runner进行管理和配置。高度封装虽然减少了代码量，但如何对内部流程进行自定义的修改（比如动态调整学习率等）？这时就需要用到Hook机制。   Hook是能够改变程序执行流">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-11-22T02:48:34.000Z">
+<meta property="article:modified_time" content="2023-11-23T03:09:43.531Z">
+<meta property="article:author" content="haseka">
+<meta property="article:tag" content="hook">
+<meta property="article:tag" content="runner">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://github.com/haseka96.github.io/2023/11/22/runner%E4%B8%8Ehook/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'runner与hook',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-23 11:09:43'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">runner与hook</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-22T02:48:34.000Z" title="Created 2023-11-22 10:48:34">2023-11-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-23T03:09:43.531Z" title="Updated 2023-11-23 11:09:43">2023-11-23</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="runner与hook"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="runner和hook详细解析">Runner和Hook详细解析</h1>
+<h2 id="runner和hook概述">1.Runner和Hook概述</h2>
+<p>  Runner又称执行器，负责模型训练过程的调度，主要目的是让用户使用更少的代码以及灵活可配置的方式开启训练。换句话说，MMCV将整个训练过程封装起来了，并使用Runner进行管理和配置。高度封装虽然减少了代码量，但如何对内部流程进行自定义的修改（比如动态调整学习率等）？这时就需要用到Hook机制。</p>
+<p>  Hook是能够改变程序执行流程的一种技术统称。通俗的说，Hook可以理解为一种触发器，在程序预定义的位置执行预定义的函数。MMCV已经在几个常用的位置预留了接口函数（称为回调函数），如下图所示。MMCV已经实现了一些常用的Hook函数，同时用户也可以增加自己的Hook函数，非常方便。当程序执行到指定位置时，就会进入到回调函数中，执行相应的功能，执行结束后再接着执行主流程。</p>
+<p><img
+src="https://img-blog.csdnimg.cn/8c2a699f7d084388bb2add311ecff379.png" /></p>
+<p>  上图对应到具体的代码：</p>
+<pre><code># 开始运行时调用
+before_run()
+
+while self.epoch &lt; self._max_epochs:
+
+    # 开始 epoch 迭代前调用
+    before_train_epoch()
+
+    for i, data_batch in enumerate(self.data_loader):
+        # 开始 iter 迭代前调用
+        before_train_iter()
+
+        self.model.train_step()
+
+        # 经过一次迭代后调用
+        after_train_iter()
+
+    # 经过一个 epoch 迭代后调用
+    after_train_epoch()
+
+# 运行完成前调用
+after_run()</code></pre>
+<p>  总的来说，Runner封装了OpenMMLab体系下各个框架的训练和验证流程，负责管理训练/验证过程的整个生命周期；通过预定义的回调函数，用户可以插入定制化Hook，实现各种各样定制化的需求。
+## 2.Runner类</p>
+<p>  Runner分为EpochBasedRunner和IterBasedRunner，顾名思义，前者以epoch的方式管理流程，后者以iter的方式管理流程，它们都是BaseRunner的子类。BaseRunner的任何子类都需要实现run()、train()、val()和save_checkpoint()四个方法，这也是Runner的核心方法。这里以EpochBasedRunner为例对上述四个函数进行分析，为了使代码结构看起来更清晰，删去了和核心功能无关的代码。<strong>hook
+的本质是回调函数，也就是在特定时刻会调用被提前注册好的函数。文章中说的拦截功能大体意思是说触发函数调用，具体实现方式其实没有限制，可以直接通过函数实现，也可以通过装饰器实现</strong></p>
+<h3 id="构造函数">2.1 构造函数</h3>
+<p>  EpochBasedRunner和IterBasedRunner都是BaseRunner的子类，继承了BaseRunner的构造函数。runner默认调用model类中的train_step()和val_step()进行训练和验证，如果指定了batch_processor，则会调用batch_processor对data_loader中的数据进行处理。</p>
+<pre><code>class BaseRunner(metaclass=ABCMeta):
+    def __init__(self,
+                 model,                 # [torch.nn.Module] 要运行的模型
+                 batch_processor=None,  # 过时用法, 通过实现模型中的train_step()和val_step()方法替代
+                 optimizer=None,        # [torch.optim.Optimizer] 优化器, 可以是一个也可以是一组通过dict配置的优化器
+                 work_dir=None,         # [str] 保存检查点和Log的目录
+                 logger=None,           # [logging.Logger] 训练中使用的日志记录器
+                 meta=None,             # [dict] 一些信息, 这些信息会在logger hook中记录
+                 max_iters=None,        # [int] 训练epoch数
+                 max_epochs=None):      # [int] 训练迭代次数</code></pre>
+<h3 id="run函数">2.2 run()函数</h3>
+<p>  run()是runner类的主调函数，会根据workflow指定的工作流，对data_loaders中的数据进行处理。目前MMCV支持训练和验证两种工作流，对于EpochBasedRunner而言，workflow配置为[('train',
+2)，('val', 1)]表示先训练2个epoch，然后验证一个epoch；[('train',
+1)]表示只进行训练，不进行验证。如果是IterBasedRunner，[('train',
+2)，('val', 1)]则表示先训练2个iter，然后验证一个iter。</p>
+<pre><code>def run(self, data_loaders, workflow, max_epochs=None, **kwargs):
+    while self.epoch &lt; self._max_epochs:
+        for i, flow in enumerate(workflow):
+            mode, epochs = flow
+            
+            # 根据工作流确定当前是运行train()还是val(), getattr返回对应的函数句柄
+            epoch_runner = getattr(self, mode)
+
+            for _ in range(epochs):
+                if mode == &#39;train&#39; and self.epoch &gt;= self._max_epochs:
+                    break
+                # 运行train()或val()
+                epoch_runner(data_loaders[i], **kwargs)</code></pre>
+<h3 id="train和val函数">2.3 train()和val()函数</h3>
+<p>  train()和val()函数循环调用run_iter()完成一个epoch流程。函数开头的self.model.train()和self.model.eval()实际上调用的是torch.nn.module.Module的成员函数，将当前模块设置为训练模式或验证模式，两种不同模式下batchnorm、dropout等层的操作会有区别。然后由于测试过程不需要梯度回传，所以val函数加了一个装饰器@torch.no_grad()。</p>
+<pre><code>def train(self, data_loader, **kwargs):
+    # 将模块设置为训练模式
+    self.model.train()
+    self.mode = &#39;train&#39;
+    self.data_loader = data_loader
+    self._max_iters = self._max_epochs * len(self.data_loader)
+    for i, data_batch in enumerate(self.data_loader):
+        self.run_iter(data_batch, train_mode=True, **kwargs)
+        self._iter += 1
+
+    self._epoch += 1
+
+@torch.no_grad()
+def val(self, data_loader, **kwargs):
+    # 将模块设置为验证模式
+    self.model.eval()
+    self.mode = &#39;val&#39;
+    self.data_loader = data_loader
+    for i, data_batch in enumerate(self.data_loader):
+        self.run_iter(data_batch, train_mode=False)</code></pre>
+<p>  train()和val()的核心函数是run_iter()，根据train_mode参数调用model.train_step()或model.val_step()，这两个函数最终会执行我们自己模型的forward()函数，返回loss值.</p>
+<pre><code>def run_iter(self, data_batch, train_mode, **kwargs):
+    if self.batch_processor is not None:
+        outputs = self.batch_processor(self.model, data_batch, train_mode=train_mode, **kwargs)
+    elif train_mode:
+        outputs = self.model.train_step(data_batch, self.optimizer, **kwargs)
+    else:
+        outputs = self.model.val_step(data_batch, self.optimizer, **kwargs)
+    
+    self.outputs = outputs</code></pre>
+<p>2.4 save_checkpoint()函数</p>
+<p>  save_checkpoint()函数调用torch.save将检查点以下列格式保存。</p>
+<pre><code>checkpoint = &#123;
+              &#39;meta&#39;: dict(),           # 环境信息(比如epoch_num, iter_num)
+              &#39;state_dict&#39;: dict(),     # 模型的state_dict()
+              &#39;optimizer&#39;: dict())      # 优化器的state_dict()
+&#125;</code></pre>
+<h2 id="hook类">3.Hook类</h2>
+<p>  MMCV在./mmcv/runner/hooks/hook.py中定义了Hook的基类以及Hook的注册器HOOKS。作为基类，Hook本身没有实现具体的函数，只是提供了before_run、after_run等6个接口函数，其他所有的Hooks都通过继承Hook类并重写相应的函数完整指定功能。</p>
+<pre><code>from mmcv.utils import Registry
+
+HOOKS = Registry(&#39;hook&#39;)</code></pre>
+<p>​<br />
+​class Hook: ​ def before_run(self, runner): ​ pass ​<br />
+def after_run(self, runner): pass</p>
+<pre><code>    def before_epoch(self, runner):
+        pass
+
+    def after_epoch(self, runner):
+        pass
+
+    def before_iter(self, runner):
+        pass
+
+    def after_iter(self, runner):
+        pass</code></pre>
+<p> MMCV已经实现了部分常用的Hooks，如下图所示。默认Hook不需要用户自行注册，通过配置文件配置对应的参数即可；定制Hook则需要用户手动注册进去。</p>
+<p><img
+src="https://img-blog.csdnimg.cn/c659b14d05c143549545648c24885f56.png" /></p>
+<p>  Hook也是一个模块，使用时需要定义、注册、调用3个步骤。</p>
+<h3 id="定义">3.1 定义</h3>
+<p>  MMCV实现的Hook都在./mmcv/runner/hooks目录下，这里以CheckpointHook为例介绍一下怎么新建一个Hook。</p>
+<p>  首先从hook.py中导入注册器HOOKS以及基类Hook。然后新建一个名为CheckpointHook类继承Hook基类，由于Hook基类没有定义构造函数，这里首先必须自己定义__init__函数，然后根据Hook需要实现的功能，重写Hook基类中的一种或几种方法。比如MMCV会在每次训练开始前打印checkpoint的保存路径，会在每次循环结束后或每个epoch执行完成后保存checkpoint，因此CheckpointHook类重写了before_run、after_train_iter和after_train_epoch这3个方法。</p>
+<pre><code>from .hook import HOOKS, Hook
+
+@HOOKS.register_module()
+class CheckpointHook(Hook):
+    def __init__(self,
+                 interval=-1,
+                 by_epoch=True,
+                 save_optimizer=True,
+                 out_dir=None,
+                 max_keep_ckpts=-1,
+                 save_last=True,
+                 sync_buffer=False,
+                 file_client_args=None,
+                 **kwargs):
+        ...
+    def before_run(self, runner):
+        ...
+    def after_train_iter(self, runner):
+        ...
+    def after_train_epoch(self, runner):
+        ...</code></pre>
+<h3 id="注册">3.2 注册</h3>
+<p>  对于MMCV的默认Hook，在执行runner.run()前会调用BaseRunner类中的<code>register_training_hooks</code>方法进行注册：</p>
+<pre><code>def register_training_hooks(self,
+                            lr_config,
+                            optimizer_config=None,
+                            checkpoint_config=None,
+                            log_config=None,
+                            momentum_config=None,
+                            timer_config=dict(type=&#39;IterTimerHook&#39;),
+                            custom_hooks_config=None):
+    &quot;&quot;&quot;Register default and custom hooks for training.
+
+    Default and custom hooks include:
+
+    +----------------------+-------------------------+
+    | Hooks                | Priority                |
+    +======================+=========================+
+    | LrUpdaterHook        | VERY_HIGH (10)          |
+    +----------------------+-------------------------+
+    | MomentumUpdaterHook  | HIGH (30)               |
+    +----------------------+-------------------------+
+    | OptimizerStepperHook | ABOVE_NORMAL (40)       |
+    +----------------------+-------------------------+
+    | CheckpointSaverHook  | NORMAL (50)             |
+    +----------------------+-------------------------+
+    | IterTimerHook        | LOW (70)                |
+    +----------------------+-------------------------+
+    | LoggerHook(s)        | VERY_LOW (90)           |
+    +----------------------+-------------------------+
+    | CustomHook(s)        | defaults to NORMAL (50) |
+    +----------------------+-------------------------+
+
+    If custom hooks have same priority with default hooks, custom hooks
+    will be triggered after default hooks.
+    &quot;&quot;&quot;
+    self.register_lr_hook(lr_config)
+    self.register_momentum_hook(momentum_config)
+    self.register_optimizer_hook(optimizer_config)
+    self.register_checkpoint_hook(checkpoint_config)
+    self.register_timer_hook(timer_config)
+    self.register_logger_hooks(log_config)
+    self.register_custom_hooks(custom_hooks_config)</code></pre>
+<h3 id="调用">3.3 调用</h3>
+<p>  在runner执行过程中，会在特定的程序位点通过<code>call_hook()</code>函数调用相应的Hook。</p>
+<pre><code>def train(self, data_loader, **kwargs):
+    self.model.train()
+    self.mode = &#39;train&#39;
+    self.data_loader = data_loader
+    self._max_iters = self._max_epochs * len(self.data_loader)
+    self.call_hook(&#39;before_train_epoch&#39;)
+    time.sleep(2)  # Prevent possible deadlock during epoch transition
+    for i, data_batch in enumerate(self.data_loader):
+        self._inner_iter = i
+        self.call_hook(&#39;before_train_iter&#39;)
+        self.run_iter(data_batch, train_mode=True, **kwargs)
+        self.call_hook(&#39;after_train_iter&#39;)
+        self._iter += 1
+
+    self.call_hook(&#39;after_train_epoch&#39;)
+    self._epoch += 1</code></pre>
+<p>前面调用<code>register_hook()</code>注册Hook的时候，会根据优先级将Hook加入到<code>self._hooks</code>这个列表中，在执行<code>call_hook()</code>时候，使用for循环就可以很简单的实现按照优先级依次调用指定的Hook了。</p>
+<div class="sourceCode" id="cb12"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> call_hook(<span class="va">self</span>, fn_name):</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> hook <span class="kw">in</span> <span class="va">self</span>._hooks:</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">getattr</span>(hook, fn_name)(<span class="va">self</span>)</span></code></pre></div>
+<h3 id="hook-机制的工作流程">3.4 Hook 机制的工作流程</h3>
+<p>Hook 机制, 其实并不是 OpenMMLab
+的特例，只是由于我代码经验太少，第一次见而已。 钩子编程 (hooking)
+，是计算机程序设计术语，指通过拦截软件模块间的函数调用、消息传递、事件传递来修改或扩展操作系统、应用程序或其他软件组件的程序执行流程。
+其中，处理被拦截的函数调用、事件、消息的代码，被称为钩子 (hook)
+，应该也就是前文 AOP 编程里面的切面。</p>
+<p>在 OpenMMLab 中，Hook 机制是由 <code>Runner</code> 类 (比如
+<code>IterBasedRunner</code>, <code>EpochBasedRunner</code>) 和
+<code>HOOK</code> 类 (比如 <code>EvalHook</code>) 配合完成的,
+共同构成一套训练框架的架构规范.</p>
+<p>首先, 在 OpenMMLab 中, 负责网络训练测试全流程的 <code>Runner</code>
+类在训练测试周期中定义好了一系列<strong>触发器</strong>, 如下所示:</p>
+<div class="sourceCode" id="cb13"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 省略 ...</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.call_hook(<span class="st">&#39;before_train_epoch&#39;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> i, data_batch <span class="kw">in</span> <span class="bu">enumerate</span>(<span class="va">self</span>.data_loader):</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 省略 ...</span></span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.call_hook(<span class="st">&#39;before_train_iter&#39;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 省略 ...</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>    <span class="va">self</span>.call_hook(<span class="st">&#39;after_train_iter&#39;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 省略 ...</span></span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a><span class="va">self</span>.call_hook(<span class="st">&#39;after_train_epoch&#39;</span>)</span></code></pre></div>
+<p>其次, 在与 <code>Runner</code> 类配合的 <code>Hook</code>
+类及其子类中, 也定义了一堆与上面 Runner 类的触发器中
+<code>before_run</code>, <code>before_epoch</code>,
+<code>before_train_iter</code>, <code>after_train_iter</code>,
+<code>after_epoch</code>, <code>after_run</code>
+等步骤/时刻/节点同名的函数, 被称之为<strong>钩子函数</strong>,
+如下所示:</p>
+<div class="sourceCode" id="cb14"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> Hook:</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> before_run(<span class="va">self</span>, runner):</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> after_run(<span class="va">self</span>, runner):</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> before_epoch(<span class="va">self</span>, runner):</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> after_epoch(<span class="va">self</span>, runner):</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> before_iter(<span class="va">self</span>, runner):</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> after_iter(<span class="va">self</span>, runner):</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a>        <span class="cf">pass</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ... 省略</span></span></code></pre></div>
+<p>当然, 上面这个 Hook 类是最最原始的实现, 也就是基本什么功能都没有实现.
+如果想定义一些操作, 实现一些功能，可以继承这个类并定制我们需要的功能,
+比如 <code>mmcv.runner.hooks.evaluation</code> 模块中的
+<code>EvalHook</code> 类继承了最最原始的 <code>Hook</code> 类,
+将里面的子函数基本都具体实现了一下; 而
+<code>mmseg.core.evaluation</code> 模块中的 <code>EvalHook</code>
+类则进一步继承了前一个 <code>EvalHook</code> 类, 重写了
+<code>after_train_iter</code> 和 <code>after_train_epoch</code>
+两个子函数.</p>
+<p>有了相互配合的 Runner 类和 Hook 类之后, Runner 类实例运行到特定时刻,
+就会通过触发器函数调用各个 Hook 类中的钩子函数, 从而完成特定的功能.
+例如, 每个或者隔几个 <code>after_epoch</code> 或者
+<code>after_train_iter</code> 触发器时刻, 可以通过 <code>EvalHook</code>
+的 <code>after_train_iter</code> 函数调用 <code>_do_evaluate</code>
+函数完成对 validation set 的 evaluation.</p>
+<p>个人感觉, 这套 Hook
+机制很像通信系统里面的<strong>轮流询问</strong>机制,
+是<strong>一套在算法生命周期中规定好了种种操作的训练框架规范</strong>.
+其之所以起作用，是因为在 Runner 类的被调用方法中, 每一个节点都规定了
+call 相应 hook 函数的操作. Runner 类在训练过程中会依次轮流询问端口,
+也就是依次 call 下每个节点的 hook 函数, 如果对应钩子函数有被专门定制过,
+那就执行下该功能. 如果没有, 那就是个空函数, 直接 pass 了,
+继续执行下一步，从而实现了拦截模块间的函数调用、消息传递、事件传递，从而修改或扩展组件的行为.</p>
+<h3 id="hook-机制的底层实现">3.5 Hook 机制的底层实现</h3>
+<p>在清楚了 Runner 类与 Hook 类配合实现 Hook 机制的工作流程后,
+还剩下的问题两个问题. 第一个问题是, 怎么让 Runner
+类实例知道去调用某个具体的 Hook 类实例的子函数, 也就是怎么将 Runner
+类实例和 Hook 类实例关联起来? 第二个问题是, Runner 类实例可能会调用多个
+Hook 对象, 每个 Hook 对象都会有各自同名的子函数, 比如
+<code>after_train_iter</code>, 这种情况是如何处理的?</p>
+<p>对于第一个问题, 是通过 Runner 类的 <code>register_hook</code> 函数将
+<code>HOOK</code> 类实例注册进 Runner 类实例的. 我们以 MMSegmentation
+为例, 在训练模型的时候, 会调用 <code>mmseg.apis</code> 模块的
+<code>train_segmentor</code> 函数. 其中有两步是给
+<code>IterBasedRunner</code> 类实例 <code>runner</code> 注册 training
+hooks 和 validation hooks:</p>
+<div class="sourceCode" id="cb15"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>runner.register_training_hooks(cfg)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>runner.register_hook(eval_hook(val_dataloader, eval_cfg))</span></code></pre></div>
+<p>Runner 类提供了两种注册 hook 的方法:</p>
+<ol type="1">
+<li><code>register_hook</code> 方法是直接传入一个实例化的
+<code>HOOK</code> 对象，并将它插入到 Runner 类实例的
+<code>self._hooks</code> 列表中;</li>
+<li><code>register_hook_from_cfg</code> 方法是传入一个配置项
+<code>cfg</code>，根据配置项来实例化 <code>HOOK</code> 对象,
+然后再将其插入到 <code>self._hooks</code> 列表中.</li>
+</ol>
+<p>其实, 第二种方法就是先调用 <code>mmcv.build_from_cfg</code>
+方法生成一个实例化的 <code>HOOK</code> 对象，然后再调用第一种
+<code>register_hook</code> 方法将实例化后的 <code>HOOK</code> 对象插入到
+<code>self._hooks</code> 列表中。</p>
+<p>有了存有注册了的 Hook 类实例的 <code>self._hooks</code> 列表, Runner
+类在运行中调用注册了的 Hook 类实例的子函数也就顺理成章了. 看一下
+<code>BaseRunner</code> 类中 <code>call_hook</code> 函数的定义, 其中
+<code>fn_name</code> 就是
+<code>self.call_hook('after_train_iter')</code> 传入的
+<code>after_train_iter</code>. <code>getattr(hook, fn_name)(self)</code>
+其实就是在调用 <code>self._hooks</code> 列表中的 hook 对象的名为
+<code>fn_name</code> 的函数, 比如 <code>EvalHook</code> 类实例的
+<code>after_train_iter</code> 方法. 至此, 第一个问题, 如何动态地将想要的
+Hook 类实例的某个方法切入到 Runner 类实例的运行过程中已经实现了.</p>
+<div class="sourceCode" id="cb16"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> call_hook(<span class="va">self</span>, fn_name):</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>        <span class="co">&quot;&quot;&quot;Call all hooks.</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="co">        Args:</span></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co">            fn_name (str): The function name in each hook to be called, such as</span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co">                &quot;before_train_epoch&quot;.</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="co">        &quot;&quot;&quot;</span></span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> hook <span class="kw">in</span> <span class="va">self</span>._hooks:</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a>            <span class="bu">getattr</span>(hook, fn_name)(<span class="va">self</span>)</span></code></pre></div>
+<p>对于第二个问题, 从上面 <code>call_hook</code> 函数的定义也可以看出,
+在 Runner 实例的 <code>run</code> 函数运行过程中, 在每一个设置
+<code>call_hook</code> 函数的节点, 都会就轮流执行一遍
+<code>self._hooks</code> 列表中所有 hook 实例中该时刻对应的方法. 比如,
+对于 <code>after_train_iter</code> 这个时刻, 就是遍历一遍所有 hook
+实例的 <code>after_train_iter</code> 方法. 如果只有一个 Hook
+实例重写了该方法, 而其他实例的该方法都是 <code>pass</code>, 那也无所谓.
+但如果有两个及以上实例的该方法实现不是 <code>pass</code>,
+那这就涉及到一个哪个实例的方法该先被调用的问题, 具体到程序中, 则是每个
+Hook 了实例被插入到 <code>self._hooks</code> 列表的位置的前后, 因为
+<code>call_hook</code> 函数是依次调用的.</p>
+<p>优先级这点, 在注册 hook 的时候就已经实现了, <code>priority</code>
+是默认变量. 从下面 <code>register_hook</code> 函数的定义就可以看出,
+对于新注册的一个 Hook 实例, 按照其指定的优先级, 没有指定就默认
+<code>'NORMAL'</code> 优先级, 插入到 <code>self._hooks</code> 中,
+优先级越高的, 越靠前. 如果新注册的 Hook 实例与就有的 Hook
+实例优先级相同, 那就按照先来后到, 先来的排在更前面. 至此,
+第二个问题也解决了.</p>
+<div class="sourceCode" id="cb17"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> register_hook(<span class="va">self</span>, hook, priority<span class="op">=</span><span class="st">&#39;NORMAL&#39;</span>):</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Register a hook into the hook list.</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a><span class="co">    The hook will be inserted into a priority queue, with the specified</span></span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a><span class="co">    priority (See :class:`Priority` for details of priorities).</span></span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a><span class="co">    For hooks with the same priority, they will be triggered in the same</span></span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co">    order as they are registered.</span></span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a><span class="co">    Args:</span></span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a><span class="co">        hook (:obj:`Hook`): The hook to be registered.</span></span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a><span class="co">        priority (int or str or :obj:`Priority`): Hook priority.</span></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="co">            Lower value means higher priority.</span></span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>    <span class="cf">assert</span> <span class="bu">isinstance</span>(hook, Hook)</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="bu">hasattr</span>(hook, <span class="st">&#39;priority&#39;</span>):</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&#39;&quot;priority&quot; is a reserved attribute for hooks&#39;</span>)</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>    priority <span class="op">=</span> get_priority(priority)</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>    hook.priority <span class="op">=</span> priority</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># insert the hook to a sorted list</span></span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>    inserted <span class="op">=</span> <span class="va">False</span></span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(<span class="va">self</span>._hooks) <span class="op">-</span> <span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>, <span class="op">-</span><span class="dv">1</span>):</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> priority <span class="op">&gt;=</span> <span class="va">self</span>._hooks[i].priority:</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._hooks.insert(i <span class="op">+</span> <span class="dv">1</span>, hook)</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a>            inserted <span class="op">=</span> <span class="va">True</span></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> inserted:</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>._hooks.insert(<span class="dv">0</span>, hook)</span></code></pre></div>
+<h3 id="示例mmseg-中的-hooks">3.6 示例：<code>mmseg</code> 中的
+Hooks</h3>
+<p>在下图中，我整理了 <code>mmseg</code> 的 <code>tools/train.py</code>
+整个运行周期中会用到的所有 hooks 对应的具体的 Hook
+类以及相应被调用的时刻。</p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-e0c95b00559f570c4efd35702de51d05_720w.webp" /></p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/22/runner%E4%B8%8Ehook/">https://github.com/haseka96.github.io/2023/11/22/runner%E4%B8%8Ehook/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/hook/">hook</a><a class="post-meta__tags" href="/tags/runner/">runner</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/23/Hook%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" title="Hook食用指南"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">Hook食用指南</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/" title="cnn_batch形成"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">cnn_batch形成</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/11/17/importlib/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd-custom_imports/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd-hook/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd3d_model/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd3d_registry_builder/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div><div><a href="/2023/11/17/mmd3d_train_see/" title="mmd_hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-17</div><div class="title">mmd_hook</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#runner%E5%92%8Chook%E8%AF%A6%E7%BB%86%E8%A7%A3%E6%9E%90"><span class="toc-number">1.</span> <span class="toc-text">Runner和Hook详细解析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#runner%E5%92%8Chook%E6%A6%82%E8%BF%B0"><span class="toc-number">1.1.</span> <span class="toc-text">1.Runner和Hook概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.1.</span> <span class="toc-text">2.1 构造函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#run%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.2.</span> <span class="toc-text">2.2 run()函数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#train%E5%92%8Cval%E5%87%BD%E6%95%B0"><span class="toc-number">1.1.3.</span> <span class="toc-text">2.3 train()和val()函数</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#hook%E7%B1%BB"><span class="toc-number">1.2.</span> <span class="toc-text">3.Hook类</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%B9%89"><span class="toc-number">1.2.1.</span> <span class="toc-text">3.1 定义</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B3%A8%E5%86%8C"><span class="toc-number">1.2.2.</span> <span class="toc-text">3.2 注册</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%B0%83%E7%94%A8"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.3 调用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hook-%E6%9C%BA%E5%88%B6%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.4.</span> <span class="toc-text">3.4 Hook 机制的工作流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#hook-%E6%9C%BA%E5%88%B6%E7%9A%84%E5%BA%95%E5%B1%82%E5%AE%9E%E7%8E%B0"><span class="toc-number">1.2.5.</span> <span class="toc-text">3.5 Hook 机制的底层实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%A4%BA%E4%BE%8Bmmseg-%E4%B8%AD%E7%9A%84-hooks"><span class="toc-number">1.2.6.</span> <span class="toc-text">3.6 示例：mmseg 中的
+Hooks</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/MMD-PETR-train-detector%E5%AF%BC%E5%9B%BE/" title="MMD-PETR_train-detector导图">MMD-PETR_train-detector导图</a><time datetime="2023-11-27T00:37:42.000Z" title="Created 2023-11-27 08:37:42">2023-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMDataParallel/" title="MMDataParallel">MMDataParallel</a><time datetime="2023-11-24T02:32:08.000Z" title="Created 2023-11-24 10:32:08">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMD3D%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%8B%E8%AF%95%E7%BE%A4%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/" title="MMD3D模型训练测试群流程解析">MMD3D模型训练测试群流程解析</a><time datetime="2023-11-24T02:22:56.000Z" title="Created 2023-11-24 10:22:56">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/PETR%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="PETR代码详解">PETR代码详解</a><time datetime="2023-11-23T08:41:06.000Z" title="Created 2023-11-23 16:41:06">2023-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/Hook%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" title="Hook食用指南">Hook食用指南</a><time datetime="2023-11-23T08:17:27.000Z" title="Created 2023-11-23 16:17:27">2023-11-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>

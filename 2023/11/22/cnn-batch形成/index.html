@@ -1,0 +1,424 @@
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>cnn_batch形成 | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Sampler, DataLoader和数据batch的形成 1. 简介 本文将简介pytorch采样器Sampler和数据加载器DataLoader，并解释在读取数据时每个batch形成的过程 2. 整体流程 简要来说在pytorch中，Sampler负责决定读取数据时的先后顺序，DataLoader负责装载数据并根据Sampler提供的顺序安排数据，具体过程绘图和描述如下。 初始化DataLo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cnn_batch形成">
+<meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/index.html">
+<meta property="og:site_name" content="在发之泽">
+<meta property="og:description" content="Sampler, DataLoader和数据batch的形成 1. 简介 本文将简介pytorch采样器Sampler和数据加载器DataLoader，并解释在读取数据时每个batch形成的过程 2. 整体流程 简要来说在pytorch中，Sampler负责决定读取数据时的先后顺序，DataLoader负责装载数据并根据Sampler提供的顺序安排数据，具体过程绘图和描述如下。 初始化DataLo">
+<meta property="og:locale" content="en_US">
+<meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
+<meta property="article:published_time" content="2023-11-22T01:45:22.000Z">
+<meta property="article:modified_time" content="2023-11-22T01:56:39.764Z">
+<meta property="article:author" content="haseka">
+<meta property="article:tag" content="Sampler">
+<meta property="article:tag" content="DataLoader">
+<meta property="article:tag" content="batch">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://github.com/haseka96.github.io/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/index.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.min.css" media="print" onload="this.media='all'"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: undefined,
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: undefined,
+  copy: {
+    success: 'Copy Successful',
+    error: 'Copy Error',
+    noSupport: 'Browser Not Supported'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '',
+  dateSuffix: {
+    just: 'Just now',
+    min: 'minutes ago',
+    hour: 'hours ago',
+    day: 'days ago',
+    month: 'months ago'
+  },
+  copyright: undefined,
+  lightbox: 'fancybox',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: 'Load More'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'cnn_batch形成',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2023-11-22 09:56:39'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">cnn_batch形成</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-22T01:45:22.000Z" title="Created 2023-11-22 09:45:22">2023-11-22</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-22T01:56:39.764Z" title="Updated 2023-11-22 09:56:39">2023-11-22</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="cnn_batch形成"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="sampler-dataloader和数据batch的形成">Sampler,
+DataLoader和数据batch的形成</h1>
+<h2 id="简介">1. 简介</h2>
+<p>本文将简介pytorch<strong>采样器Sampler</strong>和<strong>数据加载器DataLoader</strong>，并解释在读取数据时每个batch形成的过程</p>
+<h2 id="整体流程">2. 整体流程</h2>
+<p>简要来说在pytorch中，Sampler负责决定读取数据时的先后顺序，DataLoader负责装载数据并根据Sampler提供的顺序安排数据，具体过程绘图和描述如下。</p>
+<p>初始化DataLoader的时候需指定数据集Dataset（包括数据和标签)，Sampler可选，没有Sampler时会根据是否打乱数据顺序（shuffle）分别采用顺序采样器（sequential
+sampler）和随机采样器（random sampler）。</p>
+<p>第①步，Sampler首先根据Dataset的大小n形成一个可迭代的序号列表[0~n-1]。</p>
+<p>第②步，BatchSampler根据DataLoader的batch_size参数将Sampler提供的序列划分成多个batch大小的可迭代序列组，drop_last参数决定是否保留最后一组。</p>
+<p>第③步，兵分两路的Sampler(BatchSampler)和Dataset合二为一，在迭代读取DataLoader时，用BatchSampler中一个batch的编号查找Dataset中对应的数据和标签，读出一个batch数据。</p>
+<p><img
+src="https://pic1.zhimg.com/80/v2-fa13aa41ffc69576762be46631ad7448_720w.webp" /></p>
+<p>举个例子。</p>
+<p>对数据集D={X,Y}，其中数据X为[野兔在野外.png，野猫在野外.png，野猫在家.png，野狗在家.png，野狗在野外.png]，标签Y为[0，1，1，2，2]</p>
+<p>第①步，初始的序号列表为<strong>[0, 1, 2, 3,
+4]</strong>，使用RandomSampler采样，采样不重复（replacement==FALSE），得到了采样后的序号列表<strong>[3,
+2, 1, 0, 4]</strong></p>
+<p>第②步：输入的batch_size为2，drop_last为FALSE，所以用BatchSampler批次采样，形成列表[[3,
+2], [1, 0], [4]]；若drop_last为TRUE，则列表变为[[3, 2], [1, 0]]</p>
+<p>第③步：迭代读取数据，根据序号从Dataset里找到相应数据和标签，如第一个batch为：</p>
+<p>[[野狗在家.png, 野猫在家.png], [3, 2]]</p>
+<p>以上就是形成一个batch数据的整个流程，下文将从代码角度深入介绍各个Class中的重要参数和函数。我是用较旧的pytorch版本（0.4.1.post2），也自己对照了一下1.7.0版本的代码。其中BatchSampler类基本一致，Sampler类去掉了__len__()方法，总的来说采样改动不大；DataLoader类主要是针对多线程做了很多优化，具体代码中也补充了大量注释，整体基础仍然是本文提到的几个方法。</p>
+<h2 id="sampler和batchsampler">3. Sampler和BatchSampler</h2>
+<h3 id="sampler">3.1 Sampler</h3>
+<p><a
+target="_blank" rel="noopener" href="https://www.zhihu.com/people/6b2df8f2c5dae1c6b27be02f8bc53bfe"><span
+class="citation" data-cites="marsggbo">@marsggbo</span></a> 的文章<a
+target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/82985227">sampler介绍</a></p>
+<p>简要来说，Sampler类__init__()方法用于初始化采样算法，<strong>iter</strong>()方法用torch的random、multinomial方法实现随机和基于权重的采样并返回可迭代对象，<strong>len</strong>()是返回采样长度。</p>
+<h3 id="batchsampler">3.2 BatchSampler</h3>
+<p>参数：</p>
+<p>sampler（Sampler类）：输入的sampler</p>
+<p>batch_size（int类）：设定的批次大小</p>
+<p>drop_last（bool类）：是否弃掉不足batch_size大小的最后一个批次</p>
+<p>重要函数：</p>
+<p>__init__初始化各项参数</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, sampler, batch_size, drop_last):</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ...</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sampler <span class="op">=</span> sampler</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.batch_size <span class="op">=</span> batch_size</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.drop_last <span class="op">=</span> drop_last</span></code></pre></div>
+<p>__iter__循环读取sampler生成的序号列表，采样够batch_size大小后，返回batch，下一次清空batch继续采集。</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__iter__</span>(<span class="va">self</span>):</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>        batch <span class="op">=</span> []</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> idx <span class="kw">in</span> <span class="va">self</span>.sampler:</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>            batch.append(idx)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="bu">len</span>(batch) <span class="op">==</span> <span class="va">self</span>.batch_size:</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>                <span class="co"># 通过yield返回，下一个iter时清空batch继续采集</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">yield</span> batch</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>                batch <span class="op">=</span> []</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 如果不需drop最后一组返回最后一组</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">len</span>(batch) <span class="op">&gt;</span> <span class="dv">0</span> <span class="kw">and</span> <span class="kw">not</span> <span class="va">self</span>.drop_last:</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> batch</span></code></pre></div>
+<p>__len__返回batch数量，如果drop最后一个，则序列长度对batch_size取整，否则加上一</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.drop_last:</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.sampler) <span class="op">//</span> <span class="va">self</span>.batch_size</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> (<span class="bu">len</span>(<span class="va">self</span>.sampler) <span class="op">+</span> <span class="va">self</span>.batch_size <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="va">self</span>.batch_size</span></code></pre></div>
+<h2 id="dataloader">4. DataLoader</h2>
+<h3 id="dataloader-1">4.1 DataLoader</h3>
+<p>重要参数：</p>
+<p>dataset（Dataset类）：Dataset类型的输入数据，由数据和标签组成</p>
+<p>batch_size（int类）：同BatchSampler</p>
+<p>shuffle（bool类）：是否打乱数据顺序</p>
+<p>sampler（Sampler类）：同BatchSampler</p>
+<p>batch_sampler（BatchSampler类）</p>
+<p>drop_last（bool类）：同BatchSampler</p>
+<p>重要函数：</p>
+<p>__init__中对参数关系中的互斥情况进行了排除，指定sampler并通过batch_sampler分出batch，</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, dataset, batch_size<span class="op">=</span><span class="dv">1</span>, shuffle<span class="op">=</span><span class="va">False</span>, sampler<span class="op">=</span><span class="va">None</span>, batch_sampler<span class="op">=</span><span class="va">None</span>,</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>                 num_workers<span class="op">=</span><span class="dv">0</span>, collate_fn<span class="op">=</span>default_collate, pin_memory<span class="op">=</span><span class="va">False</span>, drop_last<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>                 timeout<span class="op">=</span><span class="dv">0</span>, worker_init_fn<span class="op">=</span><span class="va">None</span>):</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ...</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 互斥关系，指定了batch_sampler时，batch_size，shuffle，sampler和drop_last无效</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> batch_sampler <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span>:</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> batch_size <span class="op">&gt;</span> <span class="dv">1</span> <span class="kw">or</span> shuffle <span class="kw">or</span> sampler <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">or</span> drop_last:</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&#39;batch_sampler option is mutually exclusive &#39;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;with batch_size, shuffle, sampler, and &#39;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>                                 <span class="st">&#39;drop_last&#39;</span>)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.batch_size <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.drop_last <span class="op">=</span> <span class="va">None</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 互斥关系，指定了sampler时，shuffle无效</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> sampler <span class="kw">is</span> <span class="kw">not</span> <span class="va">None</span> <span class="kw">and</span> shuffle:</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&#39;sampler option is mutually exclusive with &#39;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&#39;shuffle&#39;</span>)</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.num_workers <span class="op">&lt;</span> <span class="dv">0</span>:</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">&#39;num_workers option cannot be negative; &#39;</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>                             <span class="st">&#39;use num_workers=0 to disable multiprocessing.&#39;</span>)</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        </span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 此处可以看出，shuffle与否其实还是靠sampler类型实现的</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 当不指定sampler时，不shuffle就是顺序采样，shuffle就是随机采样</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> batch_sampler <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> sampler <span class="kw">is</span> <span class="va">None</span>:</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>                <span class="cf">if</span> shuffle:</span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>                    sampler <span class="op">=</span> RandomSampler(dataset)</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>                <span class="cf">else</span>:</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>                    sampler <span class="op">=</span> SequentialSampler(dataset)</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>            <span class="co"># 用batch_sampler对sampler产生的序列划分batch</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>            batch_sampler <span class="op">=</span> BatchSampler(sampler, batch_size, drop_last)</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sampler <span class="op">=</span> sampler</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.batch_sampler <span class="op">=</span> batch_sampler</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.__initialized <span class="op">=</span> <span class="va">True</span></span></code></pre></div>
+<p>DataLoader的__iter__是在_DataLoaderIter类中实现的，该类也是整个迭代方法的核心</p>
+<pre class="text"><code>def __iter__(self):
+        return _DataLoaderIter(self)</code></pre>
+<h3 id="dataloaderiter">4.2 _DataLoaderIter</h3>
+<p>__init__初始化并指定了sampler_iter，即batch_sampler</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, loader):</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.dataset <span class="op">=</span> loader.dataset</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.collate_fn <span class="op">=</span> loader.collate_fn</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.batch_sampler <span class="op">=</span> loader.batch_sampler</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.num_workers <span class="op">=</span> loader.num_workers</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.pin_memory <span class="op">=</span> loader.pin_memory <span class="kw">and</span> torch.cuda.is_available()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.timeout <span class="op">=</span> loader.timeout</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.done_event <span class="op">=</span> threading.Event()</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.sample_iter <span class="op">=</span> <span class="bu">iter</span>(<span class="va">self</span>.batch_sampler)</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="co"># ...</span></span></code></pre></div>
+<p>_get_batch读取数据，加入了连接超时的判断</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _get_batch(<span class="va">self</span>):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 连接超时</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.timeout <span class="op">&gt;</span> <span class="dv">0</span>:</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>            <span class="cf">try</span>:</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>                <span class="cf">return</span> <span class="va">self</span>.data_queue.get(timeout<span class="op">=</span><span class="va">self</span>.timeout)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="cf">except</span> queue.Empty:</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="cf">raise</span> <span class="pp">RuntimeError</span>(<span class="st">&#39;DataLoader timed out after </span><span class="sc">&#123;&#125;</span><span class="st"> seconds&#39;</span>.<span class="bu">format</span>(<span class="va">self</span>.timeout))</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>.data_queue.get()</span></code></pre></div>
+<p>_DataLoaderIter在每次调用时会执行__next__方法返回下一个batch</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> <span class="fu">__next__</span>(<span class="va">self</span>):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.num_workers <span class="op">==</span> <span class="dv">0</span>:  <span class="co"># same-process loading</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>            indices <span class="op">=</span> <span class="bu">next</span>(<span class="va">self</span>.sample_iter)  <span class="co"># may raise StopIteration</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>            batch <span class="op">=</span> <span class="va">self</span>.collate_fn([<span class="va">self</span>.dataset[i] <span class="cf">for</span> i <span class="kw">in</span> indices])</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> <span class="va">self</span>.pin_memory:</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>                batch <span class="op">=</span> pin_memory_batch(batch)</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> batch</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>        <span class="co"># check if the next sample has already been generated</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.rcvd_idx <span class="kw">in</span> <span class="va">self</span>.reorder_dict:</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>            batch <span class="op">=</span> <span class="va">self</span>.reorder_dict.pop(<span class="va">self</span>.rcvd_idx)</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>._process_next_batch(batch)</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="va">self</span>.batches_outstanding <span class="op">==</span> <span class="dv">0</span>:</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>._shutdown_workers()</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">StopIteration</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>            <span class="cf">assert</span> (<span class="kw">not</span> <span class="va">self</span>.shutdown <span class="kw">and</span> <span class="va">self</span>.batches_outstanding <span class="op">&gt;</span> <span class="dv">0</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>            idx, batch <span class="op">=</span> <span class="va">self</span>._get_batch()</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>            <span class="va">self</span>.batches_outstanding <span class="op">-=</span> <span class="dv">1</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>            <span class="cf">if</span> idx <span class="op">!=</span> <span class="va">self</span>.rcvd_idx:</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>                <span class="co"># store out-of-order samples</span></span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>                <span class="va">self</span>.reorder_dict[idx] <span class="op">=</span> batch</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>                <span class="cf">continue</span></span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>            <span class="cf">return</span> <span class="va">self</span>._process_next_batch(batch)</span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="co"># 调用时执行__next__</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a><span class="bu">next</span> <span class="op">=</span> <span class="fu">__next__</span>  <span class="co"># Python 2 compatibility</span></span></code></pre></div>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/">https://github.com/haseka96.github.io/2023/11/22/cnn-batch%E5%BD%A2%E6%88%90/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Sampler/">Sampler</a><a class="post-meta__tags" href="/tags/DataLoader/">DataLoader</a><a class="post-meta__tags" href="/tags/batch/">batch</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/22/runner%E4%B8%8Ehook/" title="runner与hook"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">runner与hook</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/21/Logging%E6%97%A5%E5%BF%97%E6%A8%A1%E5%9D%97/" title="Logging日志模块"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">Logging日志模块</div></div></a></div></nav></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">28</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">27</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#sampler-dataloader%E5%92%8C%E6%95%B0%E6%8D%AEbatch%E7%9A%84%E5%BD%A2%E6%88%90"><span class="toc-number">1.</span> <span class="toc-text">Sampler,
+DataLoader和数据batch的形成</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AE%80%E4%BB%8B"><span class="toc-number">1.1.</span> <span class="toc-text">1. 简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="toc-number">1.2.</span> <span class="toc-text">2. 整体流程</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#sampler%E5%92%8Cbatchsampler"><span class="toc-number">1.3.</span> <span class="toc-text">3. Sampler和BatchSampler</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#sampler"><span class="toc-number">1.3.1.</span> <span class="toc-text">3.1 Sampler</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#batchsampler"><span class="toc-number">1.3.2.</span> <span class="toc-text">3.2 BatchSampler</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#dataloader"><span class="toc-number">1.4.</span> <span class="toc-text">4. DataLoader</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#dataloader-1"><span class="toc-number">1.4.1.</span> <span class="toc-text">4.1 DataLoader</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#dataloaderiter"><span class="toc-number">1.4.2.</span> <span class="toc-text">4.2 _DataLoaderIter</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/MMD-PETR-train-detector%E5%AF%BC%E5%9B%BE/" title="MMD-PETR_train-detector导图">MMD-PETR_train-detector导图</a><time datetime="2023-11-27T00:37:42.000Z" title="Created 2023-11-27 08:37:42">2023-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMDataParallel/" title="MMDataParallel">MMDataParallel</a><time datetime="2023-11-24T02:32:08.000Z" title="Created 2023-11-24 10:32:08">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/24/MMD3D%E6%A8%A1%E5%9E%8B%E8%AE%AD%E7%BB%83%E6%B5%8B%E8%AF%95%E7%BE%A4%E6%B5%81%E7%A8%8B%E8%A7%A3%E6%9E%90/" title="MMD3D模型训练测试群流程解析">MMD3D模型训练测试群流程解析</a><time datetime="2023-11-24T02:22:56.000Z" title="Created 2023-11-24 10:22:56">2023-11-24</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/PETR%E4%BB%A3%E7%A0%81%E8%AF%A6%E8%A7%A3/" title="PETR代码详解">PETR代码详解</a><time datetime="2023-11-23T08:41:06.000Z" title="Created 2023-11-23 16:41:06">2023-11-23</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/23/Hook%E9%A3%9F%E7%94%A8%E6%8C%87%E5%8D%97/" title="Hook食用指南">Hook食用指南</a><time datetime="2023-11-23T08:17:27.000Z" title="Created 2023-11-23 16:17:27">2023-11-23</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_swiper_injector_config(){
+    var parent_div_git = document.getElementById('recent-posts');
+    var item_html = '<div class="recent-post-item" style="height: auto;width: 100%"><div class="blog-slider swiper-container-fade swiper-container-horizontal" id="swiper_container"><div class="blog-slider__wrp swiper-wrapper" style="transition-duration: 0ms;"></div><div class="blog-slider__pagination swiper-pagination-clickable swiper-pagination-bullets"></div></div></div>';
+    console.log('已挂载butterfly_swiper')
+    parent_div_git.insertAdjacentHTML("afterbegin",item_html)
+    }
+  var elist = 'undefined'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_swiper_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_swiper_injector_config();
+  }
+  </script><script defer src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.js"></script><script defer data-pjax src="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper_init.js"></script><!-- hexo injector body_end end --></body></html>
