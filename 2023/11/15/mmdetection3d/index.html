@@ -1,9 +1,9 @@
-<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mmdetection3d | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MMDetection3D 整体框架介[TOC] 一、前言由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。 整个框架的代码库目录结构如下： # MMDetection3">
+<!DOCTYPE html><html lang="en" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>mmdetection3d | 在发之泽</title><meta name="author" content="haseka"><meta name="copyright" content="haseka"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="MMDetection3D 整体框架介 [TOC] 一、前言 由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。 整个框架的代码库目录结构如下： # MMDetectio">
 <meta property="og:type" content="article">
 <meta property="og:title" content="mmdetection3d">
 <meta property="og:url" content="https://github.com/haseka96.github.io/2023/11/15/mmdetection3d/index.html">
 <meta property="og:site_name" content="在发之泽">
-<meta property="og:description" content="MMDetection3D 整体框架介[TOC] 一、前言由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。 整个框架的代码库目录结构如下： # MMDetection3">
+<meta property="og:description" content="MMDetection3D 整体框架介 [TOC] 一、前言 由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。 整个框架的代码库目录结构如下： # MMDetectio">
 <meta property="og:locale" content="en_US">
 <meta property="og:image" content="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png">
 <meta property="article:published_time" content="2023-11-15T03:17:20.000Z">
@@ -158,253 +158,322 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
 
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/hexo-math@4.0.0/dist/style.css">
-<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">33</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">mmdetection3d</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-15T03:17:20.000Z" title="Created 2023-11-15 11:17:20">2023-11-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-15T07:44:44.995Z" title="Updated 2023-11-15 15:44:44">2023-11-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="mmdetection3d"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="MMDetection3D-整体框架介"><a href="#MMDetection3D-整体框架介" class="headerlink" title="MMDetection3D 整体框架介"></a>MMDetection3D 整体框架介</h1><p>[TOC]</p>
-<h2 id="一、前言"><a href="#一、前言" class="headerlink" title="一、前言"></a>一、前言</h2><p>由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。</p>
+<link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiper.min.css" media="print" onload="this.media='all'"><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-swiper/lib/swiperstyle.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 6.3.0"></head><body><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="在发之泽"><span class="site-name">在发之泽</span></a></span><div id="menus"><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fa fa-graduation-cap"></i><span> 博文</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/categories/"><i class="fa-fw fa fa-archive"></i><span> 分类</span></a></li><li><a class="site-page child" href="/tags/"><i class="fa-fw fa fa-tags"></i><span> 标签</span></a></li><li><a class="site-page child" href="/archives/"><i class="fa-fw fa fa-folder-open"></i><span> 归档</span></a></li></ul></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 生活</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/shuoshuo/"><i class="fa-fw fa fa-comments-o"></i><span> 分享</span></a></li><li><a class="site-page child" href="/photos/"><i class="fa-fw fa fa-camera-retro"></i><span> 相册</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fa fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 影视</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/links/"><i class="fa-fw fa fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/comment/"><i class="fa-fw fa fa-paper-plane"></i><span> 留言板</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于笔者</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">mmdetection3d</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">Created</span><time class="post-meta-date-created" datetime="2023-11-15T03:17:20.000Z" title="Created 2023-11-15 11:17:20">2023-11-15</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">Updated</span><time class="post-meta-date-updated" datetime="2023-11-15T07:44:44.995Z" title="Updated 2023-11-15 15:44:44">2023-11-15</time></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="mmdetection3d"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">Post Views:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="mmdetection3d-整体框架介">MMDetection3D 整体框架介</h1>
+<p>[TOC]</p>
+<h2 id="一前言">一、前言</h2>
+<p>由于3D本身数据的复杂性和MMDetection3D支持任务（电云D检测、单目3D检测、多模态3D检测和点云3D语义分割等）和场景（室内和外）的多样性，整个框架结构相对复杂，门槛高，这里对MMDetection3D整个框架进行整体的了解，包括设计流程，核心组件，数据集处理方法等。</p>
 <p>整个框架的代码库目录结构如下：</p>
-<pre><code class="lang-bash"># MMDetection3D 代码目录结构，展示主要部分 
-mmdetection3d 
-   | 
-   |- configs                    # 配置文件 
-   |- data                       # 原始数据及预处理后数据文件 
-   |- mmdet3d  
-   |     |- ops                  # cuda 算子（即将迁移到 mmcv 中） 
-   |     |- core                 # 核心组件 
-   |     |- datasets             # 数据集相关代码 
-   |     |- models               # 模型相关代码 
-   |     |- utils                # 辅助工具 
-   |     |- ... 
-   |- tools 
-   |     |- analysis_tools       # 分析工具，包括可视化、计算flops等 
-   |     |- data_converter       # 各个数据集预处理转换脚本 
-   |     |- create_data.py       # 数据预处理入口 
-   |     |- train.py             # 训练脚本 
-   |     |- test.py              # 测试脚本 
-   |     |- ...                       
-   |- ...
-</code></pre>
-<h2 id="二、任务介绍"><a href="#二、任务介绍" class="headerlink" title="二、任务介绍"></a>二、任务介绍</h2><p>3D 目标检测按照输入数据模态划分可以分为：<strong>点云 3D 检测、纯视觉 3D 检测以及多模态 3D 检测（点云+图片）。</strong></p>
-<p><img src="https://pic3.zhimg.com/80/v2-2a0bf86a79b2710a380e4f1ba0d5164a_720w.webp" alt=""></p>
-<p><img src="https://pic3.zhimg.com/80/v2-42c8641edd26dc0441a6e7815f37220e_720w.webp" alt=""></p>
-<p><img src="https://pic2.zhimg.com/80/v2-43f400129e178782740ac1a877b3e405_720w.webp" alt=""></p>
-<p><img src="https://pic2.zhimg.com/80/v2-9c66063032e7f7ce4cd63ab01ef3a319_720w.webp" alt=""></p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># MMDetection3D 代码目录结构，展示主要部分 </span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">mmdetection3d</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span><span class="ex">-</span> configs                    <span class="co"># 配置文件 </span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span><span class="ex">-</span> data                       <span class="co"># 原始数据及预处理后数据文件 </span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span><span class="ex">-</span> mmdet3d  </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> ops                  <span class="co"># cuda 算子（即将迁移到 mmcv 中） </span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> core                 <span class="co"># 核心组件 </span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> datasets             <span class="co"># 数据集相关代码 </span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> models               <span class="co"># 模型相关代码 </span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> utils                <span class="co"># 辅助工具 </span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> ... </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span><span class="ex">-</span> tools </span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> analysis_tools       <span class="co"># 分析工具，包括可视化、计算flops等 </span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> data_converter       <span class="co"># 各个数据集预处理转换脚本 </span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> create_data.py       <span class="co"># 数据预处理入口 </span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> train.py             <span class="co"># 训练脚本 </span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> test.py              <span class="co"># 测试脚本 </span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span>     <span class="kw">|</span><span class="ex">-</span> ...                       </span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>   <span class="kw">|</span><span class="ex">-</span> ... </span></code></pre></div>
+<h2 id="二任务介绍">二、任务介绍</h2>
+<p>3D 目标检测按照输入数据模态划分可以分为：<strong>点云 3D 检测、纯视觉
+3D 检测以及多模态 3D 检测（点云+图片）。</strong></p>
+<p><img
+src="https://pic3.zhimg.com/80/v2-2a0bf86a79b2710a380e4f1ba0d5164a_720w.webp" /></p>
+<p><img
+src="https://pic3.zhimg.com/80/v2-42c8641edd26dc0441a6e7815f37220e_720w.webp" /></p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-43f400129e178782740ac1a877b3e405_720w.webp" /></p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-9c66063032e7f7ce4cd63ab01ef3a319_720w.webp" /></p>
 <p>除此之外，MMDetection3D还拓展到了点云3D语义分割领域，目前已经支持了室内点云语义分割，同时会在将来支持室外点云语义分割。</p>
-<h2 id="三、算法模型支持"><a href="#三、算法模型支持" class="headerlink" title="三、算法模型支持"></a>三、算法模型支持</h2><p>所有模型相关代码位于mmdet3d/models下，MMDetection3D支持的各个方向的模型大体可以归类如下：</p>
-<p><img src="https://pic4.zhimg.com/80/v2-efc56a48b8d6f69a23d89e85e739518b_720w.webp" alt=""></p>
+<h2 id="三算法模型支持">三、算法模型支持</h2>
+<p>所有模型相关代码位于mmdet3d/models下，MMDetection3D支持的各个方向的模型大体可以归类如下：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-efc56a48b8d6f69a23d89e85e739518b_720w.webp" /></p>
 <p>总体来说，由于MMDetection3D依赖于MMDetection和MMSegmentation，所以很多的模型及组件都是直接复用或继承而来。目前在MMDetection3D内，整体模型的构建方式会根据任务类型被划分为三种方式，具体如下：</p>
 <p>点云3D检测（包含多模态3D检测）：</p>
-<p><img src="https://pic2.zhimg.com/80/v2-9edad73af084acad23a0721454ef4b89_720w.webp" alt=""></p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-9edad73af084acad23a0721454ef4b89_720w.webp" /></p>
 <p>对于点云3D检测（多模态3D检测），我们继承自MMDetection中的BaseDetector构建了适用于3D检测的Base3DDetector，再根据检测中的单价段和二阶段分别构造，需要注意的是不同于SingleStage3DDetector，为了尽可能的复用已有的代码组件，二阶段检测器TwoStage3DDetector同时继承自Base3DDetector和TwoStageDetector，图中只列出了部分支持的模型算法。</p>
 <p>单目3D检测：</p>
-<p><img src="https://pic4.zhimg.com/80/v2-d86ac9e6fcace16aa84df3771e62dba7_720w.webp" alt=""></p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-d86ac9e6fcace16aa84df3771e62dba7_720w.webp" /></p>
 <p>对于单目3D检测，考虑到和2D检测输入数据的一致性，同事方便做2D检测的同学可以快速上手单目3D检测，我们继承自MMDetection中的SingleStageDetector构建了SingleStageMono3DDetector，目前所支持的单目3D检测算法都是基于该类构建的。</p>
 <p>点云3D语义分割：</p>
-<p><img src="https://pic1.zhimg.com/80/v2-9a01a3aecf662585eeb4af1fec1210b8_720w.webp" alt=""></p>
-<p>对于点云 3D 语义分割，我们继承自 MMSegmentation 中的 <code>BaseSegmentor</code> 构建了适用于点云分割的 <code>Base3DSegmentor</code>，而目前所支持的点云分割算法都是遵循 <code>EncoderDecoder3D</code> 模式。 </p>
-<h2 id="四、数据预处理"><a href="#四、数据预处理" class="headerlink" title="四、数据预处理"></a>四、数据预处理</h2><p>该部分对应于toos/create_data.py，各个数据集预处理脚本位于tools/data_converter目录下。由于3D数据集的多样性，MMDetection3D会对数据集做预处理。这里，我们从整体视角来看下数据预处理的文件生成过程：</p>
-<p><img src="https://pic4.zhimg.com/80/v2-e1409ac7a44d062bbfe7814848f5611b_720w.webp" alt=""></p>
+<p><img
+src="https://pic1.zhimg.com/80/v2-9a01a3aecf662585eeb4af1fec1210b8_720w.webp" /></p>
+<p>对于点云 3D 语义分割，我们继承自 MMSegmentation 中的
+<code>BaseSegmentor</code> 构建了适用于点云分割的
+<code>Base3DSegmentor</code>，而目前所支持的点云分割算法都是遵循
+<code>EncoderDecoder3D</code> 模式。</p>
+<h2 id="四数据预处理">四、数据预处理</h2>
+<p>该部分对应于toos/create_data.py，各个数据集预处理脚本位于tools/data_converter目录下。由于3D数据集的多样性，MMDetection3D会对数据集做预处理。这里，我们从整体视角来看下数据预处理的文件生成过程：</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-e1409ac7a44d062bbfe7814848f5611b_720w.webp" /></p>
 <p>在MMDetection3D中，不同的任务和不同的场景（室内、外）的数据预处理都会存在一定的区别，如上图所示，会产生不同的预处理后的文件，便于后续训练。</p>
-<ol>
-<li><p>对所有的任务和场景，统一用数据处理脚本转换后的pkl文件，该文件包含数据集的各种信息，包括数据集路径、calib信息和标注信息等，从而做到各个数据集内部格式尽可能的统一。</p>
-</li>
+<ol type="1">
+<li><p>对所有的任务和场景，统一用数据处理脚本转换后的pkl文件，该文件包含数据集的各种信息，包括数据集路径、calib信息和标注信息等，从而做到各个数据集内部格式尽可能的统一。</p></li>
 <li><p>对于点云（多模态）3D检测，室内和室外数据集生成的文件是不一样的：</p>
 <p>对于某些室外数据集，我们会借助pkl文件的信息进一步提取reduced_point_cloud和gt_database：前者是仅包含前方视野的点云文件，通常存在于kitti数据集处理过程中，因为kitti数据集仅包含前方视野的标注；后者则是包含在训练集数据集的每个3D边界框中的点云数据分别提取出来得到的各个物体的点云文件，常用来在数据增强时使用（copy-paster)。</p>
-<p>对于室内数据集，由于点云较为密集，通常会进行点云的下采用处理，保存在points内。</p>
-</li>
+<p>对于室内数据集，由于点云较为密集，通常会进行点云的下采用处理，保存在points内。</p></li>
 </ol>
 <p>对于单目3D检测，整个模型构建的流程是遵循2D检测的，同样的在数据处理的过程中，在生成基本的pkl文件后，还需要将其抓换位coco标注格式的json文件，该过程中会对pkl的标注信息做相应处理，实际在该任务中，pkl文件用来提供data信息，json文件提供标注信息。</p>
-<p>对于点云3D语义分割，目前MMDetection3D仅支持室内点云分割，相对于检测任务，如图所示需要生成额外的文件：instance_mask 包含每个点云的实例标签，semantic_mask包含每个点云的语义标签，seg_info包含额外的辅助训练的信息。</p>
-<h2 id="五、模块抽象"><a href="#五、模块抽象" class="headerlink" title="五、模块抽象"></a>五、模块抽象</h2><p>和MMDetection一脉相承，整个MMDetection3D的模块内部抽象流程也主要包括Pipeline、DataParallel、Model、Runner和Hooks。</p>
-<h3 id="5-1Pipeline"><a href="#5-1Pipeline" class="headerlink" title="5.1Pipeline"></a>5.1Pipeline</h3><p>具体在Pipeline方面由于数据模态的不同，所以在数据处理过程中包含不同的信息。</p>
-<p><img src="https://pic4.zhimg.com/80/v2-7271a1fdfa1cfd93cced3fca4f540dd3_720w.webp" alt=""></p>
-<p>上图展示了三个比较典型的3D检测Pipeline，流程自上而下分别是点云3D检测、多模态3D检测和单目3D检测，从上述的流程可以看出，pipeline其实是由一系列的按照插入顺序插入顺序进行的数据处理模块组成。MMDetection3D 对于点云 3D 检测提供了很多常用的 pipeline  模块，比如GlobalRotScaleTrans（点云的旋转缩放）、PointsRangeFilter /  ObjectRangeFilter（限定了点云和物体的范围）、PointShuffle（打乱点云数据）；而对于单目 3D 检测基本就是直接调用  MMDetection 的数据处理模块，比如 Resize （图片缩放）、Normalize （正则化）、Pad  （图片填充）；多模态检测则兼用两者。我们可以看到其实这些任务共享了部分的 pipeline 模块，比如 LoadAnnotations3D  （标签载入）、RandomFlip3D（会对点云和图片同时进行翻转）、DefaultFormatBundle3D（数据格式化）、Collect3D （选取需要用于训练的数据和标签），这些代码都在 <code>mmdet3d/datasets/pipeline</code> 目录下。</p>
-<h3 id="5-2-Model"><a href="#5-2-Model" class="headerlink" title="5.2 Model"></a>5.2 Model</h3><p>在该部分我们按照任务类型分类，对于整个模型内部做抽象介绍。和2D检测类型，3D检测器通常也包含了几个核心组件：Backbone用于提取特征、Neck进行特征融合和增强、Head用于输出需要的结果。</p>
-<ol>
+<p>对于点云3D语义分割，目前MMDetection3D仅支持室内点云分割，相对于检测任务，如图所示需要生成额外的文件：instance_mask
+包含每个点云的实例标签，semantic_mask包含每个点云的语义标签，seg_info包含额外的辅助训练的信息。</p>
+<h2 id="五模块抽象">五、模块抽象</h2>
+<p>和MMDetection一脉相承，整个MMDetection3D的模块内部抽象流程也主要包括Pipeline、DataParallel、Model、Runner和Hooks。</p>
+<h3 id="pipeline">5.1Pipeline</h3>
+<p>具体在Pipeline方面由于数据模态的不同，所以在数据处理过程中包含不同的信息。</p>
+<p><img
+src="https://pic4.zhimg.com/80/v2-7271a1fdfa1cfd93cced3fca4f540dd3_720w.webp" /></p>
+<p>上图展示了三个比较典型的3D检测Pipeline，流程自上而下分别是点云3D检测、多模态3D检测和单目3D检测，从上述的流程可以看出，pipeline其实是由一系列的按照插入顺序插入顺序进行的数据处理模块组成。MMDetection3D
+对于点云 3D 检测提供了很多常用的 pipeline
+模块，比如GlobalRotScaleTrans（点云的旋转缩放）、PointsRangeFilter /
+ObjectRangeFilter（限定了点云和物体的范围）、PointShuffle（打乱点云数据）；而对于单目
+3D 检测基本就是直接调用 MMDetection 的数据处理模块，比如 Resize
+（图片缩放）、Normalize （正则化）、Pad
+（图片填充）；多模态检测则兼用两者。我们可以看到其实这些任务共享了部分的
+pipeline 模块，比如 LoadAnnotations3D
+（标签载入）、RandomFlip3D（会对点云和图片同时进行翻转）、DefaultFormatBundle3D（数据格式化）、Collect3D
+（选取需要用于训练的数据和标签），这些代码都在
+<code>mmdet3d/datasets/pipeline</code> 目录下。</p>
+<h3 id="model">5.2 Model</h3>
+<p>在该部分我们按照任务类型分类，对于整个模型内部做抽象介绍。和2D检测类型，3D检测器通常也包含了几个核心组件：Backbone用于提取特征、Neck进行特征融合和增强、Head用于输出需要的结果。</p>
+<ol type="1">
 <li>点云3D检测模型</li>
 </ol>
-<p>目前云目标检测按照对点云数据的处理方式，可以分为<strong>体素处理方法 (Voxel-based)</strong> 和<strong>原始点云处理方法 (Point-based)</strong>，这两种方法其实在构建模型的时候会有一定的区别，整体的模型构建按照下图流程所示： </p>
-<p><img src="https://pic2.zhimg.com/80/v2-f464a0118006f4b4706d7f70cb432129_720w.webp" alt=""></p>
+<p>目前云目标检测按照对点云数据的处理方式，可以分为<strong>体素处理方法
+(Voxel-based)</strong> 和<strong>原始点云处理方法
+(Point-based)</strong>，这两种方法其实在构建模型的时候会有一定的区别，整体的模型构建按照下图流程所示：</p>
+<p><img
+src="https://pic2.zhimg.com/80/v2-f464a0118006f4b4706d7f70cb432129_720w.webp" /></p>
 <ul>
-<li><p>基于体素的模型通常需要 <code>Encoder</code> 来对点云体素化，如 <code>HardVFE</code> 和 <code>PointPillarScatter</code>等，采用的稀疏卷积或者 Pillars 的方法从点云中生成 2D 特征图，然后基本可以套用 2D 检测流程进行 3D 检测。</p>
-</li>
-<li><p>基于原始点云模型通常直接采用 3D Backbone (Pointnet / Pointnet++ 等)  提取点的特征，再针对提取到的点云特征采用 RoI 或者 Group 等方式回归 3D bounding  box。有关的具体内容我们会在后续的文章中针对典型的方法进行分析介绍.</p>
-</li>
+<li><p>基于体素的模型通常需要 <code>Encoder</code> 来对点云体素化，如
+<code>HardVFE</code> 和
+<code>PointPillarScatter</code>等，采用的稀疏卷积或者 Pillars
+的方法从点云中生成 2D 特征图，然后基本可以套用 2D 检测流程进行 3D
+检测。</p></li>
+<li><p>基于原始点云模型通常直接采用 3D Backbone (Pointnet / Pointnet++
+等) 提取点的特征，再针对提取到的点云特征采用 RoI 或者 Group 等方式回归
+3D bounding
+box。有关的具体内容我们会在后续的文章中针对典型的方法进行分析介绍.</p></li>
 </ul>
-<ol>
+<ol start="2" type="1">
 <li>单目3D检测模型</li>
 </ol>
-<p><img src="https://pic3.zhimg.com/80/v2-90d4d36dc288c41341bb80a0f546bf56_720w.webp" alt=""></p>
-<p>由于单目 3D 检测的输入是图片，输出是 3D bounding box, 所以整体的检测流程和模型组成来说基本和 2D 检测保持一致。</p>
-<ol>
+<p><img
+src="https://pic3.zhimg.com/80/v2-90d4d36dc288c41341bb80a0f546bf56_720w.webp" /></p>
+<p>由于单目 3D 检测的输入是图片，输出是 3D bounding box,
+所以整体的检测流程和模型组成来说基本和 2D 检测保持一致。</p>
+<ol start="3" type="1">
 <li>多模态3D检测模型</li>
 </ol>
 <p>多模态的检测模型从组成来看可以看成2D检测模型和点云检测模型的拼接。</p>
-<ol>
+<ol start="4" type="1">
 <li>点云3D语义分割模型</li>
 </ol>
-<p><img src="https://pic1.zhimg.com/80/v2-8d879986dfa4ca933fc908fd0b99aac8_720w.webp" alt=""></p>
-<p>MMDetection3D 内部支持的 3D 分割模型都是符合 <code>EncoderDecoder</code> 结构的，需要 <code>backbone</code> 来 encode feature, <code>decode_head</code> 用来预测每个点云的类别的进行分割，目前主要只支持室内场景的 3D 语义分割。</p>
-<h2 id="六、训练和测试流程"><a href="#六、训练和测试流程" class="headerlink" title="六、训练和测试流程"></a>六、训练和测试流程</h2><p>首先我们训练和验证调用的是 <code>tools/train.py</code> 脚本，先进行 Dataset、Model 等相关类初始化，然后我们构建了一个 runner，最终模型的训练和验证过程是发生在 runner 内部的，而训练和验证的时候实际上是 runner 调用了 model 内部的 <code>train_step</code> 和 <code>val_step</code> 函数。 </p>
-<h3 id="6-1train和val流程"><a href="#6-1train和val流程" class="headerlink" title="6.1train和val流程"></a>6.1train和val流程</h3><p><img src="https://pic3.zhimg.com/80/v2-a8c9de0156a19b7ddc84ab550ea3419a_720w.webp" alt=""></p>
-<p><strong>(1) 调用 runner 中的 <code>train_step</code> 或者 <code>val_step</code></strong> </p>
-<p>在 runner 中调用 <code>train_step</code> 或者 <code>val_step</code>，代码如下： </p>
-<pre><code class="lang-python">#=================== mmcv/runner/epoch_based_runner.py ================== 
-if train_mode: 
-    outputs = self.model.train_step(data_batch,...) 
-else: 
-    outputs = self.model.val_step(data_batch,...)
-</code></pre>
-<p>实际上，首先会调用 DataParallel 中的 <code>train_step</code> 或者 <code>val_step</code> ，其具体调用流程为： </p>
-<pre><code class="lang-python"># 非分布式训练 
-#=================== mmcv/parallel/data_parallel.py/MMDataParallel ================== 
-def train_step(self, *inputs, **kwargs): 
-    if not self.device_ids: 
-        inputs, kwargs = self.scatter(inputs, kwargs, [-1]) 
-        # 此时才是调用 model 本身的 train_step 
-        return self.module.train_step(*inputs, **kwargs) 
-    # 单 gpu 模式 
-    inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids) 
-    # 此时才是调用 model 本身的 train_step 
-    return self.module.train_step(*inputs[0], **kwargs[0]) 
-
-# val_step 也是的一样逻辑 
-def val_step(self, *inputs, **kwargs): 
-    inputs, kwargs = self.scatter(inputs, kwargs, self.device_ids) 
-    # 此时才是调用 model 本身的 val_step 
-    return self.module.val_step(*inputs[0], **kwargs[0])
-</code></pre>
-<p>可以发现，在调用 model 本身的 train_step 前，需要额外调用 scatter 函数，前面说过该函数的作用是处理 DataContainer 格式数据，使其能够组成 batch，否则程序会报错。 </p>
-<p>如果是分布式训练，则调用的实际上是 <code>mmcv/parallel/distributed.py/MMDistributedDataParallel</code>，最终调用的依然是 model 本身的 <code>train_step</code> 或者 <code>val_step</code>。 </p>
-<p><strong>(2) 调用 model 中的 <code>train_step</code> 或者 <code>val_step</code></strong> </p>
-<p>训练流程： </p>
-<pre><code class="lang-python">#=================== mmdet/models/detectors/base.py/BaseDetector ============= 
-def train_step(self, data, optimizer): 
-    # 调用本类自身的 forward 方法 
-    losses = self(**data) 
-    # 解析 loss 
-    loss, log_vars = self._parse_losses(losses) 
-    # 返回字典对象 
-    outputs = dict( 
-        loss=loss, log_vars=log_vars, num_samples=len(data[&#39;img_metas&#39;])) 
-    return outputs 
-
-#=================== mmdet/models/detectors/base.py/Base3DDetector =========== 
-# Base3DDetector 主要是重写了 forward，改变了模型输入数据的类型，可同时传入点云数据和图片数据，从而满足多模态检测的需求 
-@auto_fp16(apply_to=(&#39;img&#39;, &#39;points&#39;)) 
-def forward(self, return_loss=True, **kwargs): 
-    if return_loss: 
-        # 训练模式 
-        return self.forward_train(**kwargs) 
-    else: 
-        # 测试模式 
-        return self.forward_test(**kwargs)
-</code></pre>
-<p><code>forward_train</code> 和 <code>forward_test</code> 需要在不同的算法子类中实现，输出是 Loss 或者 预测结果。 </p>
-<p><strong>(3) 调用子类中的 <code>forward_train</code> 方法</strong> </p>
-<p>PointPillars 采用的是 VoxelNet 检测器，核心逻辑还是比较通用的。 </p>
-<pre><code class="lang-python">#============= mmdet/models/detectors/voxelnet.py/VoxelNet ============ 
-def forward_train(self, 
-                  points, 
-                  img_metas, 
-                  gt_bboxes_3d, 
-                  gt_labels_3d, 
-                  gt_bboxes_ignore=None): 
-    # 先进行点云的特征提取   
-    x = self.extract_feat(points, img_metas) 
-    # 主要是调用 bbox_head 内部的 forward_train 方法，得到 head 输出 
-    outs = self.bbox_head(x) 
-    loss_inputs = outs + (gt_bboxes_3d, gt_labels_3d, img_metas) 
-    # 将 head 部分的输出和数据的 label 送入计算 loss 
-    losses = self.bbox_head.loss( 
-        *loss_inputs, gt_bboxes_ignore=gt_bboxes_ignore) 
-    return losses
-</code></pre>
-<p><strong>(4) 调用 model 中的 <code>_parse_losses</code> 方法</strong></p>
-<pre><code class="lang-python">#=================== mmdet/models/detectors/base.py/BaseDetector ================== 
-def _parse_losses(self, losses): 
-
-    # 返回来的 losses 是一个dict, 我们需要对 loss 进行求和 
-    log_vars = OrderedDict() 
-    for loss_name, loss_value in losses.items(): 
-        if isinstance(loss_value, torch.Tensor): 
-            log_vars[loss_name] = loss_value.mean() 
-        elif isinstance(loss_value, list): 
-            log_vars[loss_name] = sum(_loss.mean() for _loss in loss_value) 
-        else: 
-            raise TypeError( 
-                f&#39;&#123;loss_name&#125; is not a tensor or list of tensors&#39;) 
-
-    loss = sum(_value for _key, _value in log_vars.items() 
-               if &#39;loss&#39; in _key) 
-
-    log_vars[&#39;loss&#39;] = loss 
-    for loss_name, loss_value in log_vars.items(): 
-        # reduce loss when distributed training 
-        if dist.is_available() and dist.is_initialized(): 
-            loss_value = loss_value.data.clone() 
-            dist.all_reduce(loss_value.div_(dist.get_world_size())) 
-        log_vars[loss_name] = loss_value.item() 
-
-    return loss, log_vars
-</code></pre>
-<h3 id="6-2-test流程"><a href="#6-2-test流程" class="headerlink" title="6.2 test流程"></a>6.2 test流程</h3><p><img src="https://pic1.zhimg.com/80/v2-b80193d8d2bd66015ebd5aedaa9c5b14_720w.webp" alt=""></p>
-<p>test 流程如上图所示， 我们可以看见在 test 的时候流程相比 train / val 更为简单，没有调用 runner 对象。 </p>
-<p><strong>(1) 调用 model 中的 <code>forward_test</code></strong> </p>
-<pre><code class="lang-python">#=================== mmdet/models/detectors/base.py/Base3DDetector =========== 
-def forward_test(self, points, img_metas, img=None, **kwargs): 
-    num_augs = len(points) 
-    if num_augs != len(img_metas): 
-        raise ValueError( 
-            &#39;num of augmentations (&#123;&#125;) != num of image meta (&#123;&#125;)&#39;.format( 
-                len(points), len(img_metas))) 
-    # 根据 points list 长度判断是 simple_test 还是 aug_test 
-    if num_augs == 1: 
-        img = [img] if img is None else img 
-        return self.simple_test(points[0], img_metas[0], img[0], **kwargs) 
-    else: 
-        return self.aug_test(points, img_metas, img, **kwargs)
-</code></pre>
-<p><strong>(2) 调用子类 的 <code>simple_test</code> 或 <code>aug_test</code></strong> </p>
-<pre><code class="lang-python">#============= mmdet/models/detectors/voxelnet.py/VoxelNet ============ 
-def simple_test(self, points, img_metas, imgs=None, rescale=False): 
-    # 无数据增强测试 
-    # 提取特征 
-    x = self.extract_feat(points, img_metas) 
-    # 调用 head  
-    outs = self.bbox_head(x) 
-    # 根据 head 输出结果生成 bboxes 
-    bbox_list = self.bbox_head.get_bboxes( 
-        *outs, img_metas, rescale=rescale) 
-    # 对检测结果进行格式调整 
-    bbox_results = [ 
-        bbox3d2result(bboxes, scores, labels) 
-        for bboxes, scores, labels in bbox_list 
-    ] 
-    return bbox_results 
-
-def aug_test(self, points, img_metas, imgs=None, rescale=False): 
-    # 数据增强测试 
-    feats = self.extract_feats(points, img_metas) 
-
-    # 目前只支持单个 sample 的 aug_test 
-    aug_bboxes = [] 
-    for x, img_meta in zip(feats, img_metas): 
-        outs = self.bbox_head(x) 
-        bbox_list = self.bbox_head.get_bboxes( 
-            *outs, img_meta, rescale=rescale) 
-        bbox_list = [ 
-            dict(boxes_3d=bboxes, scores_3d=scores, labels_3d=labels) 
-            for bboxes, scores, labels in bbox_list 
-        ] 
-        aug_bboxes.append(bbox_list[0]) 
-
-    # 将增强后的 bboxes 进行 merge 合并操作 
-    merged_bboxes = merge_aug_bboxes_3d(aug_bboxes, img_metas, 
-                                        self.bbox_head.test_cfg) 
-
-    return [merged_bboxes]
-</code></pre>
-<p> 以上我们主要分析了整体的框架流程。</p>
-</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/15/mmdetection3d/">https://github.com/haseka96.github.io/2023/11/15/mmdetection3d/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/BEV/">BEV</a><a class="post-meta__tags" href="/tags/MMDetection3D/">MMDetection3D</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/15/MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E4%BA%8C/" title="MMDetection整体构建流程二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">MMDetection整体构建流程二</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/" title="mmdetection整体构建流程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">mmdetection整体构建流程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/11/15/MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E4%BA%8C/" title="MMDetection整体构建流程二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-15</div><div class="title">MMDetection整体构建流程二</div></div></a></div><div><a href="/2023/11/16/Registry/" title="Registry"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-16</div><div class="title">Registry</div></div></a></div><div><a href="/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/" title="mmdetection整体构建流程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-15</div><div class="title">mmdetection整体构建流程</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">32</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">33</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#MMDetection3D-%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">MMDetection3D 整体框架介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E4%BB%BB%E5%8A%A1%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.</span> <span class="toc-text">二、任务介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B%E6%94%AF%E6%8C%81"><span class="toc-number">1.3.</span> <span class="toc-text">三、算法模型支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">四、数据预处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E6%A8%A1%E5%9D%97%E6%8A%BD%E8%B1%A1"><span class="toc-number">1.5.</span> <span class="toc-text">五、模块抽象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#5-1Pipeline"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1Pipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#5-2-Model"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.</span> <span class="toc-text">六、训练和测试流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#6-1train%E5%92%8Cval%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1train和val流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#6-2-test%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.2.</span> <span class="toc-text">6.2 test流程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/07/embedding/" title="embedding">embedding</a><time datetime="2023-12-07T06:09:42.000Z" title="Created 2023-12-07 14:09:42">2023-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/05/Petr-3D%E5%9D%90%E6%A0%87%E7%94%9F%E6%88%90/" title="Petr_3D坐标生成">Petr_3D坐标生成</a><time datetime="2023-12-05T06:16:49.000Z" title="Created 2023-12-05 14:16:49">2023-12-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/29/FPN/" title="FPN">FPN</a><time datetime="2023-11-29T01:50:54.000Z" title="Created 2023-11-29 09:50:54">2023-11-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/pytorch-nn-module-call/" title="pytorch_nn_module__call__">pytorch_nn_module__call__</a><time datetime="2023-11-27T05:54:09.000Z" title="Created 2023-11-27 13:54:09">2023-11-27</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/MMD-PETR-train-detector%E5%AF%BC%E5%9B%BE/" title="MMD-PETR_train-detector导图">MMD-PETR_train-detector导图</a><time datetime="2023-11-27T00:37:42.000Z" title="Created 2023-11-27 08:37:42">2023-11-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
+<p><img
+src="https://pic1.zhimg.com/80/v2-8d879986dfa4ca933fc908fd0b99aac8_720w.webp" /></p>
+<p>MMDetection3D 内部支持的 3D 分割模型都是符合
+<code>EncoderDecoder</code> 结构的，需要 <code>backbone</code> 来 encode
+feature, <code>decode_head</code>
+用来预测每个点云的类别的进行分割，目前主要只支持室内场景的 3D
+语义分割。</p>
+<h2 id="六训练和测试流程">六、训练和测试流程</h2>
+<p>首先我们训练和验证调用的是 <code>tools/train.py</code> 脚本，先进行
+Dataset、Model 等相关类初始化，然后我们构建了一个
+runner，最终模型的训练和验证过程是发生在 runner
+内部的，而训练和验证的时候实际上是 runner 调用了 model 内部的
+<code>train_step</code> 和 <code>val_step</code> 函数。</p>
+<h3 id="train和val流程">6.1train和val流程</h3>
+<p><img
+src="https://pic3.zhimg.com/80/v2-a8c9de0156a19b7ddc84ab550ea3419a_720w.webp" /></p>
+<p><strong>(1) 调用 runner 中的 <code>train_step</code> 或者
+<code>val_step</code></strong></p>
+<p>在 runner 中调用 <code>train_step</code> 或者
+<code>val_step</code>，代码如下：</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmcv/runner/epoch_based_runner.py ================== </span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> train_mode: </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    outputs <span class="op">=</span> <span class="va">self</span>.model.train_step(data_batch,...) </span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="cf">else</span>: </span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    outputs <span class="op">=</span> <span class="va">self</span>.model.val_step(data_batch,...) </span></code></pre></div>
+<p>实际上，首先会调用 DataParallel 中的 <code>train_step</code> 或者
+<code>val_step</code> ，其具体调用流程为：</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 非分布式训练 </span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmcv/parallel/data_parallel.py/MMDataParallel ================== </span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(<span class="va">self</span>, <span class="op">*</span>inputs, <span class="op">**</span>kwargs): </span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="va">self</span>.device_ids: </span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        inputs, kwargs <span class="op">=</span> <span class="va">self</span>.scatter(inputs, kwargs, [<span class="op">-</span><span class="dv">1</span>]) </span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 此时才是调用 model 本身的 train_step </span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.module.train_step(<span class="op">*</span>inputs, <span class="op">**</span>kwargs) </span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 单 gpu 模式 </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    inputs, kwargs <span class="op">=</span> <span class="va">self</span>.scatter(inputs, kwargs, <span class="va">self</span>.device_ids) </span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 此时才是调用 model 本身的 train_step </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.module.train_step(<span class="op">*</span>inputs[<span class="dv">0</span>], <span class="op">**</span>kwargs[<span class="dv">0</span>]) </span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co"># val_step 也是的一样逻辑 </span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> val_step(<span class="va">self</span>, <span class="op">*</span>inputs, <span class="op">**</span>kwargs): </span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    inputs, kwargs <span class="op">=</span> <span class="va">self</span>.scatter(inputs, kwargs, <span class="va">self</span>.device_ids) </span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 此时才是调用 model 本身的 val_step </span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="va">self</span>.module.val_step(<span class="op">*</span>inputs[<span class="dv">0</span>], <span class="op">**</span>kwargs[<span class="dv">0</span>]) </span></code></pre></div>
+<p>可以发现，在调用 model 本身的 train_step 前，需要额外调用 scatter
+函数，前面说过该函数的作用是处理 DataContainer 格式数据，使其能够组成
+batch，否则程序会报错。</p>
+<p>如果是分布式训练，则调用的实际上是
+<code>mmcv/parallel/distributed.py/MMDistributedDataParallel</code>，最终调用的依然是
+model 本身的 <code>train_step</code> 或者 <code>val_step</code>。</p>
+<p><strong>(2) 调用 model 中的 <code>train_step</code> 或者
+<code>val_step</code></strong></p>
+<p>训练流程：</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmdet/models/detectors/base.py/BaseDetector ============= </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> train_step(<span class="va">self</span>, data, optimizer): </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 调用本类自身的 forward 方法 </span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    losses <span class="op">=</span> <span class="va">self</span>(<span class="op">**</span>data) </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 解析 loss </span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    loss, log_vars <span class="op">=</span> <span class="va">self</span>._parse_losses(losses) </span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 返回字典对象 </span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    outputs <span class="op">=</span> <span class="bu">dict</span>( </span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>        loss<span class="op">=</span>loss, log_vars<span class="op">=</span>log_vars, num_samples<span class="op">=</span><span class="bu">len</span>(data[<span class="st">&#39;img_metas&#39;</span>])) </span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> outputs </span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmdet/models/detectors/base.py/Base3DDetector =========== </span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Base3DDetector 主要是重写了 forward，改变了模型输入数据的类型，可同时传入点云数据和图片数据，从而满足多模态检测的需求 </span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="at">@auto_fp16</span>(apply_to<span class="op">=</span>(<span class="st">&#39;img&#39;</span>, <span class="st">&#39;points&#39;</span>)) </span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward(<span class="va">self</span>, return_loss<span class="op">=</span><span class="va">True</span>, <span class="op">**</span>kwargs): </span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> return_loss: </span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 训练模式 </span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.forward_train(<span class="op">**</span>kwargs) </span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: </span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># 测试模式 </span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.forward_test(<span class="op">**</span>kwargs) </span></code></pre></div>
+<p><code>forward_train</code> 和 <code>forward_test</code>
+需要在不同的算法子类中实现，输出是 Loss 或者 预测结果。</p>
+<p><strong>(3) 调用子类中的 <code>forward_train</code> 方法</strong></p>
+<p>PointPillars 采用的是 VoxelNet 检测器，核心逻辑还是比较通用的。</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co">#============= mmdet/models/detectors/voxelnet.py/VoxelNet ============ </span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_train(<span class="va">self</span>, </span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>                  points, </span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>                  img_metas, </span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>                  gt_bboxes_3d, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>                  gt_labels_3d, </span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>                  gt_bboxes_ignore<span class="op">=</span><span class="va">None</span>): </span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 先进行点云的特征提取   </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="va">self</span>.extract_feat(points, img_metas) </span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 主要是调用 bbox_head 内部的 forward_train 方法，得到 head 输出 </span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>    outs <span class="op">=</span> <span class="va">self</span>.bbox_head(x) </span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>    loss_inputs <span class="op">=</span> outs <span class="op">+</span> (gt_bboxes_3d, gt_labels_3d, img_metas) </span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 将 head 部分的输出和数据的 label 送入计算 loss </span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>    losses <span class="op">=</span> <span class="va">self</span>.bbox_head.loss( </span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>loss_inputs, gt_bboxes_ignore<span class="op">=</span>gt_bboxes_ignore) </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> losses </span></code></pre></div>
+<p><strong>(4) 调用 model 中的 <code>_parse_losses</code>
+方法</strong></p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmdet/models/detectors/base.py/BaseDetector ================== </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> _parse_losses(<span class="va">self</span>, losses): </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 返回来的 losses 是一个dict, 我们需要对 loss 进行求和 </span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    log_vars <span class="op">=</span> OrderedDict() </span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loss_name, loss_value <span class="kw">in</span> losses.items(): </span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> <span class="bu">isinstance</span>(loss_value, torch.Tensor): </span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>            log_vars[loss_name] <span class="op">=</span> loss_value.mean() </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="cf">elif</span> <span class="bu">isinstance</span>(loss_value, <span class="bu">list</span>): </span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            log_vars[loss_name] <span class="op">=</span> <span class="bu">sum</span>(_loss.mean() <span class="cf">for</span> _loss <span class="kw">in</span> loss_value) </span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>: </span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>            <span class="cf">raise</span> <span class="pp">TypeError</span>( </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>                <span class="ss">f&#39;</span><span class="sc">&#123;</span>loss_name<span class="sc">&#125;</span><span class="ss"> is not a tensor or list of tensors&#39;</span>) </span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    loss <span class="op">=</span> <span class="bu">sum</span>(_value <span class="cf">for</span> _key, _value <span class="kw">in</span> log_vars.items() </span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>               <span class="cf">if</span> <span class="st">&#39;loss&#39;</span> <span class="kw">in</span> _key) </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>    log_vars[<span class="st">&#39;loss&#39;</span>] <span class="op">=</span> loss </span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> loss_name, loss_value <span class="kw">in</span> log_vars.items(): </span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>        <span class="co"># reduce loss when distributed training </span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> dist.is_available() <span class="kw">and</span> dist.is_initialized(): </span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>            loss_value <span class="op">=</span> loss_value.data.clone() </span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>            dist.all_reduce(loss_value.div_(dist.get_world_size())) </span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>        log_vars[loss_name] <span class="op">=</span> loss_value.item() </span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> loss, log_vars </span></code></pre></div>
+<h3 id="test流程">6.2 test流程</h3>
+<p><img
+src="https://pic1.zhimg.com/80/v2-b80193d8d2bd66015ebd5aedaa9c5b14_720w.webp" /></p>
+<p>test 流程如上图所示， 我们可以看见在 test 的时候流程相比 train / val
+更为简单，没有调用 runner 对象。</p>
+<p><strong>(1) 调用 model 中的 <code>forward_test</code></strong></p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co">#=================== mmdet/models/detectors/base.py/Base3DDetector =========== </span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> forward_test(<span class="va">self</span>, points, img_metas, img<span class="op">=</span><span class="va">None</span>, <span class="op">**</span>kwargs): </span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>    num_augs <span class="op">=</span> <span class="bu">len</span>(points) </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num_augs <span class="op">!=</span> <span class="bu">len</span>(img_metas): </span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>( </span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="st">&#39;num of augmentations (</span><span class="sc">&#123;&#125;</span><span class="st">) != num of image meta (</span><span class="sc">&#123;&#125;</span><span class="st">)&#39;</span>.<span class="bu">format</span>( </span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>                <span class="bu">len</span>(points), <span class="bu">len</span>(img_metas))) </span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 根据 points list 长度判断是 simple_test 还是 aug_test </span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> num_augs <span class="op">==</span> <span class="dv">1</span>: </span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        img <span class="op">=</span> [img] <span class="cf">if</span> img <span class="kw">is</span> <span class="va">None</span> <span class="cf">else</span> img </span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.simple_test(points[<span class="dv">0</span>], img_metas[<span class="dv">0</span>], img[<span class="dv">0</span>], <span class="op">**</span>kwargs) </span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>: </span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="va">self</span>.aug_test(points, img_metas, img, <span class="op">**</span>kwargs) </span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<p><strong>(2) 调用子类 的 <code>simple_test</code> 或
+<code>aug_test</code></strong></p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode python"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">#============= mmdet/models/detectors/voxelnet.py/VoxelNet ============ </span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> simple_test(<span class="va">self</span>, points, img_metas, imgs<span class="op">=</span><span class="va">None</span>, rescale<span class="op">=</span><span class="va">False</span>): </span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 无数据增强测试 </span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 提取特征 </span></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> <span class="va">self</span>.extract_feat(points, img_metas) </span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 调用 head  </span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    outs <span class="op">=</span> <span class="va">self</span>.bbox_head(x) </span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 根据 head 输出结果生成 bboxes </span></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    bbox_list <span class="op">=</span> <span class="va">self</span>.bbox_head.get_bboxes( </span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        <span class="op">*</span>outs, img_metas, rescale<span class="op">=</span>rescale) </span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 对检测结果进行格式调整 </span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    bbox_results <span class="op">=</span> [ </span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        bbox3d2result(bboxes, scores, labels) </span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> bboxes, scores, labels <span class="kw">in</span> bbox_list </span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    ] </span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> bbox_results </span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> aug_test(<span class="va">self</span>, points, img_metas, imgs<span class="op">=</span><span class="va">None</span>, rescale<span class="op">=</span><span class="va">False</span>): </span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 数据增强测试 </span></span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>    feats <span class="op">=</span> <span class="va">self</span>.extract_feats(points, img_metas) </span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 目前只支持单个 sample 的 aug_test </span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>    aug_bboxes <span class="op">=</span> [] </span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> x, img_meta <span class="kw">in</span> <span class="bu">zip</span>(feats, img_metas): </span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>        outs <span class="op">=</span> <span class="va">self</span>.bbox_head(x) </span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>        bbox_list <span class="op">=</span> <span class="va">self</span>.bbox_head.get_bboxes( </span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>            <span class="op">*</span>outs, img_meta, rescale<span class="op">=</span>rescale) </span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>        bbox_list <span class="op">=</span> [ </span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>            <span class="bu">dict</span>(boxes_3d<span class="op">=</span>bboxes, scores_3d<span class="op">=</span>scores, labels_3d<span class="op">=</span>labels) </span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">for</span> bboxes, scores, labels <span class="kw">in</span> bbox_list </span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>        ] </span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>        aug_bboxes.append(bbox_list[<span class="dv">0</span>]) </span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>    <span class="co"># 将增强后的 bboxes 进行 merge 合并操作 </span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>    merged_bboxes <span class="op">=</span> merge_aug_bboxes_3d(aug_bboxes, img_metas, </span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>                                        <span class="va">self</span>.bbox_head.test_cfg) </span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> [merged_bboxes] </span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a> </span></code></pre></div>
+<p>以上我们主要分析了整体的框架流程。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>Author: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io">haseka</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>Link: </span><span class="post-copyright-info"><a href="https://github.com/haseka96.github.io/2023/11/15/mmdetection3d/">https://github.com/haseka96.github.io/2023/11/15/mmdetection3d/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/BEV/">BEV</a><a class="post-meta__tags" href="/tags/MMDetection3D/">MMDetection3D</a></div><div class="post_share"><div class="social-share" data-image="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2023/11/15/MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E4%BA%8C/" title="MMDetection整体构建流程二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Previous</div><div class="prev_info">MMDetection整体构建流程二</div></div></a></div><div class="next-post pull-right"><a href="/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/" title="mmdetection整体构建流程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">Next</div><div class="next_info">mmdetection整体构建流程</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>Related Articles</span></div><div class="relatedPosts-list"><div><a href="/2023/11/15/MMDetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B%E4%BA%8C/" title="MMDetection整体构建流程二"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-15</div><div class="title">MMDetection整体构建流程二</div></div></a></div><div><a href="/2023/11/16/Registry/" title="Registry"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-16</div><div class="title">Registry</div></div></a></div><div><a href="/2023/11/15/mmdetection%E6%95%B4%E4%BD%93%E6%9E%84%E5%BB%BA%E6%B5%81%E7%A8%8B/" title="mmdetection整体构建流程"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2023-11-15</div><div class="title">mmdetection整体构建流程</div></div></a></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="is-center"><div class="avatar-img"><img src="https://i.loli.net/2021/02/24/5O1day2nriDzjSu.png" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">haseka</div><div class="author-info__description">这是我的博客</div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">Articles</div><div class="length-num">34</div></a><a href="/tags/"><div class="headline">Tags</div><div class="length-num">34</div></a><a href="/categories/"><div class="headline">Categories</div><div class="length-num">2</div></a></div><a id="card-info-btn" href="https://github.com/xxxxxx"><i class="fab fa-github"></i><span>Follow Me</span></a></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>Announcement</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>Contents</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mmdetection3d-%E6%95%B4%E4%BD%93%E6%A1%86%E6%9E%B6%E4%BB%8B"><span class="toc-number">1.</span> <span class="toc-text">MMDetection3D 整体框架介</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E5%89%8D%E8%A8%80"><span class="toc-number">1.1.</span> <span class="toc-text">一、前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E4%BB%BB%E5%8A%A1%E4%BB%8B%E7%BB%8D"><span class="toc-number">1.2.</span> <span class="toc-text">二、任务介绍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E7%AE%97%E6%B3%95%E6%A8%A1%E5%9E%8B%E6%94%AF%E6%8C%81"><span class="toc-number">1.3.</span> <span class="toc-text">三、算法模型支持</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E6%95%B0%E6%8D%AE%E9%A2%84%E5%A4%84%E7%90%86"><span class="toc-number">1.4.</span> <span class="toc-text">四、数据预处理</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E6%A8%A1%E5%9D%97%E6%8A%BD%E8%B1%A1"><span class="toc-number">1.5.</span> <span class="toc-text">五、模块抽象</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#pipeline"><span class="toc-number">1.5.1.</span> <span class="toc-text">5.1Pipeline</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#model"><span class="toc-number">1.5.2.</span> <span class="toc-text">5.2 Model</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E8%AE%AD%E7%BB%83%E5%92%8C%E6%B5%8B%E8%AF%95%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.</span> <span class="toc-text">六、训练和测试流程</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#train%E5%92%8Cval%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.1.</span> <span class="toc-text">6.1train和val流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#test%E6%B5%81%E7%A8%8B"><span class="toc-number">1.6.2.</span> <span class="toc-text">6.2 test流程</span></a></li></ol></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>Recent Post</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/15/Carla%E5%AD%A6%E4%B9%A0/" title="Carla学习">Carla学习</a><time datetime="2023-12-15T07:59:56.000Z" title="Created 2023-12-15 15:59:56">2023-12-15</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/07/embedding/" title="embedding">embedding</a><time datetime="2023-12-07T06:09:42.000Z" title="Created 2023-12-07 14:09:42">2023-12-07</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/12/05/Petr-3D%E5%9D%90%E6%A0%87%E7%94%9F%E6%88%90/" title="Petr_3D坐标生成">Petr_3D坐标生成</a><time datetime="2023-12-05T06:16:49.000Z" title="Created 2023-12-05 14:16:49">2023-12-05</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/29/FPN/" title="FPN">FPN</a><time datetime="2023-11-29T01:50:54.000Z" title="Created 2023-11-29 09:50:54">2023-11-29</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2023/11/27/pytorch-nn-module-call/" title="pytorch_nn_module__call__">pytorch_nn_module__call__</a><time datetime="2023-11-27T05:54:09.000Z" title="Created 2023-11-27 13:54:09">2023-11-27</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2023 By haseka</div><div class="framework-info"><span>Framework </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>Theme </span><a href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="Read Mode"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="Toggle Between Light And Dark Mode"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="Toggle between Single-column and Double-column"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="Setting"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="Table Of Contents"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="Back To Top"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox/fancybox.umd.min.js"></script><div class="js-pjax"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/metingjs/dist/Meting.min.js"></script><script src="https://cdn.jsdelivr.net/npm/pjax/pjax.min.js"></script><script>let pjaxSelectors = ["head > title","#config-diff","#body-wrap","#rightside-config-hide","#rightside-config-show",".js-pjax"]
 
 var pjax = new Pjax({
   elements: 'a:not([target="_blank"])',
